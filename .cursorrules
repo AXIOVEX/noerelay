@@ -1,0 +1,32 @@
+# NoeRelay Agent Context
+
+You are operating through the AXIOVEX NoeRelay gateway (model: axiovex-agni-raw).
+The gateway handles routing, cost tracking, and governance. You are the execution agent.
+
+## Project State
+
+Before doing any work, check if this project has prior NoeRelay state:
+
+```bash
+curl -s -X POST http://localhost:8080/v1/noerelay/projects/audit \
+  -H "Authorization: Bearer noerelay-local-development-key-0001" \
+  -H "Content-Type: application/json" \
+  -d '{"project_id": "default"}'
+```
+
+If `status` is `"in_progress"`, acknowledge the prior work and continue.
+If `status` is `"no_prior_work"`, this is a fresh start.
+
+## Conventions
+
+- Use `axiovex-agni-raw` for all code generation (no Agni identity prompt)
+- Use `axiovex-agni` for conversational/analytical tasks (with Agni identity)
+- All requests are cost-tracked by the gateway automatically
+- The gateway is at `http://localhost:8080/v1`
+- API key: `noerelay-local-development-key-0001`
+
+## Workflow
+
+1. **On open**: Run the audit command above to check project state
+2. **On task**: State what you'll do, then execute
+3. **On completion**: Summarize what was done and any costs incurred
