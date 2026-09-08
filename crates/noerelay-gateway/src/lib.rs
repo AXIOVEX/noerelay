@@ -2481,8 +2481,10 @@ mod tests {
         let body: Value =
             serde_json::from_slice(&response.into_body().collect().await.unwrap().to_bytes())
                 .unwrap();
-        assert_eq!(body["data"].as_array().unwrap().len(), 1);
-        assert_eq!(body["data"][0]["id"], PRIMARY_PUBLIC_MODEL_ID);
+        let data = body["data"].as_array().unwrap();
+        assert_eq!(data.len(), 2);
+        assert_eq!(data[0]["id"], PRIMARY_PUBLIC_MODEL_ID);
+        assert_eq!(data[1]["id"], RAW_PUBLIC_MODEL_ID);
     }
 
     #[tokio::test]
