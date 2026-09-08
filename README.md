@@ -112,6 +112,8 @@ The draft [OpenAPI 3.1 specification](spec/openapi.json) defines the stable comp
 | `GET /v1/noerelay/runs/{run_id}/receipt` | Retrieves the signed evidence receipt for an accepted run. |
 | `GET /v1/noerelay/reports/costs` | Reports token and integer micro-USD usage by organization, project, and user. |
 | `POST /v1/noerelay/governance/release-gate` | Evaluates requirement-to-test-to-observed-evidence traceability. |
+| `POST /v1/noerelay/projects/onboard` | Initializes a new project with spec-kit lifecycle phases. |
+| `POST /v1/noerelay/projects/audit` | Returns current project state (run count, phase, last activity). |
 
 Standard request fields pass through. An optional `governance` object can specify project identity, risk class, cost and latency ceilings, required acceptance probability, data policy, retention class, and evidence-receipt behavior.
 
@@ -175,6 +177,9 @@ spec/
   schemas/                        JSON Schema 2020-12 domain contracts
 tests/
   test_spec.py                    Executable conformance tests
+scripts/
+  noerelay.py                     CLI tool for gateway management and integrations
+  aider-noerelay.cmd              Windows launcher for Aider + NoeRelay
 .github/workflows/
   conformance.yml                 Secret-free pull request and main-branch CI
   test-environment-smoke.yml      Main-guarded, manual credential smoke check
@@ -253,6 +258,68 @@ Pop-Location
 ### Configure live inference and benchmarks
 
 Offline conformance tests require no API keys. Live model tests use `OPENROUTER_API_KEY`; Hugging Face benchmark acquisition uses `HF_TOKEN` when authentication is needed. Do not commit either value and do not configure `OPENAI_API_KEY`. See [docs/environment.md](docs/environment.md) and [docs/benchmarking.md](docs/benchmarking.md).
+
+## CLI Tool
+
+The `scripts/noerelay.py` CLI provides a Codex-like command-line interface for managing the NoeRelay gateway. It requires only Python 3.8+ (no external dependencies).
+
+### Quick reference
+
+```bash
+# Gateway management
+python scripts/noerelay.py status              # Check gateway health
+python scripts/noerelay.py models              # List available models
+python scripts/noerelay.py costs               # Show cost report
+python scripts/noerelay.py audit               # Check project state
+python scripts/noerelay.py onboard -p my-project -n "My Project"
+python scripts/noerelay.py chat "Your prompt"  # One-shot completion
+python scripts/noerelay.py receipt <run-id>    # Get signed receipt
+
+# Integration launchers (auto-installs if missing)
+python scripts/noerelay.py run codex           # Launch Codex CLI
+python scripts/noerelay.py run aider           # Launch Aider
+python scripts/noerelay.py run cursor          # Print Cursor setup JSON
+python scripts/noerelay.py run opencode        # Launch OpenCode
+
+# Install tools
+python scripts/noerelay.py install codex       # Install Codex CLI (npm)
+python scripts/noerelay.py install aider       # Install Aider (pip)
+python scripts/noerelay.py install opencode    # Install OpenCode (npm)
+python scripts/noerelay.py install cursor      # Install Cursor CLI (npm)
+python scripts/noerelay.py install cursor-ide  # Install Cursor IDE (winget)
+
+# Configuration
+python scripts/noerelay.py config show         # Show current config
+python scripts/noerelay.py config set base_url http://other-host:8080
+```
+
+### Configuration
+
+Config is stored at `~/.noerelay/config.json`. Precedence (highest first):
+
+1. Environment variables: `NOERELAY_BASE_URL`, `NOERELAY_API_KEY`
+2. `~/.noerelay/config.json` (set via `config set`)
+3. Built-in defaults
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `base_url` | `http://localhost:8080` | Gateway base URL |
+| `api_key` | `noerelay-local-development-key-0001` | Bearer token |
+| `model` | `axiovex-agni` | Branded model (with Agni identity) |
+| `model_raw` | `axiovex-agni-raw` | Raw model (no identity prompt) |
+| `project_id` | `default` | Default project for audit/onboard |
+
+### Integration details
+
+| Integration | Install method | Launch command | Notes |
+|-------------|---------------|----------------|-------|
+| **Codex** | `npm install -g @openai/codex` | `run codex` | Passes `--base-url` and `--api-key` |
+| **Aider** | `pip install aider-chat` | `run aider` | Sets `OPENAI_API_BASE`/`OPENAI_API_KEY` env vars |
+| **Cursor CLI** | `npm install -g cursor-agent` | `run cursor` | Prints settings JSON; CLI via `cursor-agent` |
+| **Cursor IDE** | `winget install Anysphere.Cursor` | `install cursor-ide` | GUI app; download from [cursor.com](https://cursor.com/download) |
+| **OpenCode** | `npm install -g opencode-ai` | `run opencode` | Sets `OPENAI_API_BASE`/`OPENAI_API_KEY` env vars |
+
+All `run` commands auto-install the tool if it is not found in PATH. Extra arguments after the subcommand are forwarded to the underlying tool (e.g., `run aider --yes --file main.py`).
 
 ## What the tests cover
 

@@ -110,21 +110,10 @@
       "NoeRelay": {
         "id": "noerelay-local",
         "apiProvider": "openai",
-        "openAiBaseUrl": "http://127.0.0.1:8080/v1",
-        "openAiModelId": "noerelay/epr-1",
-        "modelMaxTokens": 4096,
+        "openAiBaseUrl": "https://layer1labs.tail8508ce.ts.net:4000/v1",
+        "openAiModelId": "qwen3.8-27b",
+        "modelMaxTokens": 32768,
         "modelTemperature": 0.7,
-        "todoListEnabled": true,
-        "consecutiveMistakeLimit": 3
-      },
-      "NoeRelayTest": {
-        "id": "noerelay-test",
-        "apiProvider": "openai",
-        "openAiBaseUrl": "http://127.0.0.1:8080/v1",
-        "openAiModelId": "noerelay/epr-1",
-        "modelMaxTokens": 8192,
-        "modelTemperature": 0.3,
-        "system_prompt": "You are a NoeRelay test subagent. Your job is to test the NoeRelay gateway by sending requests and verifying responses. Available endpoints: http://127.0.0.1:8080/v1/chat/completions, http://127.0.0.1:8080/health, http://127.0.0.1:8080/metrics, http://127.0.0.1:8080/dashboard. You can run benchmarks with: python scripts/run_benchmark.py --inline --cohort test --gateway-url http://127.0.0.1:8080. You can run tests with: python -m pytest tests/ -v.",
         "todoListEnabled": true,
         "consecutiveMistakeLimit": 3
       }
@@ -140,7 +129,7 @@
       "benchmark": "electrohire-or-orchestrator-v3",
       "release": "electrohire-or-release-v3",
       "security": "electrohire-or-security-v3",
-      "test": "noerelay-test"
+      "test": "noerelay-local"
     }
   },
   "globalSettings": {

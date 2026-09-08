@@ -93,13 +93,7 @@ services:
     command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2"]
     environment:
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?set LITELLM_MASTER_KEY in .env.docker}
-      LITELLM_LOCAL_MODEL: ollama/${NOERELAY_LOCAL_MODEL:-qwen3:8b}
-      LITELLM_REMOTE_MODEL: openai/${REMOTE_GPU_MODEL:-local-model}
-      PAIR_MODEL: openai/${NOERELAY_PAIR_MODEL:-qwen3:8b}
-      PAIR_OPENAI_BASE_URL: ${NOERELAY_PAIR_BASE_URL:-http://host.docker.internal:11434/v1}
-      PAIR_API_KEY: ${NOERELAY_PAIR_API_KEY:-pair-local}
-      REMOTE_GPU_API_KEY: ${REMOTE_GPU_API_KEY:-no-key}
-      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      REMOTE_NINFER_API_KEY: ${REMOTE_NINFER_API_KEY:-noerelay-local-development-key-0001}
     volumes: [./deploy/docker/litellm-config.yaml:/app/config.yaml:ro]
     extra_hosts: ["host.docker.internal:host-gateway"]
     networks: [backend, model-plane, egress]
@@ -143,7 +137,7 @@ services:
       NOERELAY_ORGANIZATION_ID: ${NOERELAY_ORGANIZATION_ID:-local-org}
       NOERELAY_PROJECT_ID: ${NOERELAY_PROJECT_ID:-local-project}
       NOERELAY_ENVIRONMENT_ID: ${NOERELAY_ENVIRONMENT_ID:-production}
-      NOERELAY_CANDIDATES_JSON: '${NOERELAY_CANDIDATES_JSON:-[{"candidate_id":"gpu-pool","openrouter_model_id":"gpu-pool","provider":"noerelay-model-plane","available":true,"capabilities":["text","tools"],"maximum_data_class":"confidential","cost":{"inference_microusd":0,"tools_microusd":0,"verification_microusd":0,"expected_retry_microusd":0,"expected_fallback_microusd":0,"infrastructure_microusd":0,"expected_human_review_microusd":0},"latency_p95_ms":2500,"acceptance_lcb_ppm":900000,"supports_independent_verification":true}]}'
+      NOERELAY_CANDIDATES_JSON: '${NOERELAY_CANDIDATES_JSON:-[{"candidate_id":"qwen3.8-27b","openrouter_model_id":"qwen3.8-27b","provider":"noerelay-model-plane","available":true,"capabilities":["text","tools","cursor","codex","aider"],"maximum_data_class":"confidential","cost":{"inference_microusd":0,"tools_microusd":0,"verification_microusd":0,"expected_retry_microusd":0,"expected_fallback_microusd":0,"infrastructure_microusd":0,"expected_human_review_microusd":0},"latency_p95_ms":2500,"acceptance_lcb_ppm":900000,"supports_independent_verification":true},{"candidate_id":"qwen3.8-27b-local","openrouter_model_id":"qwen3.8-27b-local","provider":"noerelay-model-plane","available":true,"capabilities":["text","tools","cursor","codex","aider"],"maximum_data_class":"confidential","cost":{"inference_microusd":0,"tools_microusd":0,"verification_microusd":0,"expected_retry_microusd":0,"expected_fallback_microusd":0,"infrastructure_microusd":0,"expected_human_review_microusd":0},"latency_p95_ms":5000,"acceptance_lcb_ppm":850000,"supports_independent_verification":true}]}'
       OPENROUTER_API_KEY: ${LITELLM_MASTER_KEY}
       OPENROUTER_BASE_URL: http://litellm:4000/v1
       DATABASE_URL: postgresql://noerelay:${NOERELAY_POSTGRES_PASSWORD}@postgres:5432/noerelay

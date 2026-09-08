@@ -59,4 +59,19 @@ python -m unittest discover -s tests -v
 
 For live inference, change `NOERELAY_OPENROUTER_MODE` to `live` and supply `OPENROUTER_API_KEY` from a secret manager. NoeRelay sends OpenRouter the explicit Rust-selected model; it does not use upstream automatic model routing.
 
+## CLI Tool
+
+Once the gateway is running, use the CLI for day-to-day management:
+
+```powershell
+python scripts/noerelay.py status          # Verify gateway is healthy
+python scripts/noerelay.py models          # List available models
+python scripts/noerelay.py chat "Hello"    # One-shot completion
+python scripts/noerelay.py run aider       # Launch Aider (auto-installs)
+python scripts/noerelay.py run codex       # Launch Codex (auto-installs)
+python scripts/noerelay.py run cursor      # Print Cursor setup JSON
+```
+
+See the [README CLI section](../README.md#cli-tool) for the full command reference.
+
 See the [production deployment gate](production-deployment.md), [requirements](requirements.md), and [verification matrix](verification-matrix.md) before exposing the service.

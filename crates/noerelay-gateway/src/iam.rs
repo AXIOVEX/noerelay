@@ -637,6 +637,8 @@ fn is_authenticated_api_route(method: &str, path: &str) -> bool {
             | ("POST", "/v1/responses")
             | ("GET", "/v1/noerelay/reports/costs")
             | ("POST", "/v1/noerelay/governance/release-gate")
+            | ("POST", "/v1/noerelay/projects/onboard")
+            | ("POST", "/v1/noerelay/projects/audit")
     ) || (method == "GET" && path.starts_with("/v1/noerelay/runs/") && path.ends_with("/receipt"))
 }
 

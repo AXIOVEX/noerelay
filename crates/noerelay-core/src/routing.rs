@@ -475,6 +475,33 @@ impl StagedRouter {
 
         StagedRouteDecision::from_decision(decision, provenance)
     }
+
+    /// Returns the full ordered list of admissible candidates (best first).
+    /// Used for fallback routing when the primary candidate fails.
+    pub fn select_all_admissible(
+        &self,
+        candidates: &[Candidate],
+        constraints: &Constraints,
+    ) -> Vec<(String, String)> {
+        let mut admissible: Vec<(&Candidate, u64)> = Vec::new();
+        for candidate in candidates {
+            let (reasons, total) = rejection_reasons(candidate, constraints);
+            if reasons.is_empty() {
+                admissible.push((candidate, total.expect("admissible cost must be present")));
+            }
+        }
+        admissible.sort_by(|(a, a_cost), (b, b_cost)| {
+            a_cost
+                .cmp(b_cost)
+                .then(a.latency_p95_ms.cmp(&b.latency_p95_ms))
+                .then(b.acceptance_lcb_ppm.cmp(&a.acceptance_lcb_ppm))
+                .then(a.candidate_id.cmp(&b.candidate_id))
+        });
+        admissible
+            .into_iter()
+            .map(|(c, _)| (c.candidate_id.clone(), c.openrouter_model_id.clone()))
+            .collect()
+    }
 }
 
 #[cfg(test)]

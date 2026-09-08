@@ -40,6 +40,8 @@ use crate::stub_provider::StubProvider;
 
 /// Stable public aliases exposed by the AXIOVEX Sentinel API.
 const PRIMARY_PUBLIC_MODEL_ID: &str = "axiovex-agni";
+/// Raw alias: no Agni system prompt injection. For IDE/agent clients (Cursor, Codex, Aider).
+const RAW_PUBLIC_MODEL_ID: &str = "axiovex-agni-raw";
 
 /// HTTP client for the LLMRouter sidecar, implementing [`AdvisoryRanker`].
 ///
@@ -557,6 +559,8 @@ pub fn app(state: AppState) -> Router {
             "/v1/noerelay/governance/release-gate",
             post(governance_release_gate),
         )
+        .route("/v1/noerelay/projects/onboard", post(spec_kit_onboard))
+        .route("/v1/noerelay/projects/audit", post(spec_kit_audit))
         .layer(DefaultBodyLimit::max(body_limit))
         .with_state(state.clone());
     if let Some(admin) = admin_router {
@@ -611,8 +615,168 @@ async fn models(
                 "id": PRIMARY_PUBLIC_MODEL_ID,
                 "object": "model",
                 "owned_by": "axiovex"
+            },
+            {
+                "id": RAW_PUBLIC_MODEL_ID,
+                "object": "model",
+                "owned_by": "axiovex"
             }
         ]
+    }))
+    .into_response()
+}
+
+/// Spec-kit onboarding: called when a new project is opened.
+/// Returns the spec-kit lifecycle phases and initial instructions.
+async fn spec_kit_onboard(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<Value>,
+) -> Response {
+    if !authorized(&headers, &state.config.bearer_key_sha256) {
+        return error(StatusCode::UNAUTHORIZED, "unauthorized", "Invalid or missing API key");
+    }
+    let project_id = body
+        .get("project_id")
+        .and_then(|v| v.as_str())
+        .unwrap_or("default")
+        .to_string();
+    let project_name = body
+        .get("project_name")
+        .and_then(|v| v.as_str())
+        .unwrap_or(&project_id)
+        .to_string();
+    let description = body
+        .get("description")
+        .and_then(|v| v.as_str())
+        .unwrap_or("")
+        .to_string();
+
+    Json(json!({
+        "object": "spec_kit_onboarding",
+        "project_id": project_id,
+        "project_name": project_name,
+        "description": description,
+        "status": "initialized",
+        "phase": "specify",
+        "phases": [
+            {
+                "name": "specify",
+                "description": "Define the project specification: goals, requirements, constraints, and acceptance criteria.",
+                "instructions": "Describe what you want to build. Include: purpose, target users, key features, technical constraints, and success criteria."
+            },
+            {
+                "name": "plan",
+                "description": "Create the implementation plan: architecture, milestones, task breakdown, and risk assessment.",
+                "instructions": "Based on the specification, propose: system architecture, technology choices, milestone breakdown, task list with estimates, and risk mitigation."
+            },
+            {
+                "name": "tasks",
+                "description": "Decompose the plan into actionable tasks with clear ownership and dependencies.",
+                "instructions": "Break the plan into discrete tasks. Each task should have: clear scope, acceptance criteria, dependencies, and estimated effort."
+            },
+            {
+                "name": "implement",
+                "description": "Execute the tasks, iterating with feedback and verification.",
+                "instructions": "Implement tasks in dependency order. After each task, verify against acceptance criteria before proceeding."
+            }
+        ],
+        "next_action": "specify",
+        "message": format!(
+            "Project '{}' has been initialized with spec-kit. Begin by describing your project goals and requirements (specify phase).",
+            project_name
+        )
+    }))
+    .into_response()
+}
+
+/// Spec-kit audit: called when an existing project is opened.
+/// Returns the current state of the project based on stored ledger events and receipts.
+async fn spec_kit_audit(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<Value>,
+) -> Response {
+    if !authorized(&headers, &state.config.bearer_key_sha256) {
+        return error(StatusCode::UNAUTHORIZED, "unauthorized", "Invalid or missing API key");
+    }
+    let project_id = body
+        .get("project_id")
+        .and_then(|v| v.as_str())
+        .unwrap_or("default")
+        .to_string();
+
+    // Load the authority snapshot for this project to determine current state
+    let scope = state.config.default_scope.clone();
+    let org_id = scope.organization_id.as_str();
+    let audit_project = if project_id == "default" {
+        scope.project_id.as_str().to_string()
+    } else {
+        project_id.clone()
+    };
+let (storage_version, last_run_count, last_activity) = if let Some(store) = &state.store {
+    match store.load(org_id, &audit_project).await {
+        Ok(Some(stored)) => {
+            let events = stored.snapshot.ledger.events();
+            let run_count = events.len();
+            let last_activity = events
+                .last()
+                .map(|e| e.occurred_at_unix_ms)
+                .unwrap_or(0);
+            (stored.storage_version, run_count, last_activity)
+        }
+        Ok(None) => (0, 0, 0),
+        Err(_) => (0, 0, 0),
+    }
+} else {
+    (0, 0, 0)
+};
+
+    let phase = if storage_version == 0 {
+        "specify"
+    } else if last_run_count < 3 {
+        "plan"
+    } else if last_run_count < 10 {
+        "tasks"
+    } else {
+        "implement"
+    };
+
+    let is_new = storage_version == 0;
+
+    Json(json!({
+        "object": "spec_kit_audit",
+        "project_id": audit_project,
+        "status": if is_new { "no_prior_work" } else { "in_progress" },
+        "phase": phase,
+        "storage_version": storage_version,
+        "total_runs": last_run_count,
+        "last_activity_unix_ms": last_activity,
+        "next_action": if is_new {
+            "onboard"
+        } else {
+            phase
+        },
+        "message": if is_new {
+            format!(
+                "No prior work found for project '{}'. Run onboarding to initialize the spec-kit lifecycle.",
+                audit_project
+            )
+        } else {
+            format!(
+                "Project '{}' has {} prior runs. Current phase: '{}'. Last activity: {}.",
+                audit_project,
+                last_run_count,
+                phase,
+                if last_activity > 0 {
+                    chrono::DateTime::from_timestamp_millis(last_activity as i64)
+                        .map(|dt| dt.to_rfc3339())
+                        .unwrap_or_else(|| "unknown".to_string())
+                } else {
+                    "unknown".to_string()
+                }
+            )
+        }
     }))
     .into_response()
 }
@@ -924,7 +1088,42 @@ async fn proxy_openai_request(
         scope.user_id = header_or(&headers, "x-noerelay-user", &scope.user_id);
     }
     scope.session_id = header_or(&headers, "x-noerelay-session", &scope.session_id);
-    let required_capabilities = vec!["text".into()];
+    // Each chat must be part of a project initialized as spec-kit.
+    // The spec-kit project is derived from the session (or explicit header)
+    // and tracked in metadata. The database tenancy (authority snapshots,
+    // ledger events) uses the configured default project since the governance
+    // runtime is loaded for that project at startup.
+    let explicit_project = headers
+        .get("x-noerelay-project")
+        .and_then(|value| value.to_str().ok())
+        .filter(|value| !value.is_empty());
+    let spec_kit_project = match explicit_project {
+        Some(project) => project.to_owned(),
+        None => {
+            if scope.session_id == "stateless" {
+                scope.session_id = Uuid::new_v4().to_string();
+            }
+            format!("spec-kit-{}", scope.session_id)
+        }
+    };
+    let project_is_new = explicit_project.is_none();
+    let mut required_capabilities: Vec<String> = vec!["text".into()];
+    if let Some(cap) = headers
+        .get("x-noerelay-capability")
+        .and_then(|value| value.to_str().ok())
+        .filter(|value| !value.is_empty())
+    {
+        for c in cap.split(',') {
+            let c = c.trim();
+            if !c.is_empty() && !required_capabilities.iter().any(|e| e == c) {
+                required_capabilities.push(c.to_owned());
+            }
+        }
+    }
+    let is_agent_capability = wire_request.model == RAW_PUBLIC_MODEL_ID
+        || required_capabilities
+            .iter()
+            .any(|c| c == "cursor" || c == "codex" || c == "aider");
     let requested_public_model = wire_request.model.clone();
     let canonical = CanonicalRequest {
         request_id: header_or(&headers, "x-request-id", &Uuid::new_v4().to_string()),
@@ -942,24 +1141,33 @@ async fn proxy_openai_request(
             .map(|tool| tool.function.name.clone())
             .collect(),
         allowed_agents: vec![],
-        metadata: BTreeMap::from([
-            ("context_manifest_hash".into(), context_manifest_hash),
-            (
-                "omitted_context_nodes".into(),
-                omitted_context_nodes.to_string(),
-            ),
-            (
-                "tool_policy_outcome".into(),
-                if repeated_tool_loop {
-                    "repetition_circuit_breaker"
-                } else if self_capability_inquiry {
-                    "self_description_tools_not_required"
-                } else {
-                    "tools_available"
-                }
-                .into(),
-            ),
-        ]),
+        metadata: {
+            let mut meta = BTreeMap::from([
+                ("context_manifest_hash".into(), context_manifest_hash),
+                (
+                    "omitted_context_nodes".into(),
+                    omitted_context_nodes.to_string(),
+                ),
+                (
+                    "tool_policy_outcome".into(),
+                    if repeated_tool_loop {
+                        "repetition_circuit_breaker"
+                    } else if self_capability_inquiry {
+                        "self_description_tools_not_required"
+                    } else {
+                        "tools_available"
+                    }
+                    .into(),
+                ),
+            ]);
+            // Every chat is part of a project initialized as spec-kit.
+            meta.insert("spec_kit_project".into(), spec_kit_project);
+            if project_is_new {
+                meta.insert("spec_kit_initialized".into(), "true".into());
+                meta.insert("spec_kit_phase".into(), "specify".into());
+            }
+            meta
+        },
         max_cost_microusd: None,
         max_latency_ms: None,
     };
@@ -997,6 +1205,7 @@ async fn proxy_openai_request(
         &requested_public_model,
         self_capability_inquiry,
         repeated_tool_loop,
+        is_agent_capability,
     );
     if state.config.stub_mode {
         let canonical_response = StubProvider.complete(&wire_request);
@@ -1039,42 +1248,74 @@ async fn proxy_openai_request(
         )
         .await;
     }
-    let response = state
-        .client
-        .post(format!(
-            "{}/{upstream_path}",
-            state.config.openrouter_base_url
-        ))
-        .bearer_auth(&state.config.openrouter_api_key)
-        .header("content-type", "application/json")
-        .json(&request)
-        .send()
-        .await;
-    let response = match response {
-        Ok(value) => value,
-        Err(_) => {
-            abort_run(&state, &prepared.run_id, "provider_transport_failed").await;
-            return error(
-                StatusCode::BAD_GATEWAY,
-                "provider_error",
-                "OpenRouter request failed",
-            );
+    // Build the fallback chain: all admissible candidates in priority order.
+    let router = StagedRouter::new();
+    let fallback_chain: Vec<(String, String)> =
+        router.select_all_admissible(&state.config.candidates, &constraints);
+    // The primary model is already selected; the fallback chain includes it.
+    // We try each candidate in order until one succeeds.
+    let mut last_error: Option<(StatusCode, &str)> = None;
+    let mut success_response: Option<(StatusCode, Bytes)> = None;
+
+    for (_candidate_id, model_id) in &fallback_chain {
+        let mut attempt_request = request.clone();
+        attempt_request.insert("model".into(), Value::String(model_id.clone()));
+
+        let response = state
+            .client
+            .post(format!(
+                "{}/{upstream_path}",
+                state.config.openrouter_base_url
+            ))
+            .bearer_auth(&state.config.openrouter_api_key)
+            .header("content-type", "application/json")
+            .json(&attempt_request)
+            .send()
+            .await;
+
+        let response = match response {
+            Ok(value) => value,
+            Err(_) => {
+                last_error = Some((
+                    StatusCode::BAD_GATEWAY,
+                    "provider_transport_failed",
+                ));
+                continue;
+            }
+        };
+
+        let status =
+            StatusCode::from_u16(response.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
+        if !status.is_success() {
+            last_error = Some((status, "provider_rejected"));
+            continue;
         }
-    };
-    let status =
-        StatusCode::from_u16(response.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
-    if !status.is_success() {
-        abort_run(&state, &prepared.run_id, "provider_rejected").await;
-        return error(status, "provider_error", "OpenRouter rejected the request");
+
+        let bytes = match response.bytes().await {
+            Ok(value) => value,
+            Err(_) => {
+                last_error = Some((
+                    StatusCode::BAD_GATEWAY,
+                    "provider_body_failed",
+                ));
+                continue;
+            }
+        };
+
+        success_response = Some((status, bytes));
+        break;
     }
-    let bytes = match response.bytes().await {
-        Ok(value) => value,
-        Err(_) => {
-            abort_run(&state, &prepared.run_id, "provider_body_failed").await;
+
+    let (status, bytes) = match success_response {
+        Some(value) => value,
+        None => {
+            let (status, reason) = last_error
+                .unwrap_or((StatusCode::BAD_GATEWAY, "no_candidates"));
+            abort_run(&state, &prepared.run_id, reason).await;
             return error(
-                StatusCode::BAD_GATEWAY,
+                status,
                 "provider_error",
-                "OpenRouter response could not be read",
+                "All candidate models failed. No fallback available.",
             );
         }
     };
@@ -1411,7 +1652,13 @@ fn apply_agent_instructions(
     _model: &str,
     self_capability_inquiry: bool,
     repeated_tool_loop: bool,
+    is_agent_capability: bool,
 ) {
+    // When codex/aider capability is requested, the client (Codex CLI, Aider)
+    // provides its own system prompt. Do not inject the Agni identity.
+    if is_agent_capability {
+        return;
+    }
     let role = "You are AXIOVEX Agni, the governed assistant presented by AXIOVEX Sentinel and powered by the NoeRelay Intelligent AI Control Plane.";
     let loop_instruction = if repeated_tool_loop {
         " A repeated-tool circuit breaker is active for this response. Do not call any tool. Use the results already present in the conversation, answer directly, and clearly identify anything still unknown."
@@ -1556,7 +1803,7 @@ async fn validate_requested_model(
     _identity: Option<&AuthenticatedIdentity>,
     request: &WireCanonicalRequest,
 ) -> Result<(), Response> {
-    if request.model == PRIMARY_PUBLIC_MODEL_ID {
+    if request.model == PRIMARY_PUBLIC_MODEL_ID || request.model == RAW_PUBLIC_MODEL_ID {
         return Ok(());
     }
     Err(api_error_response(
