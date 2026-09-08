@@ -68,9 +68,17 @@ def save_config(config: dict):
         json.dump(config, f, indent=2)
 
 
+def _validate_url(url: str) -> str:
+    """Validate that a URL is safe (no CRLF injection, valid scheme)."""
+    import re
+    if not re.match(r"^https?://[a-zA-Z0-9.\-]+(:\d+)?(/.*)?$", url):
+        raise ValueError(f"Invalid URL: {url!r}")
+    return url
+
+
 def api_request(config: dict, method: str, path: str, body: dict = None) -> dict:
     """Make an API request to the NoeRelay gateway."""
-    url = f"{config['base_url']}{path}"
+    url = _validate_url(f"{config['base_url']}{path}")
     headers = {
         "Authorization": f"Bearer {config['api_key']}",
         "Content-Type": "application/json",
@@ -308,9 +316,16 @@ def cmd_run_codex(args):
     if args.yes:
         cmd.append("--yes")
     if args.extra:
+        # Validate extra args to prevent path injection
+        for arg in args.extra:
+            if "\0" in arg or arg.startswith("-"):
+                print(f"Invalid argument: {arg!r}")
+                sys.exit(1)
         cmd.extend(args.extra)
 
-    print(f"Launching: {' '.join(cmd)}")
+    # Mask API key in output
+    safe_cmd = [c if c != config["api_key"] else "***" for c in cmd]
+    print(f"Launching: {' '.join(safe_cmd)}")
     subprocess.run(cmd)
 
 
@@ -333,9 +348,14 @@ def cmd_run_aider(args):
     if args.yes:
         cmd.append("--yes-always")
     if args.extra:
+        for arg in args.extra:
+            if "\0" in arg or arg.startswith("-"):
+                print(f"Invalid argument: {arg!r}")
+                sys.exit(1)
         cmd.extend(args.extra)
 
-    print(f"Launching: {' '.join(cmd)}")
+    safe_cmd = [c if c == config["api_key"] else c for c in cmd]
+    print(f"Launching: {' '.join(safe_cmd)}")
     subprocess.run(cmd, env=env)
 
 
@@ -348,7 +368,8 @@ def cmd_run_cursor(args):
     print("=== Cursor Setup ===\n")
     print("Add this to Cursor Settings > Models > Add Custom Model:\n")
     print(f"  Base URL:  {base_url}")
-    print(f"  API Key:   {config['api_key']}")
+    masked_key = config["api_key"][:4] + "..." + config["api_key"][-4:] if len(config["api_key"]) > 8 else "***"
+    print(f"  API Key:   {masked_key}")
     print(f"  Model ID:  {model}")
     print()
     print("Or add to .cursor/settings.json:")
@@ -385,9 +406,14 @@ def cmd_run_opencode(args):
 
     cmd = [opencode, "--model", model]
     if args.extra:
+        for arg in args.extra:
+            if "\0" in arg or arg.startswith("-"):
+                print(f"Invalid argument: {arg!r}")
+                sys.exit(1)
         cmd.extend(args.extra)
 
-    print(f"Launching: {' '.join(cmd)}")
+    safe_cmd = [c if c == config["api_key"] else c for c in cmd]
+    print(f"Launching: {' '.join(safe_cmd)}")
     subprocess.run(cmd, env=env)
 
 

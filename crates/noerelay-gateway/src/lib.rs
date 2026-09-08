@@ -43,6 +43,9 @@ const PRIMARY_PUBLIC_MODEL_ID: &str = "axiovex-agni";
 /// Raw alias: no Agni system prompt injection. For IDE/agent clients (Cursor, Codex, Aider).
 const RAW_PUBLIC_MODEL_ID: &str = "axiovex-agni-raw";
 
+/// Whitelist of valid capability values for the `x-noerelay-capability` header.
+const VALID_CAPABILITIES: &[&str] = &["text", "cursor", "codex", "aider", "vision", "code"];
+
 /// HTTP client for the LLMRouter sidecar, implementing [`AdvisoryRanker`].
 ///
 /// Calls `POST /rank` on the sidecar with sanitized features and admissible
@@ -634,7 +637,11 @@ async fn spec_kit_onboard(
     Json(body): Json<Value>,
 ) -> Response {
     if !authorized(&headers, &state.config.bearer_key_sha256) {
-        return error(StatusCode::UNAUTHORIZED, "unauthorized", "Invalid or missing API key");
+        return error(
+            StatusCode::UNAUTHORIZED,
+            "unauthorized",
+            "Invalid or missing API key",
+        );
     }
     let project_id = body
         .get("project_id")
@@ -698,7 +705,11 @@ async fn spec_kit_audit(
     Json(body): Json<Value>,
 ) -> Response {
     if !authorized(&headers, &state.config.bearer_key_sha256) {
-        return error(StatusCode::UNAUTHORIZED, "unauthorized", "Invalid or missing API key");
+        return error(
+            StatusCode::UNAUTHORIZED,
+            "unauthorized",
+            "Invalid or missing API key",
+        );
     }
     let project_id = body
         .get("project_id")
@@ -714,23 +725,20 @@ async fn spec_kit_audit(
     } else {
         project_id.clone()
     };
-let (storage_version, last_run_count, last_activity) = if let Some(store) = &state.store {
-    match store.load(org_id, &audit_project).await {
-        Ok(Some(stored)) => {
-            let events = stored.snapshot.ledger.events();
-            let run_count = events.len();
-            let last_activity = events
-                .last()
-                .map(|e| e.occurred_at_unix_ms)
-                .unwrap_or(0);
-            (stored.storage_version, run_count, last_activity)
+    let (storage_version, last_run_count, last_activity) = if let Some(store) = &state.store {
+        match store.load(org_id, &audit_project).await {
+            Ok(Some(stored)) => {
+                let events = stored.snapshot.ledger.events();
+                let run_count = events.len();
+                let last_activity = events.last().map(|e| e.occurred_at_unix_ms).unwrap_or(0);
+                (stored.storage_version, run_count, last_activity)
+            }
+            Ok(None) => (0, 0, 0),
+            Err(_) => (0, 0, 0),
         }
-        Ok(None) => (0, 0, 0),
-        Err(_) => (0, 0, 0),
-    }
-} else {
-    (0, 0, 0)
-};
+    } else {
+        (0, 0, 0)
+    };
 
     let phase = if storage_version == 0 {
         "specify"
@@ -1115,7 +1123,10 @@ async fn proxy_openai_request(
     {
         for c in cap.split(',') {
             let c = c.trim();
-            if !c.is_empty() && !required_capabilities.iter().any(|e| e == c) {
+            if !c.is_empty()
+                && VALID_CAPABILITIES.contains(&c)
+                && !required_capabilities.iter().any(|e| e == c)
+            {
                 required_capabilities.push(c.to_owned());
             }
         }
@@ -1276,10 +1287,7 @@ async fn proxy_openai_request(
         let response = match response {
             Ok(value) => value,
             Err(_) => {
-                last_error = Some((
-                    StatusCode::BAD_GATEWAY,
-                    "provider_transport_failed",
-                ));
+                last_error = Some((StatusCode::BAD_GATEWAY, "provider_transport_failed"));
                 continue;
             }
         };
@@ -1294,10 +1302,7 @@ async fn proxy_openai_request(
         let bytes = match response.bytes().await {
             Ok(value) => value,
             Err(_) => {
-                last_error = Some((
-                    StatusCode::BAD_GATEWAY,
-                    "provider_body_failed",
-                ));
+                last_error = Some((StatusCode::BAD_GATEWAY, "provider_body_failed"));
                 continue;
             }
         };
@@ -1309,8 +1314,7 @@ async fn proxy_openai_request(
     let (status, bytes) = match success_response {
         Some(value) => value,
         None => {
-            let (status, reason) = last_error
-                .unwrap_or((StatusCode::BAD_GATEWAY, "no_candidates"));
+            let (status, reason) = last_error.unwrap_or((StatusCode::BAD_GATEWAY, "no_candidates"));
             abort_run(&state, &prepared.run_id, reason).await;
             return error(
                 status,

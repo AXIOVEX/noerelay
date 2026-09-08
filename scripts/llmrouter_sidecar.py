@@ -226,6 +226,10 @@ class RankingHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _safe_str(self, value: str) -> str:
+        """Sanitize string to prevent HTTP response splitting."""
+        return value.replace("\r", "").replace("\n", "")
+
     def do_GET(self) -> None:
         if self.path == "/health":
             self._send_json(200, {"status": "healthy", "timestamp": int(time.time() * 1000)})
@@ -236,7 +240,7 @@ class RankingHandler(BaseHTTPRequestHandler):
                     "sidecar": "llmrouter-sidecar",
                     "version": SIDECAR_VERSION,
                     "schema_version": SCHEMA_VERSION,
-                    "model": self.model,
+                    "model": self._safe_str(self.model),
                 },
             )
         else:
