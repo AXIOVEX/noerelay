@@ -1116,6 +1116,7 @@ async fn proxy_openai_request(
     };
     let project_is_new = explicit_project.is_none();
     let mut required_capabilities: Vec<String> = vec!["text".into()];
+    let mut has_agent_client = false;
     if let Some(cap) = headers
         .get("x-noerelay-capability")
         .and_then(|value| value.to_str().ok())
@@ -1123,18 +1124,19 @@ async fn proxy_openai_request(
     {
         for c in cap.split(',') {
             let c = c.trim();
-            if !c.is_empty()
-                && VALID_CAPABILITIES.contains(&c)
-                && !required_capabilities.iter().any(|e| e == c)
-            {
+            if c.is_empty() || !VALID_CAPABILITIES.contains(&c) {
+                continue;
+            }
+            // Agent client identifiers control system-prompt behavior only;
+            // they are NOT model capability requirements for routing.
+            if c == "cursor" || c == "codex" || c == "aider" {
+                has_agent_client = true;
+            } else if !required_capabilities.iter().any(|e| e == c) {
                 required_capabilities.push(c.to_owned());
             }
         }
     }
-    let is_agent_capability = wire_request.model == RAW_PUBLIC_MODEL_ID
-        || required_capabilities
-            .iter()
-            .any(|c| c == "cursor" || c == "codex" || c == "aider");
+    let is_agent_capability = wire_request.model == RAW_PUBLIC_MODEL_ID || has_agent_client;
     let requested_public_model = wire_request.model.clone();
     let canonical = CanonicalRequest {
         request_id: header_or(&headers, "x-request-id", &Uuid::new_v4().to_string()),
