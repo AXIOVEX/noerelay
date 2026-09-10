@@ -1,17 +1,19 @@
 """
 Cross-platform system detection for NoeRelay provisioning.
 
-This module inspects the host (OS, CPU architecture, CPU, RAM, GPUs, VRAM)
-and decides which llama.cpp *backend* the machine should use:
+This module inspects the host (OS + version, CPU architecture, CPU model,
+logical/physical cores, RAM, GPUs, VRAM) and decides which llama.cpp *backend*
+the machine should use:
 
 * ``cuda``  — one or more NVIDIA GPUs (Windows / Linux)
 * ``metal`` — Apple Silicon (M1/M2/M3/M4) with the unified-memory Metal backend
 * ``cpu``   — no accelerator; CPU-only inference
 
 Everything here is best-effort and defensive: a missing tool (``nvidia-smi``,
-``sysctl``) or a permission error must never raise out of ``detect_system()``.
-The result is a plain :class:`SystemInfo` that the provisioning logic and the
-``noerelay detect`` / ``noerelay doctor`` CLI commands render.
+``sysctl``, ``wmic``) or a permission error must never raise out of
+``detect_system()``. The result is a plain :class:`SystemInfo` that the
+provisioning logic and the ``noerelay detect`` / ``noerelay doctor`` CLI
+commands render.
 
 No third-party dependencies — stdlib only, so it runs anywhere Python runs.
 """
@@ -19,7 +21,6 @@ No third-party dependencies — stdlib only, so it runs anywhere Python runs.
 from __future__ import annotations
 
 import platform
-import re
 import shutil
 import subprocess
 from dataclasses import dataclass, field
@@ -57,10 +58,13 @@ class SystemInfo:
     """A snapshot of the host machine."""
 
     os: str = ""                 # windows | darwin | linux
+    os_version: str = ""         # e.g. "11 (build 26200)", "14.5", "Ubuntu 24.04"
     arch: str = ""               # x86_64 | arm64 | ...
     cpu_model: str = ""
-    cpu_count: int = 0
+    cpu_count: int = 0           # logical cores / threads
+    physical_cores: int = 0      # physical cores (0 if unknown)
     ram_gb: float = 0.0
+    hostname: str = ""
     gpus: list[GPU] = field(default_factory=list)
     backend: str = "cpu"         # cuda | metal | cpu
     python_version: str = ""
@@ -76,15 +80,26 @@ class SystemInfo:
     def gpu_count(self) -> int:
         return len(self.gpus)
 
+    def _cpu_label(self) -> str:
+        model = self.cpu_model or "unknown"
+        if self.physical_cores and self.physical_cores != self.cpu_count:
+            return f"{model}  ({self.cpu_count} threads / {self.physical_cores} cores)"
+        return f"{model}  ({self.cpu_count} cores)"
+
     def summary_lines(self) -> list[str]:
         """Human-readable lines for the CLI."""
+        os_line = self.os
+        if self.os_version:
+            os_line = f"{self.os} {self.os_version}"
         lines = [
-            f"OS:          {self.os} ({self.arch})",
-            f"CPU:         {self.cpu_model or 'unknown'}  ({self.cpu_count} cores)",
+            f"OS:          {os_line} ({self.arch})",
+            f"CPU:         {self._cpu_label()}",
             f"RAM:         {self.ram_gb:.1f} GB",
             f"Backend:     {self.backend}",
             f"Python:      {self.python_version}",
         ]
+        if self.hostname:
+            lines.append(f"Host:        {self.hostname}")
         if self.gpus:
             for g in self.gpus:
                 disp = " [display]" if g.display_active else ""
@@ -136,9 +151,62 @@ def _arch_name() -> str:
     return machine or "unknown"
 
 
+def _os_version() -> str:
+    """Best-effort, human-friendly OS version string. Never raises."""
+    os_name = _os_name()
+    try:
+        if os_name == "windows":
+            # platform.version() -> "10.0.26200" (build); platform.release() -> "10"
+            build = platform.version()
+            parts = build.split(".")
+            build_num = parts[-1] if parts else ""
+            try:
+                major_build = int(build_num)
+            except (ValueError, TypeError):
+                major_build = 0
+            # Windows 11 builds start at 22000.
+            label = "11" if major_build >= 22000 else "10"
+            if build_num:
+                return f"{label} (build {build_num})"
+            return label
+        if os_name == "darwin":
+            ver = platform.mac_ver()[0]
+            return ver or platform.release()
+        if os_name == "linux":
+            try:
+                with open("/etc/os-release", "r", encoding="utf-8", errors="ignore") as fh:
+                    for line in fh:
+                        if line.startswith("PRETTY_NAME="):
+                            val = line.split("=", 1)[1].strip().strip('"')
+                            if val:
+                                return val
+            except Exception:
+                pass
+            return platform.release() or platform.platform()
+    except Exception:
+        pass
+    return platform.release() or ""
+
+
 def _cpu_model() -> str:
+    """Detect the CPU model name. Never raises.
+
+    Windows: ``wmic`` is deprecated and removed on Windows 11, so we prefer
+    PowerShell + WMI/CIM and fall back to ``wmic`` only if it still exists.
+    """
     os_name = _os_name()
     if os_name == "windows":
+        out = _run(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "(Get-CimInstance Win32_Processor | Select-Object -First 1).Name",
+            ]
+        )
+        if out and out.strip():
+            return out.strip()
+        # Legacy fallback for older Windows where wmic is still present.
         out = _run(["wmic", "cpu", "get", "name"])
         if out:
             for line in out.splitlines():
@@ -148,7 +216,8 @@ def _cpu_model() -> str:
         return ""
     if os_name == "darwin":
         out = _run(["sysctl", "-n", "machdep.cpu.brand_string"])
-        return (out or "").strip()
+        if out and out.strip():
+            return out.strip()
     # linux + fallback
     try:
         with open("/proc/cpuinfo", "r", encoding="utf-8", errors="ignore") as fh:
@@ -169,6 +238,50 @@ def _cpu_count() -> int:
         return 0
 
 
+def _physical_cores() -> int:
+    """Detect physical core count. Returns 0 if unknown. Never raises."""
+    os_name = _os_name()
+    try:
+        if os_name == "windows":
+            out = _run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    "(Get-CimInstance Win32_Processor | "
+                    "Measure-Object -Property NumberOfCores -Sum).Sum",
+                ]
+            )
+            if out and out.strip():
+                return int(out.strip())
+        elif os_name == "darwin":
+            out = _run(["sysctl", "-n", "hw.physicalcpu"])
+            if out and out.strip():
+                return int(out.strip())
+        else:
+            # linux: count unique "physical id" entries in /proc/cpuinfo.
+            try:
+                ids = set()
+                with open("/proc/cpuinfo", "r", encoding="utf-8", errors="ignore") as fh:
+                    for line in fh:
+                        if line.lower().startswith("physical id"):
+                            ids.add(line.split(":", 1)[1].strip())
+                if ids:
+                    return len(ids)
+            except Exception:
+                pass
+    except Exception:
+        pass
+    return 0
+
+
+def _hostname() -> str:
+    try:
+        return platform.node() or ""
+    except Exception:
+        return ""
+
+
 def _ram_gb() -> float:
     os_name = _os_name()
     try:
@@ -182,6 +295,15 @@ def _ram_gb() -> float:
             if out:
                 return float(out.strip())
         else:
+            # Prefer /proc/meminfo (MemTotal in kB) — more reliable than `free`.
+            try:
+                with open("/proc/meminfo", "r", encoding="utf-8", errors="ignore") as fh:
+                    for line in fh:
+                        if line.lower().startswith("memtotal:"):
+                            kb = int(line.split(":", 1)[1].strip().split()[0])
+                            return kb / (1024 ** 2)
+            except Exception:
+                pass
             out = _run(["free", "-g"])
             if out:
                 for line in out.splitlines():
@@ -300,10 +422,13 @@ def detect_system() -> SystemInfo:
 
     return SystemInfo(
         os=os_name,
+        os_version=_os_version(),
         arch=arch,
         cpu_model=_cpu_model(),
         cpu_count=_cpu_count(),
+        physical_cores=_physical_cores(),
         ram_gb=round(_ram_gb(), 2),
+        hostname=_hostname(),
         gpus=gpus,
         backend=backend,
         python_version=".".join(platform.python_version_tuple()[:2]),

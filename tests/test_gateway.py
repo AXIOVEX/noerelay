@@ -1606,6 +1606,21 @@ def _live_tests_enabled() -> bool:
         return False
 
 
+def _endpoint_reachable(base_url: str, timeout: float = 3.0) -> bool:
+    """Return True if the OpenRouter-compatible endpoint accepts a TCP/HTTP
+    connection. Used to *skip* (rather than fail) live integration tests when
+    no server is running. Never raises."""
+    if not base_url:
+        return False
+    try:
+        url = base_url.rstrip("/") + "/models"
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return 200 <= int(resp.status) < 500
+    except Exception:
+        return False
+
+
 @unittest.skipUnless(
     _live_tests_enabled(),
     "Live tests require NOERELAY_LIVE_TESTS=1 and NOERELAY_OPENROUTER_MODE=live",
@@ -1627,6 +1642,15 @@ class LiveOpenRouterTests(unittest.TestCase):
         if not key.startswith("sk-or-v1-"):
             raise unittest.SkipTest(
                 f"OPENROUTER_API_KEY has unexpected prefix (len={len(key)})"
+            )
+        # Skip (not fail) if the live endpoint is not reachable. These are
+        # integration tests that require a running OpenRouter-compatible
+        # server; a missing endpoint is an environmental condition, not a
+        # code defect.
+        if not _endpoint_reachable(config.openrouter_base_url):
+            raise unittest.SkipTest(
+                "OpenRouter endpoint not reachable "
+                f"({config.openrouter_base_url}); live tests skipped"
             )
         cls.config = config
         cls.policy = json.loads(
