@@ -22,6 +22,8 @@ Commands:
     install cursor      Install Cursor CLI (npm)
     install cursor-ide  Install Cursor IDE (winget)
     setup               Scaffold noerelay aider integration in a project
+    adopt               Adopt an existing project into the spec-kit + noerelay workflow
+    update              Update noerelay and its dependencies
     resume              Assess project state for resuming work
     config show         Show current configuration
     config set          Set configuration values
@@ -711,6 +713,312 @@ def cmd_setup(args):
     print("In the aider prompt, type /noerelay to see available commands.")
 
 
+# --- Adopt (pull an existing project into the spec-kit + noerelay workflow) ---
+
+
+CONSTITUTION_MD = '''# Project Constitution
+
+> Living document. Update as the project evolves. Keep entries short and testable.
+
+## Principles
+
+1. **Spec before code.** Every feature starts from a spec, then a plan, then tasks.
+2. **Evidence over assertion.** Claims about behavior are backed by a test or a run receipt.
+3. **Small, reversible steps.** Prefer changes that are easy to review and roll back.
+4. **Document state.** `docs/STATE.md` always reflects where the project stands.
+
+## Conventions
+
+- Feature work lives under `.specify/features/<feature>/` with `spec.md`, `plan.md`, `tasks.md`.
+- Open gaps are tracked in `.noerelay/GAPS.md`.
+- The verification matrix lives at `docs/verification-matrix.md`.
+
+## Decision Log
+
+| Date | Decision | Rationale |
+|------|----------|-----------|
+|      |          |           |
+'''
+
+STATE_MD = '''# Project State
+
+> Keep this current. `noerelay resume` reads it.
+
+## Summary
+
+- **Project:** (name)
+- **Status:** adopted
+- **Updated:** (date)
+
+## Next action
+
+- (what to do next)
+
+## Active features
+
+- (none yet)
+
+## Open gaps
+
+- (none yet)
+'''
+
+FEATURE_SPEC_TEMPLATE = '''# Spec: {feature}
+
+## Problem
+
+(what problem does this solve?)
+
+## Goals
+
+- (goal 1)
+
+## Non-goals
+
+- (explicitly out of scope)
+
+## Requirements
+
+1. (requirement 1)
+
+## Acceptance criteria
+
+- [ ] (observable, testable criterion)
+'''
+
+FEATURE_PLAN_TEMPLATE = '''# Plan: {feature}
+
+## Approach
+
+(how we will build this)
+
+## Components
+
+- (component 1)
+
+## Risks
+
+- (risk 1)
+'''
+
+FEATURE_TASKS_TEMPLATE = '''# Tasks: {feature}
+
+- [ ] 1. (task 1)
+- [ ] 2. (task 2)
+'''
+
+GAPS_MD = '''# Gap Register
+
+> Managed by `noerelay gaps` (delegates to `aee gaps`).
+
+| ID | Description | Severity | Status |
+|----|-------------|----------|--------|
+'''
+
+VERIFICATION_MATRIX_MD = '''# Verification Matrix
+
+> Maps requirements to evidence. `noerelay gaps` reads this.
+
+| Requirement | Evidence | Status |
+|-------------|----------|--------|
+'''
+
+
+def _write_file(path: str, content: str, force: bool, created: list, skipped: list):
+    """Write a file unless it exists (and force is not set)."""
+    if os.path.exists(path) and not force:
+        skipped.append(path)
+        return
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    created.append(path)
+
+
+def cmd_adopt(args):
+    """Adopt an existing project into the spec-kit + noerelay workflow.
+
+    Scaffolds the full structure in one shot:
+      - .specify/ (constitution, features/, templates)
+      - docs/STATE.md, docs/verification-matrix.md
+      - .noerelay/ (gap register)
+      - aider integration (scripts/aider.ps1, .aider.conf.yml, ...)
+
+    Idempotent and non-destructive: existing files are skipped unless --force.
+    Optionally registers the project on the gateway with --onboard.
+    """
+    target = os.path.abspath(args.dir or ".")
+    if not os.path.isdir(target):
+        print(f"Error: {target} is not a directory.")
+        sys.exit(1)
+
+    project_name = args.name or os.path.basename(target)
+    created, skipped = [], []
+
+    # 1. spec-kit structure
+    _write_file(os.path.join(target, ".specify", "memory", "constitution.md"),
+                CONSTITUTION_MD, args.force, created, skipped)
+    os.makedirs(os.path.join(target, ".specify", "features"), exist_ok=True)
+    _write_file(os.path.join(target, ".specify", "templates", "spec.md"),
+                FEATURE_SPEC_TEMPLATE.format(feature="<feature>"), args.force, created, skipped)
+    _write_file(os.path.join(target, ".specify", "templates", "plan.md"),
+                FEATURE_PLAN_TEMPLATE.format(feature="<feature>"), args.force, created, skipped)
+    _write_file(os.path.join(target, ".specify", "templates", "tasks.md"),
+                FEATURE_TASKS_TEMPLATE.format(feature="<feature>"), args.force, created, skipped)
+
+    # 2. docs
+    _write_file(os.path.join(target, "docs", "STATE.md"), STATE_MD, args.force, created, skipped)
+    _write_file(os.path.join(target, "docs", "verification-matrix.md"),
+                VERIFICATION_MATRIX_MD, args.force, created, skipped)
+
+    # 3. noerelay gap register
+    _write_file(os.path.join(target, ".noerelay", "GAPS.md"), GAPS_MD, args.force, created, skipped)
+
+    # 4. aider integration (same files as `setup`)
+    scripts_dir = os.path.join(target, "scripts")
+    _write_file(os.path.join(scripts_dir, "aider.ps1"), AIDER_PS1, args.force, created, skipped)
+    _write_file(os.path.join(scripts_dir, "aider.cmd"), AIDER_CMD, args.force, created, skipped)
+    _write_file(os.path.join(target, ".aider.conf.yml"), AIDER_CONF_YML, args.force, created, skipped)
+    _write_file(os.path.join(target, ".aider.model.metadata.json"),
+                AIDER_MODEL_METADATA, args.force, created, skipped)
+
+    # 5. .gitignore additions
+    gitignore_path = os.path.join(target, ".gitignore")
+    if os.path.exists(gitignore_path):
+        with open(gitignore_path, "r", encoding="utf-8") as f:
+            existing = f.read()
+        if ".aider*" not in existing:
+            with open(gitignore_path, "a", encoding="utf-8") as f:
+                f.write(GITIGNORE_ADDITIONS)
+            created.append(gitignore_path + " (appended)")
+    else:
+        _write_file(gitignore_path, GITIGNORE_ADDITIONS.lstrip(), args.force, created, skipped)
+
+    # 6. Optional: register on the gateway
+    onboarded = False
+    if args.onboard:
+        try:
+            config = load_config()
+            project_id = args.project or config.get("project_id", "default")
+            body = {
+                "project_id": project_id,
+                "project_name": project_name,
+                "description": args.description or "",
+            }
+            api_request(config, "POST", "/v1/noerelay/projects/onboard", body)
+            onboarded = True
+        except Exception as e:
+            print(f"\n[warn] Could not onboard on gateway: {e}")
+
+    print(f"=== NoeRelay Adopt: {project_name} ===")
+    print(f"Target: {target}\n")
+    if created:
+        print("Created:")
+        for f in created:
+            print(f"  + {os.path.relpath(f, target)}")
+    if skipped:
+        print("\nSkipped (already exists, use --force to overwrite):")
+        for f in skipped:
+            print(f"  = {os.path.relpath(f, target)}")
+    if onboarded:
+        print("\nRegistered on gateway.")
+    print("\nNext steps:")
+    print("  1. Edit .specify/memory/constitution.md for your project's principles.")
+    print("  2. Create a feature: .specify/features/<feature>/ (copy from .specify/templates/).")
+    print(f"  3. Start an aider session: pwsh -NoProfile -File {os.path.join(scripts_dir, 'aider.ps1')}")
+    print("  4. Check state anytime: noerelay resume --dir " + os.path.relpath(target))
+
+
+# --- Update (refresh noerelay + its dependencies) ---
+
+
+def _pip_cmd() -> list:
+    """Return the best available pip invocation for the current interpreter."""
+    import sys
+    return [sys.executable, "-m", "pip"]
+
+
+def _is_editable_install() -> bool:
+    """True if noerelay is installed in editable (development) mode."""
+    try:
+        import noerelay
+        path = getattr(noerelay, "__file__", "") or ""
+        return path.startswith(os.path.expanduser("~")) or "site-packages" not in path.replace("\\", "/")
+    except Exception:
+        return False
+
+
+def _build_update_commands(args) -> list:
+    """Build the ordered list of shell commands to update noerelay + deps.
+
+    Pure function (no side effects) so it can be unit-tested. Returns a list of
+    (label, argv) tuples.
+    """
+    pip = _pip_cmd()
+    extras = args.extras or "full"
+    commands = []
+
+    if args.editable:
+        # Development / editable install: refresh the source tree, then reinstall.
+        commands.append(("git pull", ["git", "pull", "--ff-only"]))
+        commands.append((
+            "pip install -e .[{}]".format(extras),
+            pip + ["install", "-U", "-e", ".[{}]".format(extras)],
+        ))
+    else:
+        # Standard install: upgrade the published package + its extras.
+        commands.append((
+            "pip install -U noerelay[{}]".format(extras),
+            pip + ["install", "-U", "noerelay[{}]".format(extras)],
+        ))
+
+    # Always refresh the core dependencies to their latest compatible versions.
+    commands.append((
+        "pip install -U (core deps)",
+        pip + ["install", "-U", "pip", "setuptools", "wheel"],
+    ))
+
+    return commands
+
+
+def cmd_update(args):
+    """Update noerelay and its dependencies.
+
+    - Standard install: `pip install -U noerelay[<extras>]`.
+    - Editable/dev install (`--editable`): `git pull` then `pip install -e .[<extras>]`.
+    - `--dry-run` prints the commands without running them.
+    """
+    commands = _build_update_commands(args)
+
+    print("=== NoeRelay Update ===")
+    mode = "editable (dev)" if args.editable else "standard"
+    print(f"Mode:    {mode}")
+    print(f"Extras:  {args.extras or 'full'}")
+    print()
+
+    if args.dry_run:
+        print("Dry run — commands that would be executed:")
+        for label, argv in commands:
+            print(f"  $ {' '.join(argv)}   # {label}")
+        print("\nRe-run without --dry-run to apply.")
+        return
+
+    for label, argv in commands:
+        print(f"→ {label}")
+        print(f"  $ {' '.join(argv)}")
+        try:
+            proc = subprocess.run(argv, check=False)
+        except FileNotFoundError as e:
+            print(f"  [error] Could not run: {e}")
+            sys.exit(1)
+        if proc.returncode != 0:
+            print(f"  [error] Command failed (exit {proc.returncode}). Aborting.")
+            sys.exit(proc.returncode)
+
+    print("\nUpdate complete.")
+    print("Verify with: noerelay status")
+
+
 # --- Provisioning / local LLM stack ---
 
 def cmd_detect(args):
@@ -889,6 +1197,31 @@ def main():
     p_setup.add_argument("--dir", "-d", help="Target project directory (default: current)")
     p_setup.add_argument("--force", "-f", action="store_true", help="Overwrite existing files")
 
+    # adopt
+    p_adopt = subparsers.add_parser(
+        "adopt",
+        help="Adopt an existing project into the spec-kit + noerelay workflow (one-shot)",
+    )
+    p_adopt.add_argument("--dir", "-d", help="Target project directory (default: current)")
+    p_adopt.add_argument("--name", "-n", help="Project display name (default: directory name)")
+    p_adopt.add_argument("--force", "-f", action="store_true", help="Overwrite existing files")
+    p_adopt.add_argument("--onboard", "-o", action="store_true",
+                         help="Also register the project on the gateway")
+    p_adopt.add_argument("--project", "-p", help="Project ID for onboarding (default: from config)")
+    p_adopt.add_argument("--description", help="Project description for onboarding")
+
+    # update
+    p_update = subparsers.add_parser(
+        "update",
+        help="Update noerelay and its dependencies",
+    )
+    p_update.add_argument("--editable", "-e", action="store_true",
+                          help="Treat as an editable/dev install (git pull + pip install -e .)")
+    p_update.add_argument("--extras", default="full",
+                          help="Extra dependency set to install: ui, models, full (default: full)")
+    p_update.add_argument("--dry-run", "-n", action="store_true",
+                          help="Print the commands without running them")
+
     # resume
     p_resume = subparsers.add_parser("resume", help="Assess project state for resuming work")
     p_resume.add_argument("--dir", "-d", help="Target project directory (default: current)")
@@ -951,6 +1284,10 @@ def main():
         cmd_install(args)
     elif args.command == "setup":
         cmd_setup(args)
+    elif args.command == "adopt":
+        cmd_adopt(args)
+    elif args.command == "update":
+        cmd_update(args)
     elif args.command == "resume":
         cmd_resume(args)
     elif args.command == "gaps":

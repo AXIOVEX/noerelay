@@ -288,6 +288,15 @@ python scripts/noerelay.py install opencode    # Install OpenCode (npm)
 python scripts/noerelay.py install cursor      # Install Cursor CLI (npm)
 python scripts/noerelay.py install cursor-ide  # Install Cursor IDE (winget)
 
+# Project adoption (pull an existing repo into the spec-kit workflow)
+python scripts/noerelay.py adopt -d path/to/project -n "My Project"
+python scripts/noerelay.py adopt -d path/to/project --onboard   # also register on gateway
+
+# Update noerelay + dependencies
+python scripts/noerelay.py update                 # standard install (pip install -U noerelay[full])
+python scripts/noerelay.py update --editable      # dev install (git pull + pip install -e .[full])
+python scripts/noerelay.py update --dry-run       # preview the commands without running them
+
 # Configuration
 python scripts/noerelay.py config show         # Show current config
 python scripts/noerelay.py config set base_url http://other-host:8080
@@ -320,6 +329,57 @@ Config is stored at `~/.noerelay/config.json`. Precedence (highest first):
 | **OpenCode** | `npm install -g opencode-ai` | `run opencode` | Sets `OPENAI_API_BASE`/`OPENAI_API_KEY` env vars |
 
 All `run` commands auto-install the tool if it is not found in PATH. Extra arguments after the subcommand are forwarded to the underlying tool (e.g., `run aider --yes --file main.py`).
+
+## Project adoption & updates
+
+### `adopt` — pull an existing project into the spec-kit workflow
+
+`adopt` scaffolds the full spec-kit + NoeRelay + aider structure into an
+existing repository in one shot, so you don't have to run the spec-kit init
+flow and `setup` separately. It is **idempotent** and **non-destructive**:
+existing files are left alone unless you pass `--force`.
+
+```bash
+noerelay adopt -d path/to/project -n "My Project"
+noerelay adopt -d path/to/project --onboard        # also register on the gateway
+noerelay adopt -d path/to/project --force          # overwrite existing files
+```
+
+What it creates (relative to the target directory):
+
+| Path | Purpose |
+|------|---------|
+| `.specify/memory/constitution.md` | Project constitution (principles, conventions, decision log) |
+| `.specify/features/` | Feature work directory |
+| `.specify/templates/{spec,plan,tasks}.md` | Copy-ready feature templates |
+| `docs/STATE.md` | Project state (read by `noerelay resume`) |
+| `docs/verification-matrix.md` | Requirement → evidence matrix (read by `noerelay gaps`) |
+| `.noerelay/GAPS.md` | Gap register |
+| `scripts/aider.ps1`, `scripts/aider.cmd` | Aider launchers |
+| `.aider.conf.yml`, `.aider.model.metadata.json` | Aider config |
+| `.gitignore` | Aider ignore rules (appended if present) |
+
+After running `adopt`, `noerelay resume --dir <target>` immediately reports
+the project's state, and `noerelay gaps --dir <target>` can generate the gap
+register from the verification matrix.
+
+### `update` — refresh NoeRelay and its dependencies
+
+`update` brings the CLI and its optional dependencies up to date.
+
+```bash
+noerelay update                    # standard install: pip install -U noerelay[full]
+noerelay update --editable         # dev install: git pull --ff-only + pip install -e .[full]
+noerelay update --extras ui        # install a specific extra set (ui | models | full)
+noerelay update --dry-run          # preview the commands without running them
+```
+
+- **Standard mode** (default) runs `pip install -U noerelay[<extras>]`.
+- **Editable mode** (`--editable`) runs `git pull --ff-only` first, then
+  `pip install -U -e .[<extras>]` — for development checkouts.
+- Both modes finish by refreshing the core toolchain
+  (`pip`, `setuptools`, `wheel`).
+- `--dry-run` prints the exact commands that would run, for review.
 
 ## Local LLM stack (cross-platform provisioning)
 
