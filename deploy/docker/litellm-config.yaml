@@ -1,9 +1,9 @@
 model_list:
-  # Primary: Remote NInfer LiteLLM (Qwen3.8-27B via Tailscale)
+  # Primary: Remote GPU vLLM (Qwen3.8-27B via SSH tunnel)
   - model_name: qwen3.8-27b
     litellm_params:
       model: openai/qwen3.8-27b
-      api_base: https://layer1labs.tail8508ce.ts.net:4000/v1
+      api_base: http://remote-gpu-tunnel:4001/v1
       api_key: os.environ/REMOTE_NINFER_API_KEY
       rpm: 120
       timeout: 600

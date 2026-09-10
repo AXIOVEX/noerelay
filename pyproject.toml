@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "noerelay"
+version = "0.2.0"
+description = "NoeRelay — local AI agent orchestration, tool integration, and one-command local LLM stack provisioning (llama.cpp + venv + model) across Windows, macOS, and Linux."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+    { name = "NoeRelay" },
+]
+keywords = [
+    "llm",
+    "local-llm",
+    "llama.cpp",
+    "inference",
+    "agent",
+    "orchestration",
+    "openai-compatible",
+    "gpu",
+    "cross-platform",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Systems Administration",
+]
+# Core is stdlib-only so the CLI runs anywhere Python runs.
+dependencies = []
+
+[project.optional-dependencies]
+# Pretty console output for the installer / provisioner.
+ui = ["rich>=13.0"]
+# Model discovery from Hugging Face during provisioning.
+models = ["huggingface_hub>=0.23"]
+# Everything the provisioner wants.
+full = ["rich>=13.0", "huggingface_hub>=0.23"]
+# Packaging / publishing tooling (dev only).
+dev = ["build>=1.0", "twine>=4.0", "rich>=13.0", "huggingface_hub>=0.23"]
+
+[project.scripts]
+noerelay = "noerelay.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/noerelay/noerelay"
+Documentation = "https://github.com/noerelay/noerelay#readme"
+Issues = "https://github.com/noerelay/noerelay/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+noerelay = ["py.typed"]

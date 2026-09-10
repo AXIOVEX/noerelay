@@ -25,6 +25,11 @@ Commands:
     resume              Assess project state for resuming work
     config show         Show current configuration
     config set          Set configuration values
+
+    Local LLM stack (cross-platform):
+    detect              Detect this machine (OS, CPU, RAM, GPUs, backend)
+    provision           Auto-provision the local LLM stack (llama.cpp + venv + model)
+    doctor              Diagnose the local LLM stack (server reachability, API, chat)
 """
 
 import argparse
@@ -706,6 +711,115 @@ def cmd_setup(args):
     print("In the aider prompt, type /noerelay to see available commands.")
 
 
+# --- Provisioning / local LLM stack ---
+
+def cmd_detect(args):
+    """Detect the local system (OS, CPU, RAM, GPUs, backend)."""
+    from .system_info import detect_system
+
+    system = detect_system()
+    print("=== NoeRelay System Detection ===")
+    for line in system.summary_lines():
+        print("  " + line)
+    if args.json:
+        import dataclasses
+        print()
+        print(json.dumps(dataclasses.asdict(system), indent=2, default=str))
+
+
+def cmd_provision(args):
+    """Auto-provision the local LLM stack for this machine."""
+    from pathlib import Path
+    from .system_info import detect_system
+    from .provision import make_plan
+
+    system = detect_system()
+    install_dir = Path(args.install_dir) if args.install_dir else None
+    models_dir = Path(args.models_dir) if args.models_dir else None
+    plan = make_plan(
+        system,
+        install_dir=install_dir,
+        models_dir=models_dir,
+        model_key=args.model,
+        host=args.host,
+        port=args.port,
+        ctx_size=args.ctx_size,
+        parallel=args.parallel,
+    )
+
+    print("=== NoeRelay Provision Plan ===")
+    for line in plan.summary_lines():
+        print("  " + line)
+
+    if args.dry_run:
+        print("\n[dry-run] No files written. Re-run without --dry-run to install.")
+        return
+
+    from .installer import provision as do_provision
+
+    do_provision(
+        install_dir=install_dir,
+        models_dir=models_dir,
+        model_key=args.model,
+        host=args.host,
+        port=args.port,
+        ctx_size=args.ctx_size,
+        parallel=args.parallel,
+        skip_download=args.skip_download,
+        skip_venv=args.skip_venv,
+    )
+
+
+def cmd_doctor(args):
+    """Diagnose the local LLM stack: config, server reachability, CLI."""
+    config = load_config()
+    base = config["base_url"]
+    print("=== NoeRelay Doctor ===")
+    print(f"Config base_url: {base}")
+    print(f"Config model:    {config.get('model')}")
+
+    # 1) Server reachable?
+    try:
+        req = urllib.request.Request(f"{base}/health")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            health = json.loads(resp.read().decode())
+        print(f"[ok] Server reachable: {health.get('status', 'unknown')}")
+    except Exception as e:
+        print(f"[FAIL] Server unreachable at {base}: {e}")
+
+    # 2) OpenAI-compatible /v1/models?
+    try:
+        req = urllib.request.Request(f"{base}/v1/models")
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            models = json.loads(resp.read().decode())
+        ids = [m.get("id") for m in models.get("data", [])]
+        print(f"[ok] /v1/models: {ids}")
+    except Exception as e:
+        print(f"[FAIL] /v1/models: {e}")
+
+    # 3) A quick chat completion?
+    if args.chat:
+        try:
+            body = {
+                "model": config.get("model", "local"),
+                "messages": [{"role": "user", "content": "Reply with the single word: ok"}],
+                "max_tokens": 16,
+            }
+            data = json.dumps(body).encode()
+            req = urllib.request.Request(
+                f"{base}/v1/chat/completions",
+                data=data,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                out = json.loads(resp.read().decode())
+            text = out.get("choices", [{}])[0].get("message", {}).get("content", "")
+            print(f"[ok] chat completion: {text!r}")
+        except Exception as e:
+            print(f"[FAIL] chat completion: {e}")
+
+
 # --- Main ---
 
 def main():
@@ -792,6 +906,27 @@ def main():
     p_set.add_argument("key", help="Config key")
     p_set.add_argument("value", help="Config value")
 
+    # detect
+    p_detect = subparsers.add_parser("detect", help="Detect local system (OS, CPU, RAM, GPUs, backend)")
+    p_detect.add_argument("--json", "-j", action="store_true", help="Also print machine-readable JSON")
+
+    # provision
+    p_prov = subparsers.add_parser("provision", help="Auto-provision the local LLM stack for this machine")
+    p_prov.add_argument("--install-dir", help="Install directory (default: ~/noerelay-llm)")
+    p_prov.add_argument("--models-dir", help="Models directory (default: <install-dir>/models)")
+    p_prov.add_argument("--model", "-m", help="Force a model key (e.g. qwen2.5-7b)")
+    p_prov.add_argument("--host", default="127.0.0.1", help="Server host (default: 127.0.0.1)")
+    p_prov.add_argument("--port", type=int, default=8080, help="Server port (default: 8080)")
+    p_prov.add_argument("--ctx-size", type=int, help="Context size (default: auto)")
+    p_prov.add_argument("--parallel", type=int, default=1, help="Parallel slots (default: 1)")
+    p_prov.add_argument("--dry-run", action="store_true", help="Show the plan without installing")
+    p_prov.add_argument("--skip-download", action="store_true", help="Skip llama.cpp/model downloads")
+    p_prov.add_argument("--skip-venv", action="store_true", help="Skip venv/CLI setup")
+
+    # doctor
+    p_doctor = subparsers.add_parser("doctor", help="Diagnose the local LLM stack")
+    p_doctor.add_argument("--chat", action="store_true", help="Also run a quick chat completion")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -820,6 +955,12 @@ def main():
         cmd_resume(args)
     elif args.command == "gaps":
         cmd_gaps(args)
+    elif args.command == "detect":
+        cmd_detect(args)
+    elif args.command == "provision":
+        cmd_provision(args)
+    elif args.command == "doctor":
+        cmd_doctor(args)
     elif args.command == "run":
         if not args.integration:
             p_run.print_help()

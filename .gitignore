@@ -53,3 +53,8 @@ artifacts/
 rtk/target/
 # Rust build output
 /target/
+
+# Aider (keep config files tracked)
+.aider*
+!.aider.model.metadata.json
+!.aider.conf.yml

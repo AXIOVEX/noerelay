@@ -321,6 +321,67 @@ Config is stored at `~/.noerelay/config.json`. Precedence (highest first):
 
 All `run` commands auto-install the tool if it is not found in PATH. Extra arguments after the subcommand are forwarded to the underlying tool (e.g., `run aider --yes --file main.py`).
 
+## Local LLM stack (cross-platform provisioning)
+
+NoeRelay can **provision a complete local inference stack** on the current
+machine — a `llama.cpp` server, a Python virtualenv with the NoeRelay CLI, and
+a GGUF model — in one directory. It is **cross-platform** (Windows, macOS,
+Linux) and **auto-detects** the hardware to produce the most optimized install:
+
+- **Backend selection** — `cuda` (NVIDIA), `metal` (Apple Silicon), or `cpu`.
+- **Multi-GPU split** — with two or more NVIDIA GPUs, layers are split across
+  them (`--tensor-split`), with the display GPU given less weight.
+- **Model auto-selection** — picks the **best agentic-AI candidate that fits**
+  the detected VRAM/RAM (ranked by tool-use / instruction-following /
+  structured-output suitability, not raw size), falling back to a small
+  CPU-friendly model when there is no accelerator.
+- **Context sizing** — scales `--ctx-size` to available memory.
+
+The stack lives in a **virtualenv** (stdlib `venv` — no conda needed). The
+`llama.cpp` server is a native binary and lives *outside* the venv; the venv
+holds only the Python CLI + its dependencies.
+
+### Install
+
+```bash
+# From this repository (installs the CLI, then provisions the stack):
+pip install -e .
+noerelay provision            # auto-detect + install (default: ~/noerelay-llm)
+
+# Or preview the plan without installing anything:
+noerelay provision --dry-run
+
+# Force a specific model / location / port:
+noerelay provision --model qwen2.5-7b --install-dir ~/llm --port 8080
+```
+
+### Inspect and diagnose
+
+```bash
+noerelay detect               # OS, CPU, RAM, GPUs, backend
+noerelay doctor --chat        # server reachability, /v1/models, a test chat
+```
+
+### Layout
+
+```
+~/noerelay-llm/
+├── llama/        # llama.cpp server + backend libs
+├── venv/         # Python virtualenv (noerelay CLI + deps)
+├── models/       # GGUF weights
+├── bin/          # activate / start-server / stop-server / autostart / noerelay
+├── config.json   # machine-readable install record
+└── README.md     # generated, machine-specific guide
+```
+
+Start the server with `~/noerelay-llm/bin/start-server.{sh|bat}`, then point any
+OpenAI-compatible client at `http://127.0.0.1:8080/v1`.
+
+> **Packaging:** `noerelay` is a real PyPI package (see `pyproject.toml`).
+> Core is stdlib-only; `rich` (pretty console) and `huggingface_hub` (model
+> discovery) are optional extras (`pip install noerelay[full]`). It is prepared
+> for publishing but **not yet published**.
+
 ## What the tests cover
 
 - Parsing every JSON artifact in the repository.
