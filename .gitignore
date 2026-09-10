@@ -46,6 +46,9 @@ artifacts/
 .cache/
 *.log
 
+# Local runtime state (SQLite DB + exports) — auto-created, machine-specific
+.noerelay/
+
 # Zoo Code generated local bundles (contain resolved credentials)
 .zoo-code/*.local.json
 
