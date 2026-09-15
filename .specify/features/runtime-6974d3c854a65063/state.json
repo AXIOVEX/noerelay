@@ -1,0 +1,8 @@
+{
+  "project": "long-context-verification",
+  "feature": ".specify/features/runtime-6974d3c854a65063",
+  "claim_id": "REQ-AC9C0072D14CF4BF",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T181553424998Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T181553424998Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

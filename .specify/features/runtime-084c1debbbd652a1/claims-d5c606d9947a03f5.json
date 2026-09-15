@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-D5C606D9947A03F5",
+      "text": "[{\"text\": \"Implement a Python add function. Return only the function.\", \"type\": \"text\"}, {\"text\": \"This is a Zoo Code compatibility smoke test.\", \"type\": \"text\"}]",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-084c1debbbd652a1\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

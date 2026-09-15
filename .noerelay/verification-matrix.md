@@ -3,12 +3,19 @@
 **Status:** Required release evidence catalog  
 **Rule:** a test identifier is not evidence until a runner records its command, revision, environment, result, and artifact hash.
 
-Current implementation evidence and unresolved release blockers are tracked in [implementation-status.md](implementation-status.md). This matrix is the target gate catalog, not a claim that every row currently passes.
+Current implementation evidence and unresolved release blockers are tracked in [implementation-status.md](../docs/implementation-status.md). This matrix is the target gate catalog, not a claim that every row currently passes.
 
 ## Automated suites
 
 | Test ID | Requirement coverage | Layer | Gate |
 |---|---|---|---|
+| `T-API-005` | `NR-API-008` | Compatibility | Zoo-style multipart requests with validated reasoning effort complete from WSL2. |
+| `T-LLM-008` | `NR-LLM-008` | Local inference | Three models allocate 131072 context; beyond-16K retrieval succeeds. |
+| `T-OPS-006` | `NR-OPS-006` | Deployment | Host and Docker assets are separated; imports, Compose and lifecycle remain functional. |
+| `T-API-004` | `NR-API-007` | Local integration | Windows and WSL2 complete authenticated requests at the documented API endpoint; missing keys are rejected. |
+| `T-LLM-007` | `NR-LLM-007` | Local integration | All three routes complete; shared-GPU cold/warm timing artifacts recorded. |
+| `T-OPS-005` | `NR-OPS-005` | Integration | Internal spec-kit/AEE preserves edits, records unsupported claims, and fails closed if missing. |
+| `T-EXEC-009` | `NR-EXEC-009` | Local integration | Authenticated Docker MCP discovery/execution and bounded agent tool calls pass. |
 | `T-API-001` | `NR-API-001..003`, `NR-API-006` | Contract | OpenAI-compatible chat, Responses, models, errors, and unknown-field fixtures pass. |
 | `T-API-002` | `NR-API-002`, `NR-EXEC-001` | Integration | SSE ordering, terminal event, resume policy, disconnect cancellation, and slow-client bounds pass. |
 | `T-API-003` | `NR-API-004..005` | Security | Scope derivation and idempotency collision/replay matrices pass. |
@@ -28,6 +35,19 @@ Current implementation evidence and unresolved release blockers are tracked in [
 | `T-OPS-001` | `NR-OPS-001..003` | Integration/fault | Probes, telemetry correlation/redaction, kill switches, backup, restore, replay, and post-restore ledger verification pass. |
 | `T-SEC-001` | `NR-SEC-001..003` | Security/supply chain | Production fail-closed config, auth bypass, parser abuse, injection, secret scanning, dependency audit, SBOM, provenance, and signature gates pass. |
 | `T-REL-001` | `NR-REL-001..003` | Release | Load/soak/fault objectives, named profile, complete evidence bundle, approvals, non-goals, and external-responsibility disclosure pass. |
+
+## Phase 2 suites (G9)
+
+| Test ID | Requirement coverage | Layer | Gate |
+|---|---|---|---|
+| `T-RTK-001` | `NR-RTK-001..002` | Property | The native PyO3 bridge returns compression results when built and a null signal that triggers the documented Python fallback otherwise; both paths pass the same contract tests, and every pass records strategy, token counts, ratio, tokens saved, and duration while protected nodes survive dedup, prune, and auto. |
+| `T-OPS-004` | `NR-OPS-004` | Integration | No tool writes managed state outside `.noerelay/` on the supported local profile, and `noerelay gaps` reads the matrix and writes the gap register there by default. |
+| `T-LLM-001` | `NR-LLM-001` | Integration | On the reference two-GPU host the generated tensor split assigns the operator-designated primary GPU the larger share, and the catalog lists every supported local model with quant and VRAM guidance. |
+| `T-LLM-002` | `NR-LLM-002` | Domain | Both tier models appear in the catalog with distinct tier metadata, and a routing fixture selects the fast tier by default and the hard tier only under the declared escalation condition. |
+| `T-LLM-003` | `NR-LLM-003` | Evaluation | A benchmark artifact under `evidence/` records per-quant tokens/s, TTFT, VRAM, and quality proxy for `gpt-oss-20b` Q4_K_M/Q5_K_M/Q6_K, and the chosen quant is reproducible from the artifact. |
+| `T-LLM-004` | `NR-LLM-004` | Integration | `python -m noerelay.cli` performs start/stop/schedule of the local LLM server on Windows and POSIX, and the installer emits only thin `.bat`/`.sh` wrappers that resolve the provisioned venv interpreter. |
+| `T-LLM-005` | `NR-LLM-005` | Contract | The provisioned server is launched with the full argument set from the master YAML, changing a YAML value changes the generated invocation, and schema validation rejects unknown keys. |
+| `T-LLM-006` | `NR-LLM-006` | Integration | `noerelay hf search/download` resolves and fetches GGUF artifacts with progress and resume, and tab completion suggests catalog and HF repository identifiers without a network round-trip for catalog entries. |
 
 ## Required end-to-end scenarios
 

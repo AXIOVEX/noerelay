@@ -1,0 +1,30 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "2b48a023-e7c9-4905-9c56-b607f3a40e78",
+  "work_package_id": "LLM-01",
+  "requirement_ids": [
+    "NR-LLM-007"
+  ],
+  "test_ids": [
+    "T-LLM-007"
+  ],
+  "status": "observed_pass",
+  "source_revision": "aa64abaefdfc7c865e81f780b21846c648bd6106",
+  "artifact_digests": {
+    "deploy/local-models.ini": "4e3fe35a702f1f7b36e8731efa725915234904a98716ca5d831e776eb9e8e236",
+    "scripts/local-model-plane.py": "06b493d82acce63c87bc5088025b5437f6011a87adc303fb582278504e4febd4",
+    "src/noerelay/sdd.py": "99215dc6daa0cb1f6da5e6089c51f7a5e748d4a131832146cf04e9b263af3221",
+    "src/noerelay/mcp_agent.py": "3fd7c37888c8e5b475d6d2089fcb8f3e198ddcd9760b4a3a2baaf93a6192d472",
+    "crates/noerelay-gateway/src/lib.rs": "d23683355408dda953789cc24000d9f9cb55c685ce58b88740627d8b82b69625",
+    "docker-compose.yml": "9038f1adb011187b16647568bce41f7e98d689f26c02bdf8d7a77245663c08f4"
+  },
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python scripts/verify-local-stack.py",
+  "started_at": "2026-09-15T16:51:40.153947+00:00",
+  "finished_at": "2026-09-15T16:52:26.506625+00:00",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "ee90bf41670505b19c53c9077d232ea7eb86497666cf54f91f192ea15e4d0ff2",
+  "logs_artifact_sha256": "ee90bf41670505b19c53c9077d232ea7eb86497666cf54f91f192ea15e4d0ff2",
+  "exceptions": [],
+  "notes": "Local working-tree observation. Retained log: evidence/local-recovery/T-LLM-007.log. Source digests identify uncommitted code; no independent verification or production certification claimed."
+}

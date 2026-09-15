@@ -6,7 +6,7 @@
 
 **Planning assumption:** Four core engineers, part-time security/product support, approximately 20–22 weeks to general availability
 
-> The authoritative requirements are now [`requirements.md`](requirements.md), with release gates in [`verification-matrix.md`](verification-matrix.md). ADR-0001 replaces the language allocation below: Rust owns release authority, Python supplies bindings/evaluation extensions, and Go is limited to justified protocol/operational adapters.
+> The authoritative requirements are now [`requirements.md`](requirements.md), with release gates in [`verification-matrix.md`](../.noerelay/verification-matrix.md). ADR-0001 replaces the language allocation below: Rust owns release authority, Python supplies bindings/evaluation extensions, and Go is limited to justified protocol/operational adapters.
 
 **Meaning of “100%”:** Every v1 requirement and launch gate in this document is satisfied. It does not mean every future research capability has been implemented.
 

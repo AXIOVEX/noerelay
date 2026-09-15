@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "content": "742913",
+  "usage": {
+    "completion_tokens": 7,
+    "prompt_tokens": 40964,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 40971
+  },
+  "elapsed_seconds": 31.062,
+  "timings": {
+    "cache_n": 0,
+    "predicted_ms": 98.733,
+    "predicted_n": 7,
+    "predicted_per_second": 60.76995533408283,
+    "predicted_per_token_ms": 16.4555,
+    "prompt_ms": 17500.577,
+    "prompt_n": 40964,
+    "prompt_per_second": 2340.722823024635,
+    "prompt_per_token_ms": 0.42721846011131726
+  },
+  "scope": "Beyond-16K retrieval smoke test; not a full-window accuracy benchmark."
+}

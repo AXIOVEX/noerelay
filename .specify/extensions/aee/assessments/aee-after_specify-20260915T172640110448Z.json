@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 1 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T17:26:40.418669Z",
+  "claims": [
+    {
+      "id": "REQ-FAD8B01D4A01A344",
+      "text": "Reply with READY.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [],
+      "uncertainty": "high",
+      "severity": "medium",
+      "source_ref": ".specify\\features\\runtime-934ead7d03d21f95\\spec.md",
+      "domain": "",
+      "confidence": 0.1,
+      "confidence_band": "low",
+      "failures": [
+        {
+          "id": "AEE-REQ-FAD8B01D4A01A344-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-FAD8B01D4A01A344",
+          "challenge": "Falsifiability challenge",
+          "breakpoint": "Non-draft claim has no stated falsification test",
+          "severity": "high",
+          "category": "missing_evidence",
+          "recovery_hint": "Define an observation that would show the claim is wrong.",
+          "resolved": false
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "REQ-FAD8B01D4A01A344": {
+      "claim_id": "REQ-FAD8B01D4A01A344",
+      "direct_score": 0.1,
+      "propagated_score": 0.1,
+      "band": "low",
+      "components": {
+        "evidence": 0.0,
+        "independence": 0.0,
+        "falsifiability": 0.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "No supporting evidence",
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [
+    {
+      "failure_id": "AEE-REQ-FAD8B01D4A01A344-FALSIFIABILITY-CHALLENGE",
+      "claim_id": "REQ-FAD8B01D4A01A344",
+      "strategy": "gather_evidence",
+      "action": "Define an observation that would show the claim is wrong.",
+      "priority": 2,
+      "verification": "At least one inspectable non-self-attested evidence item is attached."
+    }
+  ],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/runtime-934ead7d03d21f95/claims-fad8b01d4a01a344.json"
+  }
+}

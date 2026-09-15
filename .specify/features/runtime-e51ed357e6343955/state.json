@@ -1,0 +1,8 @@
+{
+  "project": "noerelay-speed-verification",
+  "feature": ".specify/features/runtime-e51ed357e6343955",
+  "claim_id": "REQ-BAB9256D8B2DA2DD",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T165721077105Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T165721077105Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

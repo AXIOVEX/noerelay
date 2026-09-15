@@ -1,0 +1,8 @@
+{
+  "project": "noerelay-agent-smoke",
+  "feature": ".specify/features/runtime-acfe1cee0d5b11c3",
+  "claim_id": "REQ-2B5AFFE514E23484",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T173038682075Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T173038682075Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

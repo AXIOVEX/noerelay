@@ -7,6 +7,12 @@ Each entry carries:
 * ``min_ram_gb``  — system RAM needed for a CPU-only / offloaded run.
 * ``agentic_score`` — a 0-100 suitability rating for **agentic AI** (tool /
   function calling, instruction following, structured output, reasoning).
+* ``tier`` — the two-model local plane (NR-LLM-002): ``"fast"`` for routine
+  work (default routing) and ``"hard"`` for difficult work (only under a
+  declared escalation).  ``""`` means unclassified (legacy entries).
+* ``filename`` — the exact on-disk / HF file name for this quant (defaults to
+  ``<key>.gguf``).  Lets the catalog match operator model dirs such as
+  ``C:\\Models\\gpt-oss-20b-Q4_K_M.gguf``.
 
 The auto-provisioner (see :mod:`noerelay.provision`) walks this list and picks
 the **highest-scoring agentic model that fits** the machine's usable memory —
@@ -22,6 +28,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
+#: Valid values for :attr:`ModelEntry.tier`.
+FAST_TIER = "fast"
+HARD_TIER = "hard"
+VALID_TIERS = (FAST_TIER, HARD_TIER)
+
 
 @dataclass
 class ModelEntry:
@@ -36,9 +47,18 @@ class ModelEntry:
     default: bool = False
     cpu_friendly: bool = False  # safe to run on CPU / low-memory machines
     agentic_score: int = 50     # 0-100 suitability for agentic AI
+    tier: str = ""              # "fast" | "hard" | "" (unclassified)
+    filename: str = ""          # exact GGUF file name ("" => <key>.gguf)
 
 
 MODEL_CATALOG: list[ModelEntry] = [
+    ModelEntry(
+        key="qwen3.6-35b-a3b", name="Qwen3.6 35B A3B (UD-Q4_K_M)",
+        repo_id="unsloth/Qwen3.6-35B-A3B-GGUF", quant="UD-Q4_K_M",
+        size_gb=22.14, min_vram_gb=24, min_ram_gb=32,
+        notes="Coding route. On a 12 GB 4070 SUPER, offload MoE experts to CPU; measure throughput locally.",
+        tier=FAST_TIER, filename="Qwen3.6-35B-A3B-UD-Q4_K_M.gguf",
+    ),
     # --- Small / CPU-friendly -------------------------------------------
     ModelEntry(
         key="qwen2.5-1.5b",
@@ -87,6 +107,54 @@ MODEL_CATALOG: list[ModelEntry] = [
         notes="Strong quality. Needs ~10 GB VRAM or 16 GB RAM.",
         agentic_score=72,
     ),
+    # --- Fast tier (routine work, NR-LLM-002) ---------------------------
+    # gpt-oss-20b: MXFP4-native open model; runs fast on a 12 GB GPU.
+    # The three quants below mirror the operator's C:\Models directory and
+    # are benchmarked per NR-LLM-003 (see evidence/LLM-01/T-LLM-003.json).
+    ModelEntry(
+        key="gpt-oss-20b",
+        name="GPT-OSS 20B (Q4_K_M)",
+        repo_id="unsloth/gpt-oss-20b-GGUF",
+        quant="Q4_K_M",
+        size_gb=10.8,
+        min_vram_gb=12,
+        min_ram_gb=20,
+        notes="Alternative Q4 quant. Routine work with a small "
+              "footprint. Q5_K_M is the operator-selected default "
+              "(NR-LLM-003).",
+        tier=FAST_TIER,
+        filename="gpt-oss-20b-Q4_K_M.gguf",
+        agentic_score=82,
+    ),
+    ModelEntry(
+        key="gpt-oss-20b-q5",
+        name="GPT-OSS 20B (Q5_K_M)",
+        repo_id="unsloth/gpt-oss-20b-GGUF",
+        quant="Q5_K_M",
+        size_gb=10.9,
+        min_vram_gb=12,
+        min_ram_gb=20,
+        notes="FAST tier default selected by the operator; compare measured "
+              "quality and speed in the quant benchmark (NR-LLM-003).",
+        tier=FAST_TIER,
+        filename="gpt-oss-20b-Q5_K_M.gguf",
+        default=True,
+        agentic_score=84,
+    ),
+    ModelEntry(
+        key="gpt-oss-20b-q6",
+        name="GPT-OSS 20B (Q6_K)",
+        repo_id="unsloth/gpt-oss-20b-GGUF",
+        quant="Q6_K",
+        size_gb=11.2,
+        min_vram_gb=14,
+        min_ram_gb=22,
+        notes="FAST tier, best gpt-oss-20b quality; slowest of the three "
+              "quants (NR-LLM-003).",
+        tier=FAST_TIER,
+        filename="gpt-oss-20b-Q6_K.gguf",
+        agentic_score=86,
+    ),
     # --- Mid / single large GPU -----------------------------------------
     ModelEntry(
         key="mistral-24b",
@@ -107,10 +175,12 @@ MODEL_CATALOG: list[ModelEntry] = [
         size_gb=15.3,
         min_vram_gb=18,
         min_ram_gb=28,
-        notes="Default. Best agentic all-rounder: strong tool-use, "
-              "instruction-following, and structured output. Fits a 16 GB "
+        notes="HARD tier. Difficult work: best agentic all-rounder — strong "
+              "tool-use, instruction-following, structured output. Routed "
+              "to only under a declared escalation (NR-LLM-002). Fits a 16 GB "
               "GPU with offload or dual-GPU.",
-        default=True,
+        tier=HARD_TIER,
+        filename="qwen3.8-27b.gguf",
         agentic_score=90,
     ),
     ModelEntry(
@@ -170,3 +240,34 @@ def get_model(key: str) -> Optional[ModelEntry]:
 
 def default_model() -> ModelEntry:
     return next((m for m in MODEL_CATALOG if m.default), MODEL_CATALOG[0])
+
+
+def models_by_tier(tier: str) -> list[ModelEntry]:
+    """All catalog entries classified into *tier* (``fast`` or ``hard``)."""
+    if tier not in VALID_TIERS:
+        raise ValueError(f"unknown tier {tier!r}; expected one of {VALID_TIERS}")
+    return [m for m in MODEL_CATALOG if m.tier == tier]
+
+
+def supported_models() -> list[dict]:
+    """Machine-readable supported-model list (NR-LLM-001).
+
+    One row per catalog entry with quant, size, VRAM/RAM guidance, and tier.
+    Consumed by ``noerelay models --local`` and the provisioner.
+    """
+    return [
+        {
+            "key": m.key,
+            "name": m.name,
+            "repo_id": m.repo_id,
+            "quant": m.quant,
+            "size_gb": m.size_gb,
+            "min_vram_gb": m.min_vram_gb,
+            "min_ram_gb": m.min_ram_gb,
+            "tier": m.tier,
+            "filename": m.filename or f"{m.key}.gguf",
+            "agentic_score": m.agentic_score,
+            "default": m.default,
+        }
+        for m in MODEL_CATALOG
+    ]

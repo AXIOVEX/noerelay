@@ -1,0 +1,88 @@
+EE.EE.....................                                               [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_missing_aee_fails_instead_of_claiming_initialization _
+
+fixturedef = <FixtureDef argname='tmp_path' scope='function' baseid=''>
+request = <SubRequest 'tmp_path' for <Function test_missing_aee_fails_instead_of_claiming_initialization>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\trist\\AppData\\Local\\Temp\\pytest-of-trist'
+
+..\..\..\scoop\apps\python312\current\Lib\site-packages\pytest_asyncio\plugin.py:728: PermissionError
+_ ERROR at setup of test_sdd_records_unsupported_claims_and_preserves_agent_edits _
+
+fixturedef = <FixtureDef argname='tmp_path' scope='function' baseid=''>
+request = <SubRequest 'tmp_path' for <Function test_sdd_records_unsupported_claims_and_preserves_agent_edits>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\trist\\AppData\\Local\\Temp\\pytest-of-trist'
+
+..\..\..\scoop\apps\python312\current\Lib\site-packages\pytest_asyncio\plugin.py:728: PermissionError
+_ ERROR at setup of test_agent_runs_workspace_tool_and_keeps_verification_separate _
+
+fixturedef = <FixtureDef argname='tmp_path' scope='function' baseid=''>
+request = <SubRequest 'tmp_path' for <Function test_agent_runs_workspace_tool_and_keeps_verification_separate>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\trist\\AppData\\Local\\Temp\\pytest-of-trist'
+
+..\..\..\scoop\apps\python312\current\Lib\site-packages\pytest_asyncio\plugin.py:728: PermissionError
+__ ERROR at setup of test_unknown_tool_never_executes_and_step_budget_stops ___
+
+fixturedef = <FixtureDef argname='tmp_path' scope='function' baseid=''>
+request = <SubRequest 'tmp_path' for <Function test_unknown_tool_never_executes_and_step_budget_stops>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+                        ^^^^^
+E               PermissionError: [WinError 5] Access is denied: 'C:\\Users\\trist\\AppData\\Local\\Temp\\pytest-of-trist'
+
+..\..\..\scoop\apps\python312\current\Lib\site-packages\pytest_asyncio\plugin.py:728: PermissionError
+============================== warnings summary ===============================
+..\..\..\scoop\apps\python312\current\Lib\site-packages\_pytest\cacheprovider.py:475
+  C:\Users\trist\scoop\apps\python312\current\Lib\site-packages\_pytest\cacheprovider.py:475: PytestCacheWarning: could not create cache path C:\Users\trist\Development\ElectroHire\noerelay\.pytest_cache\v\cache\nodeids: [WinError 5] Access is denied: 'C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+..\..\..\scoop\apps\python312\current\Lib\site-packages\_pytest\cacheprovider.py:429
+  C:\Users\trist\scoop\apps\python312\current\Lib\site-packages\_pytest\cacheprovider.py:429: PytestCacheWarning: could not create cache path C:\Users\trist\Development\ElectroHire\noerelay\.pytest_cache\v\cache\lastfailed: [WinError 5] Access is denied: 'C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/lastfailed", self.lastfailed)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_internal_sdd.py::test_missing_aee_fails_instead_of_claiming_initialization
+ERROR tests/test_internal_sdd.py::test_sdd_records_unsupported_claims_and_preserves_agent_edits
+ERROR tests/test_mcp_agent.py::test_agent_runs_workspace_tool_and_keeps_verification_separate
+ERROR tests/test_mcp_agent.py::test_unknown_tool_never_executes_and_step_budget_stops
+22 passed, 2 warnings, 4 errors in 2.69s
+
+STDERR:

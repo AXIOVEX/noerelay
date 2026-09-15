@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-85C84ECA54AF2900",
+      "text": "Reply with exactly READY.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-431b70044838bc81\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

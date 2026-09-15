@@ -114,7 +114,7 @@ Record: quality difference, latency cost, token overhead.
 ## Deliverables
 
 - [ ] Update `src/noerelay/provision.py` with Apple Silicon defaults (MLX-first, gpt-oss-20B)
-- [ ] Update `installer/installer.py` to detect Apple Silicon and prefer MLX
-- [ ] Update `installer/README_TEMPLATE.md` with Apple Silicon section
+- [ ] Update `deploy/host/installer/installer.py` to detect Apple Silicon and prefer MLX
+- [ ] Update `deploy/host/installer/README_TEMPLATE.md` with Apple Silicon section
 - [ ] Update `README.md` local LLM stack section with Apple Silicon guidance
 - [ ] Commit benchmark results to `evidence/`

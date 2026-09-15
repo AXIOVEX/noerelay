@@ -45,9 +45,13 @@ temp/
 artifacts/
 .cache/
 *.log
+!evidence/local-recovery/*.log
 
-# Local runtime state (SQLite DB + exports) — auto-created, machine-specific
-.noerelay/
+# Local runtime state (SQLite DB + exports) — auto-created, machine-specific.
+# Ignore the directory contents, but keep the aee-managed verification matrix
+# (a tracked spec artifact read by `noerelay gaps` / `aee gaps --matrix`) trackable.
+.noerelay/*
+!.noerelay/verification-matrix.md
 
 # Zoo Code generated local bundles (contain resolved credentials)
 .zoo-code/*.local.json

@@ -775,9 +775,12 @@ def compress_messages(
             cached.cache_hit = True
             return cached
 
-    # Try native Rust extension first
+    # Try native Rust extension first (supports dedup/prune/auto; the
+    # summarize strategy falls through to the Python implementation).
     native_used = False
-    if rtk_bridge.is_native_available():
+    if rtk_bridge.is_native_available() and selected_strategy in (
+        "dedup", "prune", "auto",
+    ):
         native_result = rtk_bridge.compress_native(
             original, selected_strategy, config.target_ratio, config.min_tokens,
         )
@@ -787,7 +790,12 @@ def compress_messages(
             compressed = native_result["compressed_messages"]
             if not isinstance(compressed, list):
                 compressed = original
-            duration_ms = (time.perf_counter() - start) * 1000
+            measured_ms = (time.perf_counter() - start) * 1000
+            # Prefer the native-reported duration (covers the Rust work);
+            # fall back to the measured extraction time if unavailable.
+            duration_ms = float(native_result.get("duration_ms") or 0.0)
+            if duration_ms <= 0.0:
+                duration_ms = measured_ms
             compressed_tokens = count_message_tokens(compressed)
             tokens_saved = original_tokens - compressed_tokens
             ratio = tokens_saved / max(original_tokens, 1)

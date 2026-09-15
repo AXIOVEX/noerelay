@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_implement",
+  "outcome": "iterate",
+  "summary": "Assessed 3 claim(s); found 2 failure mode(s); 0 claim(s) below the 0.70 confidence threshold.",
+  "findings": [
+    {
+      "id": "AEE-NR-OPS-005-IRREDUCIBILITY-CHALLENGE",
+      "severity": "medium",
+      "kind": "coverage_gap",
+      "subject": "NR-OPS-005",
+      "description": "Claim may contain multiple independently falsifiable propositions",
+      "evidence_refs": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "description": "Executed check with retained logs and source digests"
+        }
+      ],
+      "provenance_refs": [],
+      "uncertainty": "medium",
+      "recommended_action": "revise",
+      "rationale": "Irreducibility challenge"
+    },
+    {
+      "id": "AEE-NR-EXEC-009-IRREDUCIBILITY-CHALLENGE",
+      "severity": "medium",
+      "kind": "coverage_gap",
+      "subject": "NR-EXEC-009",
+      "description": "Claim may contain multiple independently falsifiable propositions",
+      "evidence_refs": [
+        {
+          "ref": "evidence/MCP-01/T-EXEC-009.json",
+          "kind": "observed",
+          "description": "Actual two-step Docker tool run plus bounded-loop unit tests"
+        }
+      ],
+      "provenance_refs": [],
+      "uncertainty": "medium",
+      "recommended_action": "revise",
+      "rationale": "Irreducibility challenge"
+    }
+  ],
+  "next_action": {
+    "kind": "iterate",
+    "target_phase": "implement",
+    "message": "Revise the current phase to address 2 finding(s)."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T17:28:41.764244Z",
+    "artifacts_evaluated": [
+      ".specify/features/local-consolidation/claims-local.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "NR-LLM-007",
+          "text": "All three requested models complete on their intended local routes.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Current local Windows two-GPU deployment; no production certification"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/LLM-01/T-LLM-007.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Executed check with retained logs and source digests",
+              "source_id": "local-test-runner",
+              "independent_of": [],
+              "observed_at": null,
+              "content_hash": "cb83f8a0ed6c2f34499de0e6ad2b59880a0a0fa30eb1daaa7fb3db24d6770f75"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "Any route loads the wrong model or returns no content."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": "",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "NR-OPS-005",
+          "text": "Internal SDD records real artifacts and rejects missing AEE.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Current local Windows two-GPU deployment; no production certification"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/TOOLS-01/T-OPS-005.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Executed check with retained logs and source digests",
+              "source_id": "local-test-runner",
+              "independent_of": [],
+              "observed_at": null,
+              "content_hash": "6954af104daf7c95cadb8aada802cd96cf3d192fba9fb67b6912630a2f3df5fb"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "Missing AEE succeeds or a repeated request overwrites agent edits."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": "",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [
+            {
+              "id": "AEE-NR-OPS-005-IRREDUCIBILITY-CHALLENGE",
+              "claim_id": "NR-OPS-005",
+              "challenge": "Irreducibility challenge",
+              "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+              "severity": "medium",
+              "category": "coverage_gap",
+              "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+              "resolved": false
+            }
+          ],
+          "metadata": {}
+        },
+        {
+          "id": "NR-EXEC-009",
+          "text": "The bounded agent executes a Docker workspace tool through NoeRelay and returns the observed result.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Current local operator endpoint and configured Docker MCP profile"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/MCP-01/T-EXEC-009.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Actual two-step Docker tool run plus bounded-loop unit tests",
+              "source_id": "local-test-runner",
+              "independent_of": [],
+              "observed_at": null,
+              "content_hash": "655d1cee1f0346f0603b42e300a71bfeb361406a1fb7a94f08cb4ba4776d7052"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A real tool request returns no execution result, exceeds its budget, or promotes provider-only response fields into request messages."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": "",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [
+            {
+              "id": "AEE-NR-EXEC-009-IRREDUCIBILITY-CHALLENGE",
+              "claim_id": "NR-EXEC-009",
+              "challenge": "Irreducibility challenge",
+              "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+              "severity": "medium",
+              "category": "coverage_gap",
+              "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+              "resolved": false
+            }
+          ],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "NR-LLM-007": {
+          "claim_id": "NR-LLM-007",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "NR-OPS-005": {
+          "claim_id": "NR-OPS-005",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "NR-EXEC-009": {
+          "claim_id": "NR-EXEC-009",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": [
+        {
+          "failure_id": "AEE-NR-EXEC-009-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "NR-EXEC-009",
+          "strategy": "decompose",
+          "action": "Split the claim into atomic propositions and link them explicitly.",
+          "priority": 3,
+          "verification": "Every resulting claim contains one independently falsifiable proposition."
+        },
+        {
+          "failure_id": "AEE-NR-OPS-005-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "NR-OPS-005",
+          "strategy": "decompose",
+          "action": "Split the claim into atomic propositions and link them explicitly.",
+          "priority": 3,
+          "verification": "Every resulting claim contains one independently falsifiable proposition."
+        }
+      ]
+    }
+  }
+}

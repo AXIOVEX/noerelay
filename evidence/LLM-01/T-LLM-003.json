@@ -1,0 +1,27 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "b04af3c8-b8ff-4a3c-ba77-6ccbb84312dd",
+  "work_package_id": "LLM-01",
+  "requirement_ids": [
+    "NR-LLM-003"
+  ],
+  "test_ids": [
+    "T-LLM-003"
+  ],
+  "status": "observed_fail",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {
+    "T-LLM-003-benchmark.json": "9b522ee220e43af10564cc1ad35493a6ea191109a865ee3a77648a6bf2527d44"
+  },
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python scripts/benchmark_local_models.py --root c:\\Users\\trist\\Development\\ElectroHire\\noerelay",
+  "started_at": "2026-09-13T14:15:28.918Z",
+  "finished_at": "2026-09-13T14:16:55.460Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "9b522ee220e43af10564cc1ad35493a6ea191109a865ee3a77648a6bf2527d44",
+  "logs_artifact_sha256": "e8f9e1a99a0bc02765208a70141ba37ddfaee6599c9e2b8ea20c93bbabf7c82b",
+  "exceptions": [
+    "artifact validation failed"
+  ],
+  "notes": "quants covered: Q4_K_M, Q5_K_M, Q6_K; chosen: None"
+}

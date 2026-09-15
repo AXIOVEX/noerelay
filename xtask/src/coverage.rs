@@ -106,8 +106,21 @@ fn collect_envelopes(dir: &Path, envelopes: &mut Vec<EvidenceEnvelope>) -> Resul
         } else if path.extension().is_some_and(|ext| ext == "json") {
             let content = fs::read_to_string(&path)
                 .with_context(|| format!("failed to read: {}", path.display()))?;
-            let envelope: EvidenceEnvelope = serde_json::from_str(&content)
-                .with_context(|| format!("failed to parse: {}", path.display()))?;
+            // Only JSON carrying the `evidence_version` discriminator is an
+            // evidence envelope; other artifacts (baselines, benchmark results,
+            // portfolio reports) also live under evidence/ and are skipped,
+            // matching the Python coverage loader.
+            let value: serde_json::Value = serde_json::from_str(&content)
+                .with_context(|| format!("failed to parse JSON: {}", path.display()))?;
+            let is_envelope = value
+                .get("evidence_version")
+                .map(|v| v.is_string())
+                .unwrap_or(false);
+            if !is_envelope {
+                continue;
+            }
+            let envelope: EvidenceEnvelope = serde_json::from_value(value)
+                .with_context(|| format!("failed to parse evidence envelope: {}", path.display()))?;
             envelopes.push(envelope);
         }
     }

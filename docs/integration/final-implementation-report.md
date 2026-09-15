@@ -1,3 +1,5 @@
+> Historical report. Its standalone llmrouter sidecar has been retired; current routing is documented in docs/local-operations.md.
+
 # NoeRelay Integration Mission — Final Implementation Report
 
 **Date**: 2026-09-03  

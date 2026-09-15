@@ -32,6 +32,26 @@ Commands:
     detect              Detect this machine (OS, CPU, RAM, GPUs, backend)
     provision           Auto-provision the local LLM stack (llama.cpp + venv + model)
     doctor              Diagnose the local LLM stack (server reachability, API, chat)
+    models --local      List the supported local model catalog (offline)
+    llm start           Start the local llama-server (from llama.yaml, detached)
+    llm stop            Stop the local llama-server
+    llm status          Show local server process + API status
+    llm schedule        Register a logon scheduled task (native, no PowerShell)
+    llm unschedule      Remove the logon scheduled task
+    hf search QUERY     Search Hugging Face for GGUF model repos
+    hf download REPO    Download a GGUF (progress + resume)
+    hf complete TOKEN   Offline completions for model/quant tokens (tab-completion hook)
+
+    Coverage contract (append-only; mirrors xtask evidence):
+    req list            List requirements with coverage status
+    req show ID         Show one requirement with evidence
+    req tests           List release tests with evidence status
+    req add ID          Append a new requirement to the contract
+    req test ID T       Append a release test to a requirement
+    req coverage        Coverage report (mirrors xtask evidence coverage)
+    req gate Gx         Check a gate (mirrors xtask evidence gate)
+    req record          Run a command and record an evidence envelope
+    req regenerate      Regenerate .specify/features/ from the manifest
 """
 
 import argparse
@@ -95,7 +115,7 @@ def api_request(config: dict, method: str, path: str, body: dict = None) -> dict
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with urllib.request.urlopen(req, timeout=5100 if path == '/v1/noerelay/agent' else 600) as resp:
             return json.loads(resp.read().decode())
     except urllib.error.HTTPError as e:
         error_body = e.read().decode()
@@ -136,7 +156,10 @@ def cmd_status(args):
 
 
 def cmd_models(args):
-    """List available models."""
+    """List available models (gateway by default; offline local catalog with --local)."""
+    if getattr(args, "local", False):
+        _print_local_models(as_json=getattr(args, "json", False))
+        return
     config = load_config()
     result = api_request(config, "GET", "/v1/models")
     print("Available models:")
@@ -529,7 +552,7 @@ def cmd_gaps(args):
     The gap register is now managed by the applied-epistemic-engineering package.
     """
     target = os.path.abspath(args.dir or ".")
-    matrix_path = os.path.join(target, "docs", "verification-matrix.md")
+    matrix_path = os.path.join(target, ".noerelay", "verification-matrix.md")
     evidence_dir = os.path.join(target, "evidence")
     gaps_path = os.path.join(target, ".noerelay", "GAPS.md")
 
@@ -538,26 +561,12 @@ def cmd_gaps(args):
         print("Cannot generate gaps without a verification matrix.")
         sys.exit(1)
 
-    # Delegate to the aee CLI
-    import shutil
-    import subprocess
-    aee_exec = shutil.which("aee")
-    if aee_exec is None:
-        print("Error: 'aee' command not found.")
-        print("Install with: python -m pip install \"applied-epistemic-engineering>=1.0.0,<2\"")
-        sys.exit(1)
+    from pathlib import Path
+    from .sdd import generate_gaps
+    register = generate_gaps(Path(target), args.close)
+    print(f"Gap register written to {gaps_path}")
+    print(f"Open: {register.open_count} | Closed: {register.closed_count}")
 
-    cmd = [
-        aee_exec, "gaps",
-        "--matrix", matrix_path,
-        "--evidence", evidence_dir,
-        "--output", gaps_path,
-    ]
-    if args.close:
-        cmd.extend(["--close", args.close])
-
-    result = subprocess.run(cmd, check=False)
-    sys.exit(result.returncode)
 
 
 def cmd_resume(args):
@@ -731,7 +740,7 @@ CONSTITUTION_MD = '''# Project Constitution
 
 - Feature work lives under `.specify/features/<feature>/` with `spec.md`, `plan.md`, `tasks.md`.
 - Open gaps are tracked in `.noerelay/GAPS.md`.
-- The verification matrix lives at `docs/verification-matrix.md`.
+- The verification matrix lives at `.noerelay/verification-matrix.md`.
 
 ## Decision Log
 
@@ -840,8 +849,8 @@ def cmd_adopt(args):
 
     Scaffolds the full structure in one shot:
       - .specify/ (constitution, features/, templates)
-      - docs/STATE.md, docs/verification-matrix.md
-      - .noerelay/ (gap register)
+      - docs/STATE.md
+      - .noerelay/ (gap register + verification matrix)
       - aider integration (scripts/aider.ps1, .aider.conf.yml, ...)
 
     Idempotent and non-destructive: existing files are skipped unless --force.
@@ -868,11 +877,11 @@ def cmd_adopt(args):
 
     # 2. docs
     _write_file(os.path.join(target, "docs", "STATE.md"), STATE_MD, args.force, created, skipped)
-    _write_file(os.path.join(target, "docs", "verification-matrix.md"),
-                VERIFICATION_MATRIX_MD, args.force, created, skipped)
 
-    # 3. noerelay gap register
+    # 3. noerelay managed docs (gap register + verification matrix)
     _write_file(os.path.join(target, ".noerelay", "GAPS.md"), GAPS_MD, args.force, created, skipped)
+    _write_file(os.path.join(target, ".noerelay", "verification-matrix.md"),
+                VERIFICATION_MATRIX_MD, args.force, created, skipped)
 
     # 4. aider integration (same files as `setup`)
     scripts_dir = os.path.join(target, "scripts")
@@ -1128,6 +1137,134 @@ def cmd_doctor(args):
             print(f"[FAIL] chat completion: {e}")
 
 
+# --- Local LLM lifecycle (llm verb) + HF tooling (hf verb) ---
+
+
+def _print_local_models(as_json: bool = False) -> None:
+    """Print the offline supported local-model catalog (NR-LLM-001)."""
+    from .models import supported_models
+
+    rows = supported_models()
+    if as_json:
+        print(json.dumps(rows, indent=2))
+        return
+    print("Supported local models (offline catalog):")
+    print(f"  {'KEY':<22} {'TIER':<6} {'QUANT':<9} {'SIZE':>6} {'VRAM':>6} {'RAM':>5}  NAME")
+    for r in rows:
+        mark = "*" if r.get("default") else " "
+        print(
+            f"  {mark}{r['key']:<21} {r['tier'] or '-':<6} {r['quant']:<9} "
+            f"{r['size_gb']:>5.1f}G {r['min_vram_gb']:>5.1f}G {r['min_ram_gb']:>4.0f}G  {r['name']}"
+        )
+    print("\n  * = provision default; tier: fast (default routing) | hard (escalation only)")
+
+
+def _llm_common_args(p) -> None:
+    p.add_argument("--dir", "-d", default=None,
+                   help="Install dir (default: $NOERELAY_LLM_HOME or ~/noerelay-llm)")
+
+
+def cmd_llm(args):
+    """Manage the local llama-server lifecycle (start/stop/status/schedule)."""
+    from . import lifecycle
+    from .llama_config import LlamaConfigError
+
+    action = args.llm_action
+    if not action:
+        print("usage: noerelay llm <start|stop|status|schedule|unschedule> [--dir DIR]")
+        return
+
+    if action == "start":
+        try:
+            res = lifecycle.start_server(
+                args.dir, wait=args.wait, timeout=args.timeout
+            )
+        except (lifecycle.LifecycleError, LlamaConfigError) as e:
+            print(f"[FAIL] {e}")
+            sys.exit(1)
+        print(f"[ok] started llama-server (pid {res['pid']})")
+        print(f"     base_url: {res['base_url']}")
+        print(f"     log:      {res['log']}")
+        if args.wait:
+            print(f"     ready:    {res.get('ready', False)}")
+        return
+
+    if action == "stop":
+        res = lifecycle.stop_server(args.dir)
+        if res.get("stopped"):
+            print(f"[ok] stopped llama-server (pid {res.get('pid')})")
+        else:
+            print(f"[ok] not running ({res.get('reason', 'no pid')})")
+        return
+
+    if action == "status":
+        res = lifecycle.server_status(args.dir)
+        print("Local llama-server status:")
+        print(f"  install_dir:   {res['install_dir']}")
+        print(f"  pid:           {res['pid']}")
+        print(f"  process_alive: {res['process_alive']}")
+        print(f"  base_url:      {res['base_url']}")
+        print(f"  api_reachable: {res['api_reachable']}")
+        return
+
+    if action == "schedule":
+        try:
+            res = lifecycle.schedule_task(args.dir, task_name=args.task_name)
+        except lifecycle.LifecycleError as e:
+            print(f"[FAIL] {e}")
+            sys.exit(1)
+        print(f"[ok] scheduled logon task: {res.get('task_name')}")
+        print(f"     platform: {res.get('platform')}  trigger: {res.get('trigger')}")
+        return
+
+    if action == "unschedule":
+        res = lifecycle.unschedule_task(args.dir, task_name=args.task_name)
+        print(f"[ok] unscheduled (platform {res.get('platform')})")
+        if res.get("detail"):
+            print(f"     {res['detail']}")
+        return
+
+
+def cmd_hf(args):
+    """Hugging Face tooling: search / download / complete (NR-LLM-006)."""
+    from pathlib import Path
+    from . import hf
+
+    action = args.hf_action
+    if not action:
+        print("usage: noerelay hf <search|download|complete> [options]")
+        return
+
+    if action == "search":
+        try:
+            results = hf.search_hf(args.query, limit=args.limit, gguf_only=not args.all)
+        except RuntimeError as e:
+            print(f"[FAIL] {e}")
+            sys.exit(1)
+        hf.print_search_results(results)
+        return
+
+    if action == "download":
+        dest = Path(args.dest).expanduser() if args.dest else Path.home() / "noerelay-llm" / "models"
+        try:
+            final = hf.download_gguf(
+                args.repo,
+                args.filename or "",
+                dest,
+                quant=args.quant or "",
+                progress=not args.no_progress,
+            )
+        except RuntimeError as e:
+            print(f"[FAIL] {e}")
+            sys.exit(1)
+        print(f"[ok] downloaded: {final}")
+        return
+
+    if action == "complete":
+        hf.print_completions(hf.complete(args.token or ""))
+        return
+
+
 # --- Main ---
 
 def main():
@@ -1139,9 +1276,22 @@ def main():
 
     # status
     subparsers.add_parser("status", help="Check gateway health")
+    subparsers.add_parser("mcp", help="Serve the NoeRelay Docker MCP integration over stdio")
+    p_agent = subparsers.add_parser("agent", help="Run a bounded agent with Docker tools and automatic SDD")
+    p_agent.add_argument("prompt")
+    p_agent.add_argument("--project", default="noerelay-agent")
+    p_agent.add_argument("--max-steps", type=int, default=4)
+    p_agent.add_argument("--escalate", action="store_true")
 
     # models
-    subparsers.add_parser("models", help="List available models")
+    p_models = subparsers.add_parser(
+        "models",
+        help="List available models (gateway, or --local for the offline catalog)",
+    )
+    p_models.add_argument("--local", "-l", action="store_true",
+                          help="Show the offline supported local model catalog (no gateway needed)")
+    p_models.add_argument("--json", "-j", action="store_true",
+                          help="JSON output (with --local)")
 
     # costs
     subparsers.add_parser("costs", help="Show cost report")
@@ -1260,13 +1410,144 @@ def main():
     p_doctor = subparsers.add_parser("doctor", help="Diagnose the local LLM stack")
     p_doctor.add_argument("--chat", action="store_true", help="Also run a quick chat completion")
 
+    # llm (local llama-server lifecycle — NR-LLM-004)
+    p_llm = subparsers.add_parser(
+        "llm",
+        help="Manage the local llama-server (start/stop/status/schedule)",
+    )
+    llm_sub = p_llm.add_subparsers(dest="llm_action", help="LLM action")
+
+    p_llm_start = llm_sub.add_parser("start", help="Start the local llama-server (detached)")
+    _llm_common_args(p_llm_start)
+    p_llm_start.add_argument("--wait", "-w", action="store_true",
+                             help="Wait for /health before returning")
+    p_llm_start.add_argument("--timeout", type=int, default=180,
+                             help="Ready-wait timeout in seconds (default: 180)")
+
+    p_llm_stop = llm_sub.add_parser("stop", help="Stop the local llama-server")
+    _llm_common_args(p_llm_stop)
+
+    p_llm_status = llm_sub.add_parser("status", help="Show local server process + API status")
+    _llm_common_args(p_llm_status)
+
+    p_llm_sched = llm_sub.add_parser(
+        "schedule", help="Register a logon scheduled task (native, no PowerShell)")
+    _llm_common_args(p_llm_sched)
+    p_llm_sched.add_argument("--task-name", default="NoeRelay LLM Server",
+                             help="Scheduled task name (default: NoeRelay LLM Server)")
+
+    p_llm_unsched = llm_sub.add_parser("unschedule", help="Remove the logon scheduled task")
+    _llm_common_args(p_llm_unsched)
+    p_llm_unsched.add_argument("--task-name", default="NoeRelay LLM Server",
+                               help="Scheduled task name (default: NoeRelay LLM Server)")
+
+    # hf (Hugging Face tooling — NR-LLM-006)
+    p_hf = subparsers.add_parser(
+        "hf",
+        help="Hugging Face tooling (search / download / complete)",
+    )
+    hf_sub = p_hf.add_subparsers(dest="hf_action", help="HF action")
+
+    p_hf_search = hf_sub.add_parser("search", help="Search Hugging Face for GGUF model repos")
+    p_hf_search.add_argument("query", help="Search query (e.g. gpt-oss-20b)")
+    p_hf_search.add_argument("--limit", type=int, default=20, help="Max results (default: 20)")
+    p_hf_search.add_argument("--all", action="store_true",
+                             help="Include non-GGUF repos")
+
+    p_hf_dl = hf_sub.add_parser("download", help="Download a GGUF (progress + resume)")
+    p_hf_dl.add_argument("repo", help="HF repo id (e.g. unsloth/gpt-oss-20b-GGUF)")
+    p_hf_dl.add_argument("filename", nargs="?", default=None,
+                         help="Exact file name (default: best match for --quant)")
+    p_hf_dl.add_argument("--quant", "-q", default=None,
+                         help="Quant filter when picking the file (e.g. Q4_K_M)")
+    p_hf_dl.add_argument("--dest", "-d", default=None,
+                         help="Destination directory (default: ~/noerelay-llm/models)")
+    p_hf_dl.add_argument("--no-progress", action="store_true", help="Disable progress output")
+
+    p_hf_complete = hf_sub.add_parser(
+        "complete", help="Offline completions for model/quant tokens (tab-completion hook)")
+    p_hf_complete.add_argument("token", nargs="?", default="",
+                               help="Token prefix to complete (e.g. gpt-oss, Q4_)")
+
+    # req (requirement + release-test management over the append-only contract)
+    p_req = subparsers.add_parser(
+        "req",
+        help="Manage requirements and release tests (coverage contract)",
+    )
+    req_sub = p_req.add_subparsers(dest="req_action", help="Req action")
+
+    p_req_list = req_sub.add_parser("list", help="List requirements with coverage status")
+    p_req_list.add_argument("--root", "-r", help="Repo root (default: auto-detect from cwd)")
+    p_req_list.add_argument("--verbose", "-v", action="store_true", help="List skipped non-envelope files")
+
+    p_req_show = req_sub.add_parser("show", help="Show one requirement with evidence")
+    p_req_show.add_argument("requirement_id", help="Requirement ID (e.g. NR-LLM-001)")
+    p_req_show.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
+    p_req_tests = req_sub.add_parser("tests", help="List release tests with evidence status")
+    p_req_tests.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
+    p_req_add = req_sub.add_parser("add", help="Append a new requirement (append-only)")
+    p_req_add.add_argument("requirement_id", help="New requirement ID (NR-<AREA>-NNN)")
+    p_req_add.add_argument("text", help="Requirement text")
+    p_req_add.add_argument("acceptance", help="Acceptance outcome")
+    p_req_add.add_argument("--packages", "-p", help="Comma-separated work packages (e.g. LLM-01)")
+    p_req_add.add_argument("--tests", "-t", help="Comma-separated release test IDs (e.g. T-LLM-007)")
+    p_req_add.add_argument("--section", "-s", help="Section heading in requirements.md (default: Phase 2 additions)")
+    p_req_add.add_argument("--gate", "-g", help="Gate ID to add the requirement to (e.g. G9)")
+    p_req_add.add_argument("--gate-desc", help="Gate description when creating a new gate")
+    p_req_add.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
+    p_req_test = req_sub.add_parser("test", help="Append a release test to an existing requirement")
+    p_req_test.add_argument("requirement_id", help="Existing requirement ID")
+    p_req_test.add_argument("test_id", help="New release test ID (T-<AREA>-NNN)")
+    p_req_test.add_argument("--gate", "-g", help="Gate ID to add the test to")
+    p_req_test.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
+    p_req_cov = req_sub.add_parser("coverage", help="Coverage report (mirrors xtask evidence coverage)")
+    p_req_cov.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+    p_req_cov.add_argument("--strict", action="store_true", help="Exit 1 if any requirement is not covered")
+    p_req_cov.add_argument("--verbose", "-v", action="store_true", help="Print per-requirement detail")
+
+    p_req_gate = req_sub.add_parser("gate", help="Check one gate (mirrors xtask evidence gate)")
+    p_req_gate.add_argument("gate_id", help="Gate ID (e.g. G9)")
+    p_req_gate.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+    p_req_gate.add_argument("--strict", action="store_true", help="Exit 1 if the gate fails")
+
+    p_req_rec = req_sub.add_parser("record", help="Run a command and record an evidence envelope")
+    p_req_rec.add_argument("--work-package-id", "-w", required=True, help="Work package ID (e.g. LLM-01)")
+    p_req_rec.add_argument("--test-id", "-t", required=True, help="Release test ID (e.g. T-LLM-001)")
+    # NOTE: dest must NOT be "command" — that collides with the top-level
+    # subparsers dest and would clobber args.command after parsing.
+    p_req_rec.add_argument("--command", "-c", dest="record_command", required=True,
+                           help="Command to run (executed from the repo root)")
+    p_req_rec.add_argument("--requirements", "-q", required=True, help="Comma-separated requirement IDs this evidence covers")
+    p_req_rec.add_argument("--profile", default="single-region-org-v1-local-test", help="Environment profile")
+    p_req_rec.add_argument("--runner", default="ROLE-RUST", help="Runner identity")
+    p_req_rec.add_argument("--verifier", help="Independent verifier identity (optional)")
+    p_req_rec.add_argument("--evidence-dir", default="evidence", help="Evidence directory (default: evidence)")
+    p_req_rec.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
+    p_req_regen = req_sub.add_parser("regenerate", help="Regenerate .specify/features/ from the manifest")
+    p_req_regen.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
+
     args = parser.parse_args()
 
     if not args.command:
         parser.print_help()
         sys.exit(0)
 
-    if args.command == "status":
+    if args.command == "mcp":
+        from .mcp_stdio import main as mcp_main
+        mcp_main()
+    elif args.command == "agent":
+        from .mcp_stdio import local_config
+        result = api_request(local_config(), "POST", "/v1/noerelay/agent", {
+            "prompt": args.prompt, "project": args.project,
+            "max_steps": args.max_steps, "escalate": args.escalate,
+        })
+        print(json.dumps(result, indent=2))
+    elif args.command == "status":
         cmd_status(args)
     elif args.command == "models":
         cmd_models(args)
@@ -1298,6 +1579,27 @@ def main():
         cmd_provision(args)
     elif args.command == "doctor":
         cmd_doctor(args)
+    elif args.command == "llm":
+        cmd_llm(args)
+    elif args.command == "hf":
+        cmd_hf(args)
+    elif args.command == "req":
+        from . import reqtest
+        if not args.req_action:
+            p_req.print_help()
+            sys.exit(0)
+        _req_handlers = {
+            "list": reqtest.cmd_req_list,
+            "show": reqtest.cmd_req_show,
+            "tests": reqtest.cmd_req_tests,
+            "add": reqtest.cmd_req_add,
+            "test": reqtest.cmd_req_test,
+            "coverage": reqtest.cmd_req_coverage,
+            "gate": reqtest.cmd_req_gate,
+            "record": reqtest.cmd_req_record,
+            "regenerate": reqtest.cmd_req_regenerate,
+        }
+        sys.exit(_req_handlers[args.req_action](args))
     elif args.command == "run":
         if not args.integration:
             p_run.print_help()

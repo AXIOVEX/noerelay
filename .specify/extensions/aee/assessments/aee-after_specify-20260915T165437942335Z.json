@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T16:54:38.275411Z",
+  "claims": [
+    {
+      "id": "REQ-2B5AFFE514E23484",
+      "text": "Use noerelay_workspace_execute to run python -c \"print(731 + 269)\" in the Docker workspace. Report its actual output. This is a tool smoke test; do not edit project files or claim release verification.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [],
+      "uncertainty": "high",
+      "severity": "medium",
+      "source_ref": ".specify\\features\\runtime-acfe1cee0d5b11c3\\spec.md",
+      "domain": "",
+      "confidence": 0.1,
+      "confidence_band": "low",
+      "failures": [
+        {
+          "id": "AEE-REQ-2B5AFFE514E23484-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-2B5AFFE514E23484",
+          "challenge": "Irreducibility challenge",
+          "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+          "severity": "medium",
+          "category": "coverage_gap",
+          "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+          "resolved": false
+        },
+        {
+          "id": "AEE-REQ-2B5AFFE514E23484-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-2B5AFFE514E23484",
+          "challenge": "Falsifiability challenge",
+          "breakpoint": "Non-draft claim has no stated falsification test",
+          "severity": "high",
+          "category": "missing_evidence",
+          "recovery_hint": "Define an observation that would show the claim is wrong.",
+          "resolved": false
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "REQ-2B5AFFE514E23484": {
+      "claim_id": "REQ-2B5AFFE514E23484",
+      "direct_score": 0.1,
+      "propagated_score": 0.1,
+      "band": "low",
+      "components": {
+        "evidence": 0.0,
+        "independence": 0.0,
+        "falsifiability": 0.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "No supporting evidence",
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [
+    {
+      "failure_id": "AEE-REQ-2B5AFFE514E23484-FALSIFIABILITY-CHALLENGE",
+      "claim_id": "REQ-2B5AFFE514E23484",
+      "strategy": "gather_evidence",
+      "action": "Define an observation that would show the claim is wrong.",
+      "priority": 2,
+      "verification": "At least one inspectable non-self-attested evidence item is attached."
+    },
+    {
+      "failure_id": "AEE-REQ-2B5AFFE514E23484-IRREDUCIBILITY-CHALLENGE",
+      "claim_id": "REQ-2B5AFFE514E23484",
+      "strategy": "decompose",
+      "action": "Split the claim into atomic propositions and link them explicitly.",
+      "priority": 3,
+      "verification": "Every resulting claim contains one independently falsifiable proposition."
+    }
+  ],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/runtime-acfe1cee0d5b11c3/claims-2b5affe514e23484.json"
+  }
+}

@@ -79,7 +79,7 @@ class AdoptScaffoldingTests(unittest.TestCase):
             target = Path(td)
             _run_adopt(target)
             self.assertTrue((target / "docs" / "STATE.md").is_file())
-            self.assertTrue((target / "docs" / "verification-matrix.md").is_file())
+            self.assertTrue((target / ".noerelay" / "verification-matrix.md").is_file())
             self.assertTrue((target / ".noerelay" / "GAPS.md").is_file())
 
     def test_creates_aider_integration(self):
@@ -248,11 +248,12 @@ class ArgparseWiringTests(unittest.TestCase):
         self.assertIn('args.command == "update"', src)
 
     def test_standalone_script_has_same_commands(self):
-        src = (ROOT / "scripts" / "noerelay.py").read_text("utf-8")
-        self.assertIn('"adopt",', src)
-        self.assertIn('"update",', src)
-        self.assertIn("def cmd_adopt", src)
-        self.assertIn("def cmd_update", src)
+        import subprocess
+        result = subprocess.run([sys.executable, str(ROOT / "scripts/noerelay.py"), "--help"], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("adopt", result.stdout)
+        self.assertIn("update", result.stdout)
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,30 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "2a619401-abf9-42af-85a9-e04eaba2c582",
+  "work_package_id": "API-01",
+  "requirement_ids": [
+    "NR-API-007"
+  ],
+  "test_ids": [
+    "T-API-004"
+  ],
+  "status": "observed_pass",
+  "source_revision": "aa64abaefdfc7c865e81f780b21846c648bd6106",
+  "artifact_digests": {
+    "deploy/local-models.ini": "4e3fe35a702f1f7b36e8731efa725915234904a98716ca5d831e776eb9e8e236",
+    "scripts/local-model-plane.py": "06b493d82acce63c87bc5088025b5437f6011a87adc303fb582278504e4febd4",
+    "src/noerelay/sdd.py": "99215dc6daa0cb1f6da5e6089c51f7a5e748d4a131832146cf04e9b263af3221",
+    "src/noerelay/mcp_agent.py": "5ec8c5dd409f3d798371e60585af8a2be4f3fcf5b098b78a7a0d27a035d4dbac",
+    "crates/noerelay-gateway/src/lib.rs": "d23683355408dda953789cc24000d9f9cb55c685ce58b88740627d8b82b69625",
+    "docker-compose.yml": "9038f1adb011187b16647568bce41f7e98d689f26c02bdf8d7a77245663c08f4"
+  },
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python scripts/verify-host-wsl.py",
+  "started_at": "2026-09-15T17:40:36.853324+00:00",
+  "finished_at": "2026-09-15T17:40:51.923655+00:00",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "37a08c06ee62ead6b2e645b40c6cd44ce8003f505fa718020f990993928a07ee",
+  "logs_artifact_sha256": "37a08c06ee62ead6b2e645b40c6cd44ce8003f505fa718020f990993928a07ee",
+  "exceptions": [],
+  "notes": "Local working-tree observation. Retained log: evidence/local-recovery/T-API-004.log. Source digests identify uncommitted code; no independent verification or production certification claimed."
+}

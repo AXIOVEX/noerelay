@@ -1,0 +1,8 @@
+{
+  "project": "wsl-access-verification",
+  "feature": ".specify/features/runtime-016cea7ed174293a",
+  "claim_id": "REQ-43CD4824142370BC",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T181302868245Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T181302868245Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

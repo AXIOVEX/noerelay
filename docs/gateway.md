@@ -272,7 +272,7 @@ docker compose up -d
 curl http://127.0.0.1:8080/health
 ```
 
-See [`Dockerfile`](../Dockerfile) and [`docker-compose.yml`](../docker-compose.yml).
+See [`Dockerfile`](../deploy/docker/Dockerfile) and [`docker-compose.yml`](../docker-compose.yml).
 
 ### Kubernetes
 

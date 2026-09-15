@@ -134,6 +134,21 @@ fn chat_parser_rejects_unsupported_field() {
 }
 
 #[test]
+fn zoo_reasoning_effort_is_validated_and_preserved() {
+    for effort in ["none", "minimal", "low", "medium", "high", "xhigh"] {
+        let mut value = chat_request();
+        value["reasoning_effort"] = json!(effort);
+        let request = ChatCompletionsConverter::parse_request(&value).unwrap();
+        assert_eq!(request.reasoning_effort.as_deref(), Some(effort));
+    }
+    let mut value = chat_request();
+    value["reasoning_effort"] = json!("unbounded");
+    assert!(ChatCompletionsConverter::parse_request(&value).is_err());
+    value["reasoning_effort"] = json!(12);
+    assert!(ChatCompletionsConverter::parse_request(&value).is_err());
+}
+
+#[test]
 fn chat_parser_rejects_empty_model() {
     let value = json!({"model":"","messages":[{"role":"user","content":"x"}]});
     assert_eq!(

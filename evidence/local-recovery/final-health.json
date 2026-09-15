@@ -1,0 +1,72 @@
+{
+  "services": [
+    {
+      "Service": "a2a-adapter",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "docling",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "litellm",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "noerelay",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "open-terminal",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "open-webui",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "open-webui-init",
+      "State": "exited",
+      "Health": "",
+      "ExitCode": 0
+    },
+    {
+      "Service": "postgres",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    },
+    {
+      "Service": "recovery-proxy",
+      "State": "running",
+      "Health": "healthy",
+      "ExitCode": 0
+    }
+  ],
+  "health": {
+    "8080": {
+      "authority": "rust",
+      "model_plane": "openrouter",
+      "status": "ready"
+    },
+    "8081": {
+      "status": "ok"
+    },
+    "8082": {
+      "status": "ok",
+      "rtk_native": true
+    }
+  }
+}

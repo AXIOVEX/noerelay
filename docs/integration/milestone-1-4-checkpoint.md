@@ -1,3 +1,5 @@
+> Historical report. Its standalone llmrouter sidecar has been retired; current routing is documented in docs/local-operations.md.
+
 # Milestone 1-4 Checkpoint Report
 
 **Date**: 2026-09-03T13:17:00Z  

@@ -1,9 +1,25 @@
 # NoeRelay implementation and release status
 
-**Assessment date:** 2026-08-21  
+**Assessment date:** 2026-09-13  
 **Verdict:** Architecture-correct, tested vertical slice; not GA release-ready
 
 This status distinguishes repository implementation from organizational release evidence. Passing a unit test is evidence for that implementation boundary, not proof of legal compliance, availability, security, or fitness for every organization.
+
+## Local consolidation (2026-09-15)
+
+The local stack now uses the three-model shared-GPU router, native RTK, automatic spec-kit/AEE, Docker MCP, and a bounded workspace agent. G10 passes in Python and Rust. Live Chat, Responses, SSE, CORS, MCP stdio/HTTP, Docker execution, agent round-trip, and manual stop/start checks passed. Focused Python tests: 27 passed; Rust gateway suites: 57 passed. Full Python baseline earlier in this session: 1,254 passed, 5 skipped. Generated code passed basic isolated checks; this is not broad model-quality calibration.
+
+Current requirement coverage is 15/77. The local feature now passes all four AEE phases for 20 atomic claims, with verified evidence hashes and ledger integrity. Windows and Ubuntu WSL2 share the tested API endpoint; see api-client-settings.md. Production approvals remain separate. [Local operations](local-operations.md) and [STATE](STATE.md) supersede the historical phase-2 startup and benchmark instructions below.
+
+## Phase 2 resumption (2026-09-13)
+
+- Python and Rust coverage agree: G9 fails only on NR-LLM-003; total coverage is 8/70. No benchmark evidence has been fabricated or recorded.
+- xtask: 40 tests pass. Initial Python baseline: 1,171 passed, 5 skipped, 69 dashboard failures caused by sandbox `spawn EPERM`; all 69 dashboard tests passed on the escalated rerun (114.68 s). Combined baseline: 1,240 passed and 5 skipped; the 11 new recovery/validation tests also pass.
+- Benchmark recovery hardened: stop and VRAM checks are inside recovery protection; maintenance creation and GPU probes fail closed; restart-launch failures release maintenance for the watchdog. Eleven focused regression tests pass.
+- Temporary benchmark server shutdown uses the sanctioned stop script. Artifact validation now gates passing evidence and checks the reproduced quant choice and perplexity exit status.
+- Live server health is 200, watchdog Ready, maintenance absent. Live YAML/CLI refresh remains pending as described in the Phase 2 handoff; no live configuration changes were made.
+- Benchmark is pending the operator acknowledgment explicitly required by handoff section 9. Speed proposal correction: the current bandwidth formula yields `12,13` with the display penalty, not `14,11`; any performance change needs measurement and memory-fit validation.
+- Existing unrelated deletions and uncommitted work remain pending a commit decision. Docker last-known-good recovery design remains open.
 
 ## Implemented and exercised
 
@@ -53,4 +69,4 @@ This status distinguishes repository implementation from organizational release 
 - Ten Kubernetes YAML resources parse locally; cluster-side admission, controller compatibility, and runtime behavior remain unvalidated release blockers.
 - Docker Scout container CVE evidence was not produced because the local scanner requires external Docker account authentication; this remains a release gate.
 
-The authoritative completion definition remains [requirements.md](requirements.md) plus [verification-matrix.md](verification-matrix.md). This file must be updated when observed evidence changes; optimistic prose is not a release gate.
+The authoritative completion definition remains [requirements.md](requirements.md) plus [verification-matrix.md](../.noerelay/verification-matrix.md). This file must be updated when observed evidence changes; optimistic prose is not a release gate.

@@ -1,0 +1,14 @@
+[
+  {
+    "attempt": 1,
+    "passed": false,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 70, in <module>\n  File \"<stdin>\", line 22, in merge_intervals\nValueError: Each interval must be a list of two integers.\n"
+  },
+  {
+    "attempt": 2,
+    "passed": false,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 62, in <module>\n  File \"<stdin>\", line 23, in merge_intervals\nValueError: Each interval must be a list of two integers.\n"
+  }
+]

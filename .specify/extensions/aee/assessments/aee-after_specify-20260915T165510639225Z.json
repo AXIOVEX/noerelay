@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "iterate",
+  "summary": "Assessed 2 claim(s); found 1 failure mode(s); 0 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T16:55:11.009272Z",
+  "claims": [
+    {
+      "id": "NR-LLM-007",
+      "text": "All three requested models complete on their intended local routes.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows two-GPU deployment; no production certification"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/LLM-01/T-LLM-007.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "Executed check with retained logs and source digests",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": null,
+          "content_hash": "cb83f8a0ed6c2f34499de0e6ad2b59880a0a0fa30eb1daaa7fb3db24d6770f75"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "Any route loads the wrong model or returns no content."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": "",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {}
+    },
+    {
+      "id": "NR-OPS-005",
+      "text": "Internal SDD records real artifacts and rejects missing AEE.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows two-GPU deployment; no production certification"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "Executed check with retained logs and source digests",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": null,
+          "content_hash": "4d90fb0a165387af7af2b3e96b9c96e8e88bf15dd76bd42d8460a6f8730de503"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "Missing AEE succeeds or a repeated request overwrites agent edits."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": "",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [
+        {
+          "id": "AEE-NR-OPS-005-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "NR-OPS-005",
+          "challenge": "Irreducibility challenge",
+          "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+          "severity": "medium",
+          "category": "coverage_gap",
+          "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+          "resolved": false
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "NR-LLM-007": {
+      "claim_id": "NR-LLM-007",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-OPS-005": {
+      "claim_id": "NR-OPS-005",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [
+    {
+      "failure_id": "AEE-NR-OPS-005-IRREDUCIBILITY-CHALLENGE",
+      "claim_id": "NR-OPS-005",
+      "strategy": "decompose",
+      "action": "Split the claim into atomic propositions and link them explicitly.",
+      "priority": 3,
+      "verification": "Every resulting claim contains one independently falsifiable proposition."
+    }
+  ],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/local-consolidation/claims-local.json"
+  }
+}

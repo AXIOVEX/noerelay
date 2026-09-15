@@ -1,0 +1,53 @@
+{
+  "status": "pass",
+  "claims": 20,
+  "evidence_hashes_verified": true,
+  "phases": [
+    {
+      "phase": "after_specify",
+      "assessments": [
+        {
+          "exit_code": 0,
+          "artifacts": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T181732499331Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T181732499331Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n"
+        }
+      ],
+      "verification_status": "supported"
+    },
+    {
+      "phase": "after_plan",
+      "assessments": [
+        {
+          "exit_code": 0,
+          "artifacts": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_plan-20260915T181733052611Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_plan-20260915T181733052611Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n"
+        }
+      ],
+      "verification_status": "supported"
+    },
+    {
+      "phase": "after_tasks",
+      "assessments": [
+        {
+          "exit_code": 0,
+          "artifacts": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_tasks-20260915T181733580212Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_tasks-20260915T181733580212Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n"
+        }
+      ],
+      "verification_status": "supported"
+    },
+    {
+      "phase": "after_implement",
+      "assessments": [
+        {
+          "exit_code": 0,
+          "artifacts": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_implement-20260915T181734107075Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_implement-20260915T181734107075Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n"
+        }
+      ],
+      "verification_status": "supported"
+    }
+  ],
+  "ledger": {
+    "valid": true,
+    "entries": 60,
+    "head_hash": "90d8bef93e5bff7c950fb8f97a9d7745dfaa2c076b8d97b01eaaf015a0ddd5c3",
+    "errors": []
+  }
+}

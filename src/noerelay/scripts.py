@@ -4,14 +4,15 @@ OS-appropriate launcher scripts for the NoeRelay local LLM stack.
 Generates small, self-contained scripts next to the install so the user can:
 
 * **activate the venv** and get the ``noerelay`` CLI on PATH,
-* **start / stop** the llama.cpp server with the exact args the provisioner
-  chose,
-* (Windows) **register autostart** via a Scheduled Task,
-* (macOS) **register autostart** via a LaunchAgent.
+* **start / stop** the llama.cpp server,
+* **register autostart** (Windows Scheduled Task / macOS LaunchAgent).
 
-Windows gets ``.bat``/``.ps1``; macOS/Linux get ``.sh``. All scripts are
-generated from the :class:`ProvisionPlan` so they always match the detected
-hardware (split, offload, model, port).
+NR-LLM-004: all lifecycle scripts are **thin wrappers** — they resolve the
+provisioned venv interpreter and invoke the Python entry points
+(``python -m noerelay.cli llm start|stop|schedule``).  No PowerShell
+lifecycle scripts are generated; Windows gets ``.bat``, macOS/Linux get
+``.sh``.  The server arguments themselves come from the master YAML config
+written by the installer (NR-LLM-005).
 """
 
 from __future__ import annotations
@@ -40,14 +41,6 @@ def venv_noerelay_path(plan: ProvisionPlan) -> Path:
     return plan.venv_dir / "bin" / "noerelay"
 
 
-def _server_exe(plan: ProvisionPlan) -> str:
-    return "llama-server.exe" if plan.os == "windows" else "llama-server"
-
-
-def _server_path(plan: ProvisionPlan) -> str:
-    return str(plan.llama_dir / _server_exe(plan))
-
-
 # ---------------------------------------------------------------------------
 # Windows scripts
 # ---------------------------------------------------------------------------
@@ -62,33 +55,27 @@ echo NoeRelay venv active. Use: noerelay <command>
 
 
 def _win_start(plan: ProvisionPlan) -> str:
-    args = " ".join(_quote(a) for a in plan.server_args())
+    py = str(venv_python_path(plan))
     return f"""@echo off
-REM NoeRelay: start the llama.cpp server (backend={plan.backend}).
-cd /d "{plan.llama_dir}"
-echo Starting llama.cpp server on {plan.host}:{plan.port} ...
-"{_server_path(plan)}" {args}
+REM NoeRelay: start the llama.cpp server (Python lifecycle entry point).
+"{py}" -m noerelay.cli llm start --dir "{plan.install_dir}"
 """
 
 
 def _win_stop(plan: ProvisionPlan) -> str:
+    py = str(venv_python_path(plan))
     return f"""@echo off
-REM NoeRelay: stop the llama.cpp server.
-taskkill /F /IM llama-server.exe >nul 2>&1
-if %errorlevel%==0 (echo Stopped llama-server.exe) else (echo llama-server.exe not running)
+REM NoeRelay: stop the llama.cpp server (Python lifecycle entry point).
+"{py}" -m noerelay.cli llm stop --dir "{plan.install_dir}"
 """
 
 
 def _win_autostart(plan: ProvisionPlan) -> str:
-    start = str(plan.bin_dir / "start-server.bat")
+    py = str(venv_python_path(plan))
     return f"""@echo off
-REM NoeRelay: register a logon Scheduled Task that starts the server.
-REM Run this from an ELEVATED (Administrator) prompt.
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$a = New-ScheduledTaskAction -Execute '{start}';" ^
-  "$t = New-ScheduledTaskTrigger -AtLogOn;" ^
-  "Register-ScheduledTask -TaskName 'NoeRelayLLM' -Action $a -Trigger $t -Description 'NoeRelay local LLM server'"
-echo Done. The server now starts at logon.
+REM NoeRelay: register a logon Scheduled Task (Python entry point;
+REM native schtasks under the hood - no PowerShell lifecycle scripts).
+"{py}" -m noerelay.cli llm schedule --dir "{plan.install_dir}"
 """
 
 
@@ -106,57 +93,27 @@ echo "NoeRelay venv active. Use: noerelay <command>"
 
 
 def _sh_start(plan: ProvisionPlan) -> str:
-    args = " ".join(_sh_quote(a) for a in plan.server_args())
-    log = str(plan.install_dir / "server.log")
+    py = str(venv_python_path(plan))
     return f"""#!/usr/bin/env bash
-# NoeRelay: start the llama.cpp server (backend={plan.backend}).
-cd "{plan.llama_dir}"
-echo "Starting llama.cpp server on {plan.host}:{plan.port} ..."
-exec "{_server_path(plan)}" {args}
+# NoeRelay: start the llama.cpp server (Python lifecycle entry point).
+exec "{py}" -m noerelay.cli llm start --dir "{plan.install_dir}"
 """
 
 
 def _sh_stop(plan: ProvisionPlan) -> str:
-    return """#!/usr/bin/env bash
-# NoeRelay: stop the llama.cpp server.
-pkill -f llama-server && echo "Stopped llama-server" || echo "llama-server not running"
+    py = str(venv_python_path(plan))
+    return f"""#!/usr/bin/env bash
+# NoeRelay: stop the llama.cpp server (Python lifecycle entry point).
+exec "{py}" -m noerelay.cli llm stop --dir "{plan.install_dir}"
 """
 
 
 def _mac_autostart(plan: ProvisionPlan) -> str:
-    start = str(plan.bin_dir / "start-server.sh")
-    plist = str(plan.install_dir / "com.noerelay.llm.plist")
+    py = str(venv_python_path(plan))
     return f"""#!/usr/bin/env bash
-# NoeRelay: register a macOS LaunchAgent that starts the server at login.
-PLIST="{plist}"
-cat > "$PLIST" <<'EOF'
-{{{{
-  "Label": "com.noerelay.llm",
-  "ProgramArguments": ["{start}"],
-  "RunAtLoad": true,
-  "KeepAlive": false
-}}}}
-EOF
-mkdir -p "$HOME/Library/LaunchAgents"
-cp "$PLIST" "$HOME/Library/LaunchAgents/"
-launchctl load "$HOME/Library/LaunchAgents/com.noerelay.llm.plist"
-echo "Done. The server now starts at login."
+# NoeRelay: register a macOS LaunchAgent (Python entry point).
+exec "{py}" -m noerelay.cli llm schedule --dir "{plan.install_dir}"
 """
-
-
-# ---------------------------------------------------------------------------
-# Quoting helpers
-# ---------------------------------------------------------------------------
-
-
-def _quote(s: str) -> str:
-    return f'"{s}"' if " " in s else s
-
-
-def _sh_quote(s: str) -> str:
-    if any(c in s for c in " \t\"'"):
-        return "'" + s.replace("'", "'\\''") + "'"
-    return s
 
 
 # ---------------------------------------------------------------------------

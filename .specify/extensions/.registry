@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "extensions": {
+    "evaluator": {
+      "version": "1.0.0",
+      "source": "local",
+      "manifest_hash": "sha256:783a733dbdc81dfa10bc3f445b6ee25184f8ad73ddf6f776e2c0a47a6dca189e",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {},
+      "registered_skills": [],
+      "installed_at": "2026-09-15T09:58:15.591403+00:00"
+    },
+    "aee": {
+      "version": "1.0.0",
+      "source": "local",
+      "manifest_hash": "sha256:1e96d5c9bfe7e2b584ef4fd08f0612fbbfca0ffc4c554e099429b139ff9ed0ca",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {},
+      "registered_skills": [],
+      "installed_at": "2026-09-15T09:58:22.587691+00:00"
+    }
+  }
+}

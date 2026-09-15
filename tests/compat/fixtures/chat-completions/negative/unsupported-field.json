@@ -1,5 +1,10 @@
 {
   "model": "openai/gpt-4o-mini",
-  "messages": [{"role": "user", "content": "Hello"}],
-  "reasoning_effort": "high"
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "store": true
 }

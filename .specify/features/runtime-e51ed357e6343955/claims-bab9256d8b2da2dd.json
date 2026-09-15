@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-BAB9256D8B2DA2DD",
+      "text": "Use complex reasoning to explain when a database transaction can lose an update and how optimistic concurrency control prevents this. Give a concrete two-writer timeline and pseudocode for retrying on a version conflict. Keep it under 250 words.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-e51ed357e6343955\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

@@ -95,8 +95,19 @@ impl BundleValidator {
             } else if path.extension().is_some_and(|ext| ext == "json") {
                 let content = fs::read_to_string(&path)
                     .with_context(|| format!("failed to read: {}", path.display()))?;
+                // Skip non-envelope JSON artifacts (baselines, benchmark results,
+                // portfolio reports) that also live under evidence/.
+                let value: serde_json::Value = serde_json::from_str(&content)
+                    .with_context(|| format!("failed to parse JSON: {}", path.display()))?;
+                let is_envelope = value
+                    .get("evidence_version")
+                    .map(|v| v.is_string())
+                    .unwrap_or(false);
+                if !is_envelope {
+                    continue;
+                }
                 let envelope: EvidenceEnvelope =
-                    serde_json::from_str(&content).with_context(|| {
+                    serde_json::from_value(value).with_context(|| {
                         format!("failed to parse evidence envelope: {}", path.display())
                     })?;
                 envelopes.push(envelope);

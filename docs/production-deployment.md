@@ -41,7 +41,7 @@ kubectl -n noerelay create secret generic noerelay-secrets \
 
 ## Mandatory release evidence
 
-Do not label a build GA until the [verification matrix](verification-matrix.md) contains observed evidence for all MUST requirements, including:
+Do not label a build GA until the [verification matrix](../.noerelay/verification-matrix.md) contains observed evidence for all MUST requirements, including:
 
 - independent security review with no unresolved critical/high findings;
 - tenant-crossover, SSRF, injection, quota, signing-key, ledger-splice, and A2A adversarial tests;

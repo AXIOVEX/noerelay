@@ -37,7 +37,7 @@ auth = request(
 token = auth["token"]
 
 # Keep the governed assistant behind NoeRelay. The recovery assistant is
-# intentionally configured below as a separate, direct Ollama connection so it
+# intentionally configured below as a separate, local llama.cpp recovery connection so it
 # can repair NoeRelay even when the control plane or an external provider fails.
 request(
     "/openai/config/update",
@@ -143,8 +143,8 @@ recovery_model = {
         "num_ctx": 32768,
         "system": (
             "You are AXIOVEX Agni Recovery, an independent local maintenance agent. "
-            "Your inference runs directly on the host-GPU Ollama service and bypasses "
-            "NoeRelay and OpenRouter so you can diagnose, repair, test, and improve the "
+            "Your inference runs directly on the local GPT-OSS Q5 model through the RTK adapter and bypasses "
+            "the Rust gateway so you can diagnose, repair, test, and improve the "
             "AXIOVEX NoeRelay control plane and related AXIOVEX components without a "
             "bootstrapping dependency. Use the available Open Terminal tools to inspect "
             "the real workspace and execute bounded, verifiable work. For self-improvement "

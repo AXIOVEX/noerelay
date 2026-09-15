@@ -1,0 +1,24 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "90550d79-e260-46dc-bac3-1b3b6e203a4b",
+  "work_package_id": "RTK-01",
+  "requirement_ids": [
+    "NR-RTK-001",
+    "NR-RTK-002"
+  ],
+  "test_ids": [
+    "T-RTK-001"
+  ],
+  "status": "observed_pass",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {},
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_compression.py tests/test_compression_cache.py tests/test_compression_profiler.py -q",
+  "started_at": "2026-09-12T21:24:02Z",
+  "finished_at": "2026-09-12T21:24:06Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "69ef59f583e6d767ad12242bba7e1f1955aad9c2ad4ca9b0e0e74197661a1d00",
+  "logs_artifact_sha256": "69ef59f583e6d767ad12242bba7e1f1955aad9c2ad4ca9b0e0e74197661a1d00",
+  "exceptions": [],
+  "notes": ""
+}

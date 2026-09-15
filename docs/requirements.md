@@ -81,6 +81,8 @@ NoeRelay is a virtual OpenAI API endpoint for people who want a low-friction, ‚Ä
 | `NR-CTX-004` | Claims MUST use four-valued epistemic state: supported, refuted, both, or neither. | Truth-table and merge tests preserve contradictions instead of averaging them away. |
 | `NR-CTX-005` | The system MUST distinguish facts, requirements, decisions, assumptions, observations, predictions, preferences, and artifacts. | Each type has valid transitions, evidence rules, retention, and rendering behavior. |
 | `NR-CTX-006` | When evidence is insufficient, the system MUST clarify, gather information, abstain, or escalate. | No-route and low-confidence fixtures never fabricate an accepted answer. |
+| `NR-RTK-001` | Context compression MUST be provided by a Rust-native engine (`noerelay-compact`) exposed to the Python gateway through a PyO3/Maturin bridge, and the bridge MUST degrade to a documented Python fallback when the native module is unavailable. | The bridge returns native results when the module is built and a null signal that triggers the documented fallback otherwise; both paths pass the same compression contract tests. |
+| `NR-RTK-002` | Every compression pass MUST record strategy, original and compressed token counts, compression ratio, tokens saved, and duration, and MUST preserve the protected nodes defined by `NR-CTX-002`. | Compression events appear in audit/ledger metadata; property tests prove requirements, decisions, contradictions, approvals, evidence handles, and active tool state survive dedup, prune, and auto strategies. |
 
 ### Governed execution and tools
 
@@ -125,12 +127,36 @@ NoeRelay is a virtual OpenAI API endpoint for people who want a low-friction, ‚Ä
 | `NR-OPS-001` | The service MUST expose separate liveness, readiness, metrics, trace, structured-log, and sanitized event interfaces. | Dependency failure removes readiness without causing false liveness failure. |
 | `NR-OPS-002` | Administrative kill switches MUST exist globally and by tenant, project, provider, model, agent, and tool. | Kill-switch tests stop new/cached work and produce audit evidence. |
 | `NR-OPS-003` | Backups, point-in-time recovery, ledger verification, and disaster recovery MUST be exercised. | A documented restore drill meets declared RPO/RTO and validates receipts afterward. |
+| `NR-OPS-004` | All NoeRelay-managed local state (databases, logs, run artifacts, gap/verification matrices, exports) MUST be written to the project-local `.noerelay/` directory, and tooling that consumes these artifacts MUST default to that location. | No tool writes managed state outside `.noerelay/` on the supported local profile; `noerelay gaps` and equivalent commands read and write there by default. |
 | `NR-SEC-001` | TLS, secret management, deny-by-default egress, input/body/concurrency limits, least privilege, and secure headers MUST be enforced in the supported production profile. | Production configuration fails closed when any mandatory control is absent. |
 | `NR-SEC-002` | Authentication, authorization, SSRF, injection, tenant crossover, ledger tampering, quota abuse, and secret redaction MUST have adversarial suites. | No critical/high finding remains open at release. |
 | `NR-SEC-003` | Dependencies, licenses, source, containers, SBOMs, provenance, and releases MUST be scanned and signed. | CI produces attributable artifacts and blocks known disallowed risk. |
 | `NR-REL-001` | The release MUST publish measurable SLO, load, soak, and fault-injection results for the supported deployment profile. | Results meet declared concurrency, latency, error, durability, RPO, and RTO targets. |
 | `NR-REL-002` | A release MUST have product, engineering, security, evaluation, and operations sign-off evidence. | Missing approval leaves the release candidate non-GA. |
 | `NR-REL-003` | ‚Äú100% ready‚Äù MUST refer to this frozen requirement set and a named deployment profile, never to universal fitness or automatic legal compliance. | Release record identifies remaining external/customer responsibilities and non-goals. |
+
+### Local LLM stack and operator tooling
+
+| ID | Requirement | Acceptance outcome |
+|---|---|---|
+| `NR-LLM-001` | The local provisioner MUST treat the operator-designated primary GPU (default: the display GPU, e.g. an RTX 4070 SUPER) as the preferred tensor owner, and MUST expose a machine-readable supported-model list derived from the model catalog. | On the reference two-GPU host the generated tensor split assigns the primary GPU the larger share; `noerelay models` (or the catalog source) lists every supported local model with quant and VRAM guidance. |
+| `NR-LLM-002` | The local profile MUST support a two-model plane: a fast model (`gpt-oss-20b`) for routine work and a hard model (`qwen3.8-27b`) for difficult work, with routing metadata that keeps the selection explicit and auditable. | Both models appear in the catalog with distinct tier metadata; a routing fixture selects the fast tier by default and the hard tier only under the declared escalation condition. |
+| `NR-LLM-003` | Quantization selection for `gpt-oss-20b` (Q4_K_M / Q5_K_M / Q6_K) MUST be backed by a recorded benchmark (tokens/s, TTFT, VRAM, quality proxy) rather than an unrecorded preference. | A benchmark artifact under `evidence/` records per-quant results and the chosen quant; the choice is reproducible from the artifact. |
+| `NR-LLM-004` | Local LLM server lifecycle (start, stop, scheduled-task creation) MUST be implemented in the noerelay Python package; generated installer scripts MUST be thin wrappers that invoke the Python entry points in the provisioned virtual environment. No PowerShell lifecycle scripts are generated or required. | `python -m noerelay.cli` (or `noerelay`) performs start/stop/schedule on Windows and POSIX; the installer emits only `.bat`/`.sh` wrappers that resolve the venv interpreter; no `.ps1` lifecycle files are produced. |
+| `NR-LLM-005` | A single master YAML configuration MUST carry all llama-server settings (model, host/port, context, parallelism, batch/ubatch, flash attention, cache types, tensor split, GPU layers, flags) matching the reference `start-llama-server` argument set, and the provisioner MUST generate server arguments from it. | The provisioned server process is launched with the full argument set from the YAML; changing a YAML value changes the generated invocation; schema validation rejects unknown keys. |
+| `NR-LLM-006` | The noerelay CLI MUST support Hugging Face model operations: search, download (with progress and resume), and shell-style autocomplete for model identifiers and quant names. | `noerelay hf search/download` resolves and fetches GGUF artifacts; tab-completion suggests catalog and HF repo identifiers without a network round-trip for catalog entries. |
+
+### Local consolidation
+
+| ID | Requirement | Acceptance outcome |
+|---|---|---|
+| `NR-LLM-007` | Route routine, coding, and reasoning requests through the three local models with measured shared-GPU performance. | Live completions select all three intended models; warm coding throughput and switching latency are recorded without claiming quality calibration. |
+| `NR-OPS-005` | Manage spec-kit and AEE artifacts internally for agent tasks. | Real artifacts and AEE assessments exist; missing integration fails closed and unsupported claims remain visible. |
+| `NR-EXEC-009` | Expose Docker MCP and bounded workspace agents through authenticated NoeRelay endpoints. | Tool discovery, real Docker execution, agent budgets, and operator authentication are verified. |
+| `NR-API-007` | Allow authenticated Windows and WSL2 clients to access the same local routed API. | Windows and Ubuntu WSL2 list models and complete a request at the documented endpoint; unauthenticated requests are rejected. |
+| `NR-API-008` | Accept validated Zoo Code reasoning effort on multipart chat requests. | Supported effort values parse and reach live WSL inference; invalid values remain rejected. |
+| `NR-LLM-008` | Allocate 131072 total context tokens for each local routed model. | All three loaded model metadata report 131072 context; a retrieval prompt beyond 16384 tokens completes. |
+| `NR-OPS-006` | Separate machine-side deployment assets from Docker project definitions. | Moved host scripts and Docker definitions pass targeted tests; the reorganized stack restarts successfully. |
 
 ## Supported v1 deployment profile
 

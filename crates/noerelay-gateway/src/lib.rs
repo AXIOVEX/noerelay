@@ -6,7 +6,8 @@ pub mod stub_provider;
 use axum::{
     Json, Router,
     body::{Body, Bytes},
-    extract::{DefaultBodyLimit, Extension, Path, State},
+    extract::{DefaultBodyLimit, Extension, Path, State, Request},
+    middleware::Next,
     http::{HeaderMap, StatusCode},
     response::{IntoResponse, Response},
     routing::{get, post},
@@ -44,7 +45,7 @@ const PRIMARY_PUBLIC_MODEL_ID: &str = "axiovex-agni";
 const RAW_PUBLIC_MODEL_ID: &str = "axiovex-agni-raw";
 
 /// Whitelist of valid capability values for the `x-noerelay-capability` header.
-const VALID_CAPABILITIES: &[&str] = &["text", "cursor", "codex", "aider", "vision", "code"];
+const VALID_CAPABILITIES: &[&str] = &["text", "cursor", "codex", "aider", "vision", "code", "reasoning"];
 
 /// HTTP client for the LLMRouter sidecar, implementing [`AdvisoryRanker`].
 ///
@@ -556,6 +557,8 @@ pub fn app(state: AppState) -> Router {
         .route("/v1/models", get(models))
         .route("/v1/chat/completions", post(chat_completions))
         .route("/v1/responses", post(responses))
+        .route("/mcp", post(mcp_bridge))
+        .route("/v1/noerelay/agent", post(agent_bridge))
         .route("/v1/noerelay/runs/{run_id}/receipt", get(receipt))
         .route("/v1/noerelay/reports/costs", get(cost_report))
         .route(
@@ -579,6 +582,50 @@ pub fn app(state: AppState) -> Router {
         .route("/ready", get(ready))
         .with_state(state)
         .merge(protected)
+        .layer(axum::middleware::from_fn(cors))
+}
+
+async fn cors(request: Request, next: Next) -> Response {
+    let requested_headers = request.headers().get("access-control-request-headers").cloned();
+    let mut response = if request.method() == axum::http::Method::OPTIONS {
+        StatusCode::NO_CONTENT.into_response()
+    } else {
+        next.run(request).await
+    };
+    let headers = response.headers_mut();
+    headers.insert("access-control-allow-origin", "*".parse().unwrap());
+    headers.insert("access-control-allow-methods", "GET, POST, OPTIONS, DELETE".parse().unwrap());
+    headers.insert("access-control-allow-headers", requested_headers.unwrap_or_else(|| "Authorization, Content-Type, Mcp-Session-Id, MCP-Protocol-Version, x-noerelay-project, x-noerelay-capability, x-noerelay-risk".parse().unwrap()));
+    headers.insert("access-control-expose-headers", "x-noerelay-run-id, x-noerelay-receipt-id, Mcp-Session-Id".parse().unwrap());
+    response
+}
+
+async fn local_agent_bridge(state: AppState, headers: HeaderMap, body: Value, path: &str) -> Response {
+    // Tool/agent execution is currently an operator capability, not a tenant API.
+    if !authorized(&headers, &state.config.bearer_key_sha256) {
+        return error(StatusCode::FORBIDDEN, "operator_required", "Operator API key required for local agent tools");
+    }
+    let base = std::env::var("NOERELAY_LOCAL_PLANE_URL").unwrap_or_else(|_| "http://host.docker.internal:8082".into());
+    match state.client.post(format!("{base}{path}"))
+        .timeout(Duration::from_secs(if path == "/agent" { 5100 } else { 120 }))
+        .bearer_auth(&state.config.openrouter_api_key).json(&body).send().await {
+        Ok(response) => {
+            let status = response.status();
+            match response.bytes().await {
+                Ok(bytes) => (status, [("content-type", "application/json")], bytes).into_response(),
+                Err(_) => error(StatusCode::BAD_GATEWAY, "local_plane_failed", "Local agent response failed"),
+            }
+        }
+        Err(_) => error(StatusCode::BAD_GATEWAY, "local_plane_unavailable", "Local agent service unavailable"),
+    }
+}
+
+async fn mcp_bridge(State(state): State<AppState>, headers: HeaderMap, Json(body): Json<Value>) -> Response {
+    local_agent_bridge(state, headers, body, "/mcp").await
+}
+
+async fn agent_bridge(State(state): State<AppState>, headers: HeaderMap, Json(body): Json<Value>) -> Response {
+    local_agent_bridge(state, headers, body, "/agent").await
 }
 
 async fn health() -> Json<Value> {
@@ -636,65 +683,7 @@ async fn spec_kit_onboard(
     headers: HeaderMap,
     Json(body): Json<Value>,
 ) -> Response {
-    if !authorized(&headers, &state.config.bearer_key_sha256) {
-        return error(
-            StatusCode::UNAUTHORIZED,
-            "unauthorized",
-            "Invalid or missing API key",
-        );
-    }
-    let project_id = body
-        .get("project_id")
-        .and_then(|v| v.as_str())
-        .unwrap_or("default")
-        .to_string();
-    let project_name = body
-        .get("project_name")
-        .and_then(|v| v.as_str())
-        .unwrap_or(&project_id)
-        .to_string();
-    let description = body
-        .get("description")
-        .and_then(|v| v.as_str())
-        .unwrap_or("")
-        .to_string();
-
-    Json(json!({
-        "object": "spec_kit_onboarding",
-        "project_id": project_id,
-        "project_name": project_name,
-        "description": description,
-        "status": "initialized",
-        "phase": "specify",
-        "phases": [
-            {
-                "name": "specify",
-                "description": "Define the project specification: goals, requirements, constraints, and acceptance criteria.",
-                "instructions": "Describe what you want to build. Include: purpose, target users, key features, technical constraints, and success criteria."
-            },
-            {
-                "name": "plan",
-                "description": "Create the implementation plan: architecture, milestones, task breakdown, and risk assessment.",
-                "instructions": "Based on the specification, propose: system architecture, technology choices, milestone breakdown, task list with estimates, and risk mitigation."
-            },
-            {
-                "name": "tasks",
-                "description": "Decompose the plan into actionable tasks with clear ownership and dependencies.",
-                "instructions": "Break the plan into discrete tasks. Each task should have: clear scope, acceptance criteria, dependencies, and estimated effort."
-            },
-            {
-                "name": "implement",
-                "description": "Execute the tasks, iterating with feedback and verification.",
-                "instructions": "Implement tasks in dependency order. After each task, verify against acceptance criteria before proceeding."
-            }
-        ],
-        "next_action": "specify",
-        "message": format!(
-            "Project '{}' has been initialized with spec-kit. Begin by describing your project goals and requirements (specify phase).",
-            project_name
-        )
-    }))
-    .into_response()
+    local_agent_bridge(state, headers, body, "/sdd/onboard").await
 }
 
 /// Spec-kit audit: called when an existing project is opened.
@@ -704,89 +693,7 @@ async fn spec_kit_audit(
     headers: HeaderMap,
     Json(body): Json<Value>,
 ) -> Response {
-    if !authorized(&headers, &state.config.bearer_key_sha256) {
-        return error(
-            StatusCode::UNAUTHORIZED,
-            "unauthorized",
-            "Invalid or missing API key",
-        );
-    }
-    let project_id = body
-        .get("project_id")
-        .and_then(|v| v.as_str())
-        .unwrap_or("default")
-        .to_string();
-
-    // Load the authority snapshot for this project to determine current state
-    let scope = state.config.default_scope.clone();
-    let org_id = scope.organization_id.as_str();
-    let audit_project = if project_id == "default" {
-        scope.project_id.as_str().to_string()
-    } else {
-        project_id.clone()
-    };
-    let (storage_version, last_run_count, last_activity) = if let Some(store) = &state.store {
-        match store.load(org_id, &audit_project).await {
-            Ok(Some(stored)) => {
-                let events = stored.snapshot.ledger.events();
-                let run_count = events.len();
-                let last_activity = events.last().map(|e| e.occurred_at_unix_ms).unwrap_or(0);
-                (stored.storage_version, run_count, last_activity)
-            }
-            Ok(None) => (0, 0, 0),
-            Err(_) => (0, 0, 0),
-        }
-    } else {
-        (0, 0, 0)
-    };
-
-    let phase = if storage_version == 0 {
-        "specify"
-    } else if last_run_count < 3 {
-        "plan"
-    } else if last_run_count < 10 {
-        "tasks"
-    } else {
-        "implement"
-    };
-
-    let is_new = storage_version == 0;
-
-    Json(json!({
-        "object": "spec_kit_audit",
-        "project_id": audit_project,
-        "status": if is_new { "no_prior_work" } else { "in_progress" },
-        "phase": phase,
-        "storage_version": storage_version,
-        "total_runs": last_run_count,
-        "last_activity_unix_ms": last_activity,
-        "next_action": if is_new {
-            "onboard"
-        } else {
-            phase
-        },
-        "message": if is_new {
-            format!(
-                "No prior work found for project '{}'. Run onboarding to initialize the spec-kit lifecycle.",
-                audit_project
-            )
-        } else {
-            format!(
-                "Project '{}' has {} prior runs. Current phase: '{}'. Last activity: {}.",
-                audit_project,
-                last_run_count,
-                phase,
-                if last_activity > 0 {
-                    chrono::DateTime::from_timestamp_millis(last_activity as i64)
-                        .map(|dt| dt.to_rfc3339())
-                        .unwrap_or_else(|| "unknown".to_string())
-                } else {
-                    "unknown".to_string()
-                }
-            )
-        }
-    }))
-    .into_response()
+    local_agent_bridge(state, headers, body, "/sdd/audit").await
 }
 
 async fn receipt(
@@ -1116,6 +1023,14 @@ async fn proxy_openai_request(
     };
     let project_is_new = explicit_project.is_none();
     let mut required_capabilities: Vec<String> = vec!["text".into()];
+    // Local task routing is deterministic and auditable, with explicit overrides.
+    // Uncalibrated task heuristics never relax risk/acceptance constraints.
+    let task_class = if state.config.candidates.iter().any(|c| c.candidate_id == "qwen3.6-35b-a3b") {
+        local_task_class(&wire_request)
+    } else { "routine" };
+    if task_class != "routine" {
+        required_capabilities.push(task_class.into());
+    }
     let mut has_agent_client = false;
     if let Some(cap) = headers
         .get("x-noerelay-capability")
@@ -1156,6 +1071,7 @@ async fn proxy_openai_request(
         allowed_agents: vec![],
         metadata: {
             let mut meta = BTreeMap::from([
+                ("routing_task_class".into(), task_class.into()),
                 ("context_manifest_hash".into(), context_manifest_hash),
                 (
                     "omitted_context_nodes".into(),
@@ -1176,8 +1092,8 @@ async fn proxy_openai_request(
             // Every chat is part of a project initialized as spec-kit.
             meta.insert("spec_kit_project".into(), spec_kit_project);
             if project_is_new {
-                meta.insert("spec_kit_initialized".into(), "true".into());
-                meta.insert("spec_kit_phase".into(), "specify".into());
+                meta.insert("spec_kit_initialized".into(), "false".into());
+                meta.insert("spec_kit_phase".into(), "pending_artifacts".into());
             }
             meta
         },
@@ -1212,6 +1128,16 @@ async fn proxy_openai_request(
         .clone()
         .expect("prepared run always has a selected route");
     request.insert("model".into(), Value::String(model));
+    // The local model plane creates actual artifacts and runs AEE before inference.
+    // LiteLLM merges extra_body into the upstream request after parameter filtering.
+    if state.config.candidates.iter().any(|candidate| candidate.candidate_id == "gpt-oss-20b-Q5_K_M") {
+        let extra = request.entry("extra_body").or_insert_with(|| serde_json::json!({}));
+        if let Some(extra) = extra.as_object_mut() {
+            extra.insert("noerelay_sdd".into(), serde_json::json!({
+                "project": canonical.metadata.get("spec_kit_project")
+            }));
+        }
+    }
     apply_agent_instructions(
         &mut request,
         profile,
@@ -1672,7 +1598,7 @@ fn apply_agent_instructions(
         ""
     };
     let product_manifest = if self_capability_inquiry {
-        "\n\nYour factual product identity: AXIOVEX Sentinel is the Open WebUI-based enterprise interface. NoeRelay is the Rust-based Intelligent AI Control Plane behind its OpenAI-compatible API. NoeRelay compiles and cleans context, enforces policy and risk constraints, selects an admissible internal route using capability, cost, latency, and acceptance evidence, records governed runs and signed hash-linked receipts in PostgreSQL, and reports usage and cost. The axiovex-agni route uses a LiteLLM model plane spanning host-GPU Ollama and the remote GPU, with OpenRouter failover. AXIOVEX Sentinel separately exposes axiovex-agni-recovery through direct host-GPU Ollama inference, deliberately bypassing NoeRelay so maintainers can repair the control plane when it is unavailable. Open Terminal supplies permission-controlled workspace execution; Docling supplies document extraction, OCR, and PDF processing; optional WebUI tools supply web search and other configured actions. Tool availability always depends on deployment configuration and the signed-in user's permissions; never claim access you do not have. Public AXIOVEX model names intentionally hide changeable provider model identifiers."
+        "\n\nYour factual product identity: AXIOVEX Sentinel is the Open WebUI-based enterprise interface. NoeRelay is the Rust-based Intelligent AI Control Plane behind its OpenAI-compatible API. NoeRelay compiles and cleans context, enforces policy and risk constraints, selects an admissible internal route using capability, cost, latency, and acceptance evidence, records governed runs and signed hash-linked receipts in PostgreSQL, and reports usage and cost. The axiovex-agni route uses a local three-model router: GPT-OSS Q5 for routine work, Qwen3.6 for coding, and Qwen3.8 for reasoning, with native RTK and agent-managed spec-kit/AEE. AXIOVEX Sentinel separately exposes axiovex-agni-recovery through the local GPT-OSS Q5 recovery route, deliberately bypassing NoeRelay so maintainers can repair the control plane when it is unavailable. Docker MCP supplies configured external tools through NoeRelay. Open Terminal supplies permission-controlled workspace execution; Docling supplies document extraction, OCR, and PDF processing; optional WebUI tools supply web search and other configured actions. Tool availability always depends on deployment configuration and the signed-in user's permissions; never claim access you do not have. Public AXIOVEX model names intentionally hide changeable provider model identifiers."
     } else {
         ""
     };
@@ -2253,6 +2179,18 @@ fn compile_wire_context(
     ))
 }
 
+fn local_task_class(request: &WireCanonicalRequest) -> &'static str {
+    let text = governance_messages(request).iter().rev()
+        .find(|message| message.role == MessageRole::User)
+        .map(|message| message.content.to_lowercase()).unwrap_or_default();
+    if ["architecture", "race condition", "security review", "root cause", "failed tests", "prove", "complex reasoning"].iter().any(|term| text.contains(term)) {
+        "reasoning"
+    } else if request.tools.as_ref().is_some_and(|tools| !tools.is_empty()) ||
+        ["code", "coding", "implement", "debug", "refactor", "function", "repository", "unit test", "python", "javascript", "typescript", "rust"].iter().any(|term| text.contains(term)) {
+        "code"
+    } else { "routine" }
+}
+
 fn parse_risk(value: Option<&str>) -> RiskClass {
     match value {
         Some("medium") => RiskClass::Medium,
@@ -2400,6 +2338,27 @@ mod tests {
         assert!(constant_time_equal(b"same", b"same"));
         assert!(!constant_time_equal(b"same", b"diff"));
         assert!(!constant_time_equal(b"short", b"longer"));
+    }
+
+    #[test]
+    fn local_task_routing_separates_routine_coding_and_reasoning() {
+        for (text, expected) in [("Hello", "routine"), ("Implement a Python function", "code"), ("Investigate this race condition", "reasoning")] {
+            let request = ChatCompletionsConverter::parse_request(&json!({"model": "axiovex-agni", "messages": [{"role": "user", "content": text}]})).unwrap();
+            assert_eq!(local_task_class(&request), expected);
+        }
+    }
+
+    #[tokio::test]
+    async fn cors_preflight_succeeds_but_mcp_still_requires_authentication() {
+        let router = app(state("http://127.0.0.1:1".into()));
+        let preflight = router.clone().oneshot(Request::builder().method("OPTIONS").uri("/mcp")
+            .header("origin", "https://frontend.example").header("access-control-request-headers", "authorization,content-type")
+            .body(Body::empty()).unwrap()).await.unwrap();
+        assert_eq!(preflight.status(), StatusCode::NO_CONTENT);
+        assert_eq!(preflight.headers()["access-control-allow-origin"], "*");
+        let denied = router.oneshot(Request::builder().method("POST").uri("/mcp")
+            .header("content-type", "application/json").body(Body::from("{}" )).unwrap()).await.unwrap();
+        assert_eq!(denied.status(), StatusCode::UNAUTHORIZED);
     }
 
     #[test]

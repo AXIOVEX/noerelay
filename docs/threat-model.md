@@ -12,7 +12,7 @@ This threat model originally covered the Python reference kernel. ADR-0001 now a
 
 ### 1.1 Rust authority delta
 
-The Rust boundary now includes canonical request scope, task-contract hashing, constraint-first model selection, budget reservation, tool authorization, four-valued claims, protected context manifests, verification DAG decisions, usage rollups, recommendation uncertainty, and hash-chain verification. New risks include cross-language canonicalization drift, binding privilege confusion, adapter-to-core authorization, async cancellation, stream truncation, registry/config authenticity, and persistence transaction boundaries. The release tests for these risks are normative in [`verification-matrix.md`](verification-matrix.md).
+The Rust boundary now includes canonical request scope, task-contract hashing, constraint-first model selection, budget reservation, tool authorization, four-valued claims, protected context manifests, verification DAG decisions, usage rollups, recommendation uncertainty, and hash-chain verification. New risks include cross-language canonicalization drift, binding privilege confusion, adapter-to-core authorization, async cancellation, stream truncation, registry/config authenticity, and persistence transaction boundaries. The release tests for these risks are normative in [`verification-matrix.md`](../.noerelay/verification-matrix.md).
 
 ### In scope
 

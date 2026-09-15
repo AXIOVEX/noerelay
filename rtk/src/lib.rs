@@ -31,14 +31,35 @@ fn count_message_tokens_rust(messages: &Bound<'_, PyDict>) -> PyResult<usize> {
     let items: Vec<Bound<'_, PyDict>> = extract_dict_list(messages)?;
     let contents: Vec<String> = items
         .iter()
-        .filter_map(|msg| {
-            msg.get_item("content")
-                .ok()
-                .flatten()
-                .and_then(|v| v.extract::<String>().ok())
-        })
+        .flat_map(|msg| message_content_texts(msg))
         .collect();
     Ok(tokenizer::count_message_tokens(&contents))
+}
+
+/// Extract the text content(s) of a message, handling both plain-string
+/// content and multipart list content (e.g. `[{"type": "text", "text": ...}]`).
+fn message_content_texts(msg: &Bound<'_, PyDict>) -> Vec<String> {
+    let mut texts: Vec<String> = Vec::new();
+    let content = match msg.get_item("content").ok().flatten() {
+        Some(c) => c,
+        None => return texts,
+    };
+    if let Ok(s) = content.extract::<String>() {
+        texts.push(s);
+        return texts;
+    }
+    if let Ok(list) = content.downcast::<PyList>() {
+        for part in list.iter() {
+            if let Ok(dict) = part.downcast::<PyDict>() {
+                if let Ok(Some(t)) = dict.get_item("text") {
+                    if let Ok(s) = t.extract::<String>() {
+                        texts.push(s);
+                    }
+                }
+            }
+        }
+    }
+    texts
 }
 
 /// Deduplicate a message list in Rust — returns list of dicts.

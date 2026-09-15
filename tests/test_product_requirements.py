@@ -30,7 +30,7 @@ class ProductRequirementTraceabilityTests(unittest.TestCase):
         cls.requirements_text = (ROOT / "docs" / "requirements.md").read_text(
             encoding="utf-8"
         )
-        cls.matrix_text = (ROOT / "docs" / "verification-matrix.md").read_text(
+        cls.matrix_text = (ROOT / ".noerelay" / "verification-matrix.md").read_text(
             encoding="utf-8"
         )
         cls.orchestrator_plan_text = (

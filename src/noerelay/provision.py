@@ -81,16 +81,60 @@ _VRAM_HEADROOM = {
 _RAM_HEADROOM = 0.60  # leave room for OS + KV cache when offloading
 
 
+# Approximate memory bandwidth (GB/s) for known NVIDIA GPUs, keyed by a
+# substring of the device name. LLM token generation is memory-bandwidth-bound,
+# so this — not raw VRAM — is the better proxy for per-layer speed. Unknown
+# GPUs return ``None`` and fall back to a VRAM-based weight.
+_GPU_BANDWIDTH_GBS: list[tuple[str, float]] = [
+    # Most-specific first so substrings resolve correctly
+    # (e.g. "4070 SUPER" before "4070", "5060 TI" before "5060").
+    ("4070 SUPER", 504.0),
+    ("4070 TI", 672.0),
+    ("4070", 504.0),
+    ("4060 TI", 288.0),
+    ("4060", 272.0),
+    ("4080 SUPER", 736.0),
+    ("4080", 717.0),
+    ("4090", 1008.0),
+    ("5060 TI", 448.0),
+    ("5060", 448.0),
+    ("5070", 672.0),
+    ("5080", 960.0),
+    ("5090", 1792.0),
+    ("3090", 936.0),
+    ("3080", 912.0),
+    ("3070", 448.0),
+    ("3060", 360.0),
+]
+
+
+def _gpu_bandwidth_gbs(name: str) -> Optional[float]:
+    """Best-effort memory bandwidth (GB/s) for a GPU name, or ``None``."""
+    upper = name.upper()
+    for key, bw in _GPU_BANDWIDTH_GBS:
+        if key in upper:
+            return bw
+    return None
+
+
 def _recommend_split(system: SystemInfo) -> str:
     """
-    Relative tensor-split across NVIDIA GPUs, proportional to VRAM. The
-    display-driving GPU is reduced by 20% to leave desktop headroom. Weights
-    are normalized to integers summing to ~25 (the ``9,16`` style).
+    Relative tensor-split across NVIDIA GPUs.
+
+    Weights are proportional to **memory bandwidth** when it is known (LLM
+    token generation is memory-bandwidth-bound, so the faster GPU should hold
+    more layers), falling back to VRAM for unknown GPUs. The display-driving
+    GPU is reduced by 20% to leave desktop headroom. Weights are normalized to
+    integers summing to ~25 (the ``9,16`` style).
     """
     gpus = [g for g in system.gpus if g.vendor == "nvidia"]
     if len(gpus) < 2:
         return ""
-    raw = [g.total_mib * (0.8 if g.display_active else 1.0) for g in gpus]
+    raw: list[float] = []
+    for g in gpus:
+        bw = _gpu_bandwidth_gbs(g.name)
+        base = bw if bw is not None else max(1, g.total_mib)
+        raw.append(base * (0.8 if g.display_active else 1.0))
     total = sum(raw)
     if total == 0:
         return ",".join("1" for _ in gpus)
@@ -139,14 +183,19 @@ def _pick_model(system: SystemInfo) -> ModelEntry:
 
 
 def _pick_ctx(system: SystemInfo, model: ModelEntry) -> int:
-    """Scale context size with available memory."""
+    """Scale context size with available memory.
+
+    The master YAML config (NR-LLM-005) is the authoritative source at
+    runtime; this heuristic only seeds the initial plan.  The reference
+    operator host runs 131072 with dual-GPU + quantized KV cache.
+    """
     if system.backend == "cpu":
         return 4096
     if system.total_vram_gb >= 24 or system.ram_gb >= 32:
         return 16384
     if system.total_vram_gb >= 12 or system.ram_gb >= 16:
-        return 8192
-    return 4096
+        return 131072
+    return 8192
 
 
 # ---------------------------------------------------------------------------
@@ -167,13 +216,24 @@ class ProvisionPlan:
     tensor_split: str = ""        # e.g. "9,16" (empty = no split)
     n_gpu_layers: int = 0         # 999 = all, 0 = none
     model: ModelEntry = field(default_factory=default_model)
-    ctx_size: int = 8192
+    ctx_size: int = 131072
     parallel: int = 1
     host: str = "127.0.0.1"
     port: int = 8080
+    batch_size: int = 512
+    ubatch_size: int = 256
+    flash_attn: str = "auto"
+    cache_type_k: str = "q4_0"
+    cache_type_v: str = "q4_0"
+    no_mtp: bool = False
+    no_reasoning_preserve: bool = True
+    metrics: bool = True
     install_dir: Path = field(default_factory=lambda: Path.home() / "noerelay-llm")
     models_dir: Optional[Path] = None
     notes: list[str] = field(default_factory=list)
+    #: Master YAML config (NR-LLM-005).  When set, :meth:`server_args`
+    #: generates the invocation from it.
+    llama_config: Optional[dict] = None
 
     # -- derived -----------------------------------------------------------
 
@@ -192,7 +252,9 @@ class ProvisionPlan:
     @property
     def model_file(self) -> Path:
         d = self.models_dir or (self.install_dir / "models")
-        return d / f"{self.model.key}.gguf"
+        # Use the catalog's exact filename when provided so the plan matches
+        # operator model dirs (e.g. C:\Models\gpt-oss-20b-Q4_K_M.gguf).
+        return d / (self.model.filename or f"{self.model.key}.gguf")
 
     @property
     def api_base(self) -> str:
@@ -203,7 +265,14 @@ class ProvisionPlan:
         return self.split_mode == "layer" and "," in self.tensor_split
 
     def server_args(self) -> list[str]:
-        """The llama-server command-line arguments for this plan."""
+        """The llama-server command-line arguments for this plan.
+
+        Generated from the master YAML config when present (NR-LLM-005);
+        otherwise from the plan fields (same reference argument set).
+        """
+        if self.llama_config is not None:
+            from .llama_config import server_args_from_config
+            return server_args_from_config(self.llama_config, model_path=str(self.model_file))
         args = [
             "-m", str(self.model_file),
             "--host", self.host,
@@ -212,11 +281,24 @@ class ProvisionPlan:
             "--parallel", str(self.parallel),
         ]
         if self.backend == "cpu":
-            args += ["-ngl", "0"]
+            args += ["--n-gpu-layers", "0"]
         else:
-            args += ["-ngl", str(self.n_gpu_layers)]
+            args += ["--n-gpu-layers", str(self.n_gpu_layers)]
         if self.is_multi_gpu:
             args += ["--split-mode", "layer", "--tensor-split", self.tensor_split]
+        args += [
+            "--batch-size", str(self.batch_size),
+            "--ubatch-size", str(self.ubatch_size),
+            "--flash-attn", self.flash_attn,
+            "--cache-type-k", self.cache_type_k,
+            "--cache-type-v", self.cache_type_v,
+        ]
+        if self.no_mtp:
+            args.append("--no-mtp")
+        if self.no_reasoning_preserve:
+            args.append("--no-reasoning-preserve")
+        if self.metrics:
+            args.append("--metrics")
         return args
 
     def summary_lines(self) -> list[str]:
@@ -320,5 +402,35 @@ def make_plan(
 
     # -- context -----------------------------------------------------------
     plan.ctx_size = ctx_size or _pick_ctx(system, plan.model)
+
+    # -- master YAML config (NR-LLM-005) ------------------------------------
+    # The provisioned server is launched from this config; the installer
+    # renders it to <install_dir>/llama.yaml.
+    from .llama_config import validate_llama_config
+
+    plan.llama_config = validate_llama_config(
+        {
+            "version": 1,
+            "server": {
+                "model": str(plan.model_file),
+                "model_key": plan.model.key,
+                "host": plan.host,
+                "port": plan.port,
+                "n_gpu_layers": plan.n_gpu_layers,
+                "split_mode": plan.split_mode,
+                "tensor_split": plan.tensor_split,
+                "ctx_size": plan.ctx_size,
+                "parallel": plan.parallel,
+                "batch_size": plan.batch_size,
+                "ubatch_size": plan.ubatch_size,
+                "flash_attn": plan.flash_attn,
+                "cache_type_k": plan.cache_type_k,
+                "cache_type_v": plan.cache_type_v,
+                "no_mtp": plan.no_mtp,
+                "no_reasoning_preserve": plan.no_reasoning_preserve,
+                "metrics": plan.metrics,
+            },
+        }
+    )
 
     return plan

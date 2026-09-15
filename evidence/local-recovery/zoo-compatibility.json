@@ -1,0 +1,1 @@
+{"passed": true, "message": {"content": "```python\ndef add(a, b):\n    return a + b\n```", "provider_specific_fields": {"refusal": null}, "role": "assistant"}}

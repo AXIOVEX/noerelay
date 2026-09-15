@@ -1,0 +1,127 @@
+{
+  "checks": [
+    {
+      "check": "cors_preflight",
+      "passed": true
+    },
+    {
+      "check": "mcp_tools",
+      "tools": [
+        "query-docs",
+        "resolve-library-id",
+        "sequentialthinking",
+        "noerelay_workspace_execute",
+        "noerelay_workspace_status",
+        "noerelay_sdd_assess",
+        "noerelay_requirements"
+      ],
+      "passed": true
+    },
+    {
+      "check": "docker_workspace",
+      "passed": true,
+      "result": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"result\": {\"id\": \"20260915-161519-089388\", \"command\": \"python -c \\\"print(731 + 269)\\\"\", \"status\": \"done\", \"exit_code\": 0, \"output\": [{\"type\": \"output\", \"data\": \"1000\\r\\n\"}], \"truncated\": false, \"next_offset\": 1, \"log_path\": \"/home/user/.local/state/open-terminal/logs/processes/20260915-161519-089388.jsonl\"}, \"evidence_path\": \".noerelay/runtime/tool-evidence/1789488919331978900.json\", \"sha256\": \"2fa33523cbed452174d66b8e4ae34d7bd4d9c7b5598a3641ad64198bafc10ce0\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "check": "model_route",
+      "expected": "gpt-oss-20b-Q5_K_M",
+      "loaded": [
+        "gpt-oss-20b-Q5_K_M"
+      ],
+      "elapsed_seconds": 12.703,
+      "content": "READY",
+      "timings": {
+        "cache_n": 0,
+        "predicted_ms": 368.262,
+        "predicted_n": 41,
+        "predicted_per_second": 108.6183206521444,
+        "predicted_per_token_ms": 9.20655,
+        "prompt_ms": 668.56,
+        "prompt_n": 310,
+        "prompt_per_second": 463.68313988273303,
+        "prompt_per_token_ms": 2.1566451612903226
+      },
+      "usage": {
+        "completion_tokens": 41,
+        "prompt_tokens": 310,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 351
+      },
+      "run_id": "df4701c1-75bb-4c2d-a0ee-3a9e365e5994",
+      "passed": true
+    },
+    {
+      "check": "model_route",
+      "expected": "qwen3.6-35b-a3b",
+      "loaded": [
+        "qwen3.6-35b-a3b"
+      ],
+      "elapsed_seconds": 14.437,
+      "content": "```python\ndef add(a, b):\n    return a + b\n```",
+      "timings": {
+        "cache_n": 0,
+        "predicted_ms": 658.29,
+        "predicted_n": 18,
+        "predicted_per_second": 25.824484649622505,
+        "predicted_per_token_ms": 38.722941176470584,
+        "prompt_ms": 3012.454,
+        "prompt_n": 278,
+        "prompt_per_second": 92.28356681960952,
+        "prompt_per_token_ms": 10.8361654676259
+      },
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 278,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 296
+      },
+      "run_id": "42b14376-0c17-47a0-a4f9-0d6cb0a6eb09",
+      "passed": true
+    },
+    {
+      "check": "model_route",
+      "expected": "qwen3.8-27b",
+      "loaded": [
+        "qwen3.8-27b"
+      ],
+      "elapsed_seconds": 25.11,
+      "content": "323",
+      "timings": {
+        "cache_n": 0,
+        "predicted_ms": 8046.713,
+        "predicted_n": 81,
+        "predicted_per_second": 9.941947724493218,
+        "predicted_per_token_ms": 100.5839125,
+        "prompt_ms": 2320.569,
+        "prompt_n": 319,
+        "prompt_per_second": 137.46628520849845,
+        "prompt_per_token_ms": 7.2745109717868335
+      },
+      "usage": {
+        "completion_tokens": 81,
+        "prompt_tokens": 319,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 400
+      },
+      "run_id": "11e57bf4-674d-4074-bac2-18f6cc8023f1",
+      "passed": true
+    }
+  ]
+}

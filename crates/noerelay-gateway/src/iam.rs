@@ -635,6 +635,8 @@ fn is_authenticated_api_route(method: &str, path: &str) -> bool {
         ("GET", "/v1/models")
             | ("POST", "/v1/chat/completions")
             | ("POST", "/v1/responses")
+            | ("POST", "/mcp")
+            | ("POST", "/v1/noerelay/agent")
             | ("GET", "/v1/noerelay/reports/costs")
             | ("POST", "/v1/noerelay/governance/release-gate")
             | ("POST", "/v1/noerelay/projects/onboard")

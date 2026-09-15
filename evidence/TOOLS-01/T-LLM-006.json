@@ -1,0 +1,23 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "e5d07b8b-0b1e-4c61-bf0b-6e12932582c5",
+  "work_package_id": "TOOLS-01",
+  "requirement_ids": [
+    "NR-LLM-006"
+  ],
+  "test_ids": [
+    "T-LLM-006"
+  ],
+  "status": "observed_pass",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {},
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_cli_llm_hf.py tests/test_hf_offline.py -q",
+  "started_at": "2026-09-12T21:23:56Z",
+  "finished_at": "2026-09-12T21:24:01Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "49fd4ba7c4418d3e489baac6170e099eb09ffbaaef788311d086368fc4b122c3",
+  "logs_artifact_sha256": "49fd4ba7c4418d3e489baac6170e099eb09ffbaaef788311d086368fc4b122c3",
+  "exceptions": [],
+  "notes": ""
+}

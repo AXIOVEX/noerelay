@@ -1,0 +1,23 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "62275366-995f-41e2-b585-14ff049abf58",
+  "work_package_id": "TOOLS-01",
+  "requirement_ids": [
+    "NR-OPS-004"
+  ],
+  "test_ids": [
+    "T-OPS-004"
+  ],
+  "status": "observed_pass",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {},
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_product_requirements.py tests/test_cli_adopt_update.py -q",
+  "started_at": "2026-09-12T21:24:06Z",
+  "finished_at": "2026-09-12T21:24:11Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "41b04bdd2cf305ca34091de4ceff4be3bc014ac33ff9f6605e616888e15e8482",
+  "logs_artifact_sha256": "41b04bdd2cf305ca34091de4ceff4be3bc014ac33ff9f6605e616888e15e8482",
+  "exceptions": [],
+  "notes": ""
+}

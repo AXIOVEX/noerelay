@@ -1,0 +1,8 @@
+{
+  "project": "api-final-smoke",
+  "feature": ".specify/features/runtime-934ead7d03d21f95",
+  "claim_id": "REQ-FAD8B01D4A01A344",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T172640110448Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T172640110448Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value, json};
 use std::collections::{HashMap, HashSet};
 
-pub const PROFILE_VERSION: &str = "2024-02-15";
+pub const PROFILE_VERSION: &str = "2026-09-15";
 
 const CHAT_SUPPORTED_FIELDS: &[&str] = &[
     "model",
@@ -35,13 +35,13 @@ const CHAT_SUPPORTED_FIELDS: &[&str] = &[
     "parallel_tool_calls",
     "logit_bias",
     "metadata",
+    "reasoning_effort",
 ];
 
 const CHAT_UNSUPPORTED_FIELDS: &[&str] = &[
     "audio",
     "modalities",
     "prediction",
-    "reasoning_effort",
     "store",
     "web_search_options",
 ];
@@ -116,6 +116,8 @@ pub struct CanonicalRequest {
     pub messages: Vec<CanonicalMessage>,
     pub model: String,
     pub temperature: Option<f32>,
+    #[serde(default)]
+    pub reasoning_effort: Option<String>,
     pub max_tokens: Option<i32>,
     pub max_completion_tokens: Option<i32>,
     pub top_p: Option<f32>,
@@ -659,10 +661,15 @@ fn build_request(
         }
         Some(value) => Some(decode(value, response_format_field)?),
     };
+    let reasoning_effort = optional_string(object, "reasoning_effort")?;
+    if reasoning_effort.as_deref().is_some_and(|value| !matches!(value, "none" | "minimal" | "low" | "medium" | "high" | "xhigh")) {
+        return Err(vec![ApiError::invalid_request("Invalid reasoning_effort.", Some("reasoning_effort"))]);
+    }
     Ok(CanonicalRequest {
         messages,
         model,
         temperature: optional(object, "temperature")?,
+        reasoning_effort,
         max_tokens: if max_tokens_field == "max_tokens" {
             optional(object, max_tokens_field)?
         } else {

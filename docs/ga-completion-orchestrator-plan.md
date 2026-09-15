@@ -38,7 +38,7 @@ When documents conflict, use this order:
 1. `docs/requirements.md` — frozen normative v1 requirements.
 2. `docs/adr/0001-rust-release-authority.md` — trusted authority boundary.
 3. `docs/adr/0002-justified-polyglot-boundaries.md` — language ownership rules.
-4. `docs/verification-matrix.md` — mandatory verification and evidence gates.
+4. `.noerelay/verification-matrix.md` — mandatory verification and evidence gates.
 5. This execution plan — decomposition, dependencies, and orchestration.
 6. `docs/implementation-status.md` — current observed status, updated as evidence changes.
 7. Other design and legacy-reference documents.
@@ -917,6 +917,8 @@ Ranges in earlier tables are convenient for humans; this table is the explicit c
 | `NR-CTX-004` | `MEM-01` | `T-CTX-001` |
 | `NR-CTX-005` | `MEM-01` | `T-CTX-001` |
 | `NR-CTX-006` | `CTX-01`, `VER-02` | `T-CTX-001` |
+| `NR-RTK-001` | `RTK-01` | `T-RTK-001` |
+| `NR-RTK-002` | `RTK-01` | `T-RTK-001` |
 | `NR-EXEC-001` | `RUN-01`, `RUN-02`, `RUN-03`, `RUN-04` | `T-EXEC-001` |
 | `NR-EXEC-002` | `RUN-02`, `PROV-02` | `T-EXEC-001` |
 | `NR-EXEC-003` | `TOOL-01`, `MCP-01` | `T-EXEC-002` |
@@ -941,6 +943,13 @@ Ranges in earlier tables are convenient for humans; this table is the explicit c
 | `NR-OPS-001` | `OPS-01`, `RUN-04` | `T-OPS-001` |
 | `NR-OPS-002` | `OPS-02`, `REC-02` | `T-OPS-001` |
 | `NR-OPS-003` | `OPS-03` | `T-OPS-001` |
+| `NR-OPS-004` | `TOOLS-01` | `T-OPS-004` |
+| `NR-LLM-001` | `LLM-01` | `T-LLM-001` |
+| `NR-LLM-002` | `LLM-01` | `T-LLM-002` |
+| `NR-LLM-003` | `LLM-01` | `T-LLM-003` |
+| `NR-LLM-004` | `LLM-02` | `T-LLM-004` |
+| `NR-LLM-005` | `LLM-02` | `T-LLM-005` |
+| `NR-LLM-006` | `TOOLS-01` | `T-LLM-006` |
 | `NR-SEC-001` | `SEC-01`, `TOOL-02`, `OPS-01` | `T-SEC-001` |
 | `NR-SEC-002` | `SEC-01` | `T-SEC-001` |
 | `NR-SEC-003` | `SEC-02` | `T-SEC-001` |
@@ -1016,7 +1025,7 @@ If an external protocol changes, update the compatibility/interop profile throug
 NoeRelay v1 is GA-ready only when all of the following are true:
 
 - Every `MUST` requirement in `docs/requirements.md` is implemented for the frozen named profile.
-- Every row in `docs/verification-matrix.md` has current observed passing evidence for the exact release candidate.
+- Every row in `.noerelay/verification-matrix.md` has current observed passing evidence for the exact release candidate.
 - All required end-to-end scenarios pass in production-like staging.
 - No Rust-authority decision is duplicated in another language or prompt.
 - Official-client compatibility passes for every advertised field and unsupported behavior is explicit.
@@ -1031,3 +1040,11 @@ NoeRelay v1 is GA-ready only when all of the following are true:
 - `REL-04` validates and signs the immutable GA bundle.
 
 Until then, the honest status is “draft,” “development,” “controlled evaluation,” “pilot candidate,” or “release candidate,” according to the highest passed gate. No agent may substitute “100% ready” for missing evidence or external authority.
+
+## Local consolidation (2026-09-15)
+
+G10 tracks NR-LLM-007 / T-LLM-007 (three-model shared-GPU router), NR-OPS-005 / T-OPS-005 (internal spec-kit/AEE lifecycle), and NR-EXEC-009 / T-EXEC-009 (Docker MCP and bounded agents). Work packages: LLM-01, TOOLS-01, MCP-01. Local observations do not waive production approval or calibration requirements. See `.specify/features/local-consolidation/`.
+
+G10 also covers NR-API-007 / T-API-004: authenticated Windows/WSL2 client access (API-01).
+
+G10 includes NR-API-008 / T-API-005 (Zoo compatibility, API-01), NR-LLM-008 / T-LLM-008 (128K allocation and long-context retrieval, LLM-01), and NR-OPS-006 / T-OPS-006 (deployment separation, TOOLS-01).

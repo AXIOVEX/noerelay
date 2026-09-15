@@ -1,0 +1,23 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "3ab19e44-6a22-4943-82c9-b4efe047e136",
+  "work_package_id": "LLM-01",
+  "requirement_ids": [
+    "NR-LLM-001"
+  ],
+  "test_ids": [
+    "T-LLM-001"
+  ],
+  "status": "observed_pass",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {},
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_provision_split.py tests/test_models_tier.py -q",
+  "started_at": "2026-09-12T21:23:06Z",
+  "finished_at": "2026-09-12T21:23:12Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "7ca7bac0a5bd6c42a9f2e7a85605e4447e5d6ffd347b886ea035cdc507aabaca",
+  "logs_artifact_sha256": "7ca7bac0a5bd6c42a9f2e7a85605e4447e5d6ffd347b886ea035cdc507aabaca",
+  "exceptions": [],
+  "notes": ""
+}

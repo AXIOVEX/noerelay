@@ -1,0 +1,42 @@
+[
+  {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "base_url": "http://127.0.0.1:8080/v1",
+    "model": "axiovex-agni-raw",
+    "checks": [
+      {
+        "path": "/models",
+        "passed": true
+      },
+      {
+        "path": "/chat/completions",
+        "passed": true
+      },
+      {
+        "path": "/models_without_key",
+        "passed": true
+      }
+    ],
+    "client": "windows"
+  },
+  {
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2+-x86_64-with-glibc2.39",
+    "base_url": "http://127.0.0.1:8080/v1",
+    "model": "axiovex-agni-raw",
+    "checks": [
+      {
+        "path": "/models",
+        "passed": true
+      },
+      {
+        "path": "/chat/completions",
+        "passed": true
+      },
+      {
+        "path": "/models_without_key",
+        "passed": true
+      }
+    ],
+    "client": "wsl2-ubuntu"
+  }
+]

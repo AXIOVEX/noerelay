@@ -1,0 +1,30 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "74530fd8-21c8-4df0-9cd2-ea985a3f02fd",
+  "work_package_id": "TOOLS-01",
+  "requirement_ids": [
+    "NR-OPS-005"
+  ],
+  "test_ids": [
+    "T-OPS-005"
+  ],
+  "status": "observed_pass",
+  "source_revision": "aa64abaefdfc7c865e81f780b21846c648bd6106",
+  "artifact_digests": {
+    "deploy/local-models.ini": "4e3fe35a702f1f7b36e8731efa725915234904a98716ca5d831e776eb9e8e236",
+    "scripts/local-model-plane.py": "06b493d82acce63c87bc5088025b5437f6011a87adc303fb582278504e4febd4",
+    "src/noerelay/sdd.py": "99215dc6daa0cb1f6da5e6089c51f7a5e748d4a131832146cf04e9b263af3221",
+    "src/noerelay/mcp_agent.py": "5ec8c5dd409f3d798371e60585af8a2be4f3fcf5b098b78a7a0d27a035d4dbac",
+    "crates/noerelay-gateway/src/lib.rs": "d23683355408dda953789cc24000d9f9cb55c685ce58b88740627d8b82b69625",
+    "docker-compose.yml": "9038f1adb011187b16647568bce41f7e98d689f26c02bdf8d7a77245663c08f4"
+  },
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+  "started_at": "2026-09-15T17:29:58.758790+00:00",
+  "finished_at": "2026-09-15T17:30:04.867769+00:00",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "19701d0901cc5351c2de11335b124b97aa9bf3e5f0dd74af0a62b07f672a116c",
+  "logs_artifact_sha256": "19701d0901cc5351c2de11335b124b97aa9bf3e5f0dd74af0a62b07f672a116c",
+  "exceptions": [],
+  "notes": "Local working-tree observation. Retained log: evidence/local-recovery/T-OPS-005.log. Source digests identify uncommitted code; no independent verification or production certification claimed."
+}

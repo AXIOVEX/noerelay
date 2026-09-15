@@ -395,19 +395,19 @@ class DockerfileTests(unittest.TestCase):
     """Tests that Docker support files exist and have valid content."""
 
     def test_dockerfile_exists(self):
-        dockerfile = ROOT / "Dockerfile"
+        dockerfile = ROOT / "deploy/docker/Dockerfile"
         self.assertTrue(
             dockerfile.exists(),
             f"Dockerfile not found at {dockerfile}",
         )
 
     def test_dockerfile_has_from(self):
-        dockerfile = ROOT / "Dockerfile"
+        dockerfile = ROOT / "deploy/docker/Dockerfile"
         content = dockerfile.read_text()
         self.assertIn("FROM rust", content)
         self.assertIn("EXPOSE", content)
         self.assertIn("ENTRYPOINT", content)
-        reference_content = (ROOT / "Dockerfile.reference").read_text()
+        reference_content = (ROOT / "deploy/docker/Dockerfile.reference").read_text()
         self.assertIn("FROM python", reference_content)
 
     def test_dockerignore_exists(self):
@@ -418,14 +418,14 @@ class DockerfileTests(unittest.TestCase):
         )
 
     def test_docker_compose_exists(self):
-        compose = ROOT / "docker-compose.yml"
+        compose = ROOT / "deploy/docker/compose.yml"
         self.assertTrue(
             compose.exists(),
             f"docker-compose.yml not found at {compose}",
         )
 
     def test_docker_compose_has_services(self):
-        compose = ROOT / "docker-compose.yml"
+        compose = ROOT / "deploy/docker/compose.yml"
         content = compose.read_text()
         self.assertIn("noerelay:", content)
         self.assertIn("8080", content)

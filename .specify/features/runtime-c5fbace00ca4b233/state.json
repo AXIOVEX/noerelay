@@ -1,0 +1,8 @@
+{
+  "project": "noerelay-local-verification",
+  "feature": ".specify/features/runtime-c5fbace00ca4b233",
+  "claim_id": "REQ-D8C052BE09988B18",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T181328340517Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T181328340517Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

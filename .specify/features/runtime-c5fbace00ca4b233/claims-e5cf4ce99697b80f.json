@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-E5CF4CE99697B80F",
+      "text": "Implement a Python function add(a, b). Return only the function.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-c5fbace00ca4b233\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "attempt": 1,
+    "passed": true,
+    "stdout": "6 independent checks passed\n",
+    "stderr": "",
+    "boundary": "List-of-list inputs as declared by generated function; basic correctness only, not complexity or broad code quality."
+  },
+  {
+    "attempt": 2,
+    "passed": true,
+    "stdout": "6 independent checks passed\n",
+    "stderr": "",
+    "boundary": "List-of-list inputs as declared by generated function; basic correctness only, not complexity or broad code quality."
+  }
+]

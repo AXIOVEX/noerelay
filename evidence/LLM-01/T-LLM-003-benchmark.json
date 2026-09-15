@@ -1,0 +1,231 @@
+{
+  "artifact": "T-LLM-003-benchmark",
+  "requirement_id": "NR-LLM-003",
+  "test_id": "T-LLM-003",
+  "model": "gpt-oss-20b",
+  "generated_at": "2026-09-13T14:16:55.349Z",
+  "environment": {
+    "gpus": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 4070 SUPER",
+        "total_mib": 12282
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA GeForce RTX 5060 Ti",
+        "total_mib": 16311
+      }
+    ],
+    "llama_dir": "C:\\LLM\\llama",
+    "llama_build": null,
+    "server_config": {
+      "tensor_split": "10,15",
+      "n_gpu_layers": 999,
+      "ctx_size": 131072,
+      "parallel": 1,
+      "batch": 512,
+      "ubatch": 256,
+      "flash_attn": "on",
+      "cache_type_k": "q4_0",
+      "cache_type_v": "q4_0",
+      "host": "127.0.0.1",
+      "port": 8123
+    }
+  },
+  "method": {
+    "throughput": "llama-server /v1/chat/completions, streaming, temperature=0, max_tokens=128, median of 3 runs; prompt = fixed instruction + first 3 paragraphs of evidence/LLM-01/quality-corpus.txt",
+    "ttft": "wall time from request send to first streamed content token",
+    "quality_proxy": "llama-perplexity over evidence/LLM-01/quality-corpus.txt (-s 0, -n 4096) under the same tensor split and cache settings as the server",
+    "vram": "nvidia-smi memory.used per GPU, before/after server load",
+    "note": "llama-bench cannot express the dual-GPU tensor split '10,15' (its multi-value syntax would split it into two single-GPU configs), so throughput is measured on the real server path"
+  },
+  "results": [
+    {
+      "quant": "Q4_K_M",
+      "file": "C:\\Models\\gpt-oss-20b-Q4_K_M.gguf",
+      "file_size_bytes": 11624759488,
+      "ttft_s": null,
+      "tokens_per_s": null,
+      "ttft_runs": [
+        {
+          "ttft_s": null,
+          "total_s": 2.0496,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        },
+        {
+          "ttft_s": null,
+          "total_s": 1.1354,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        },
+        {
+          "ttft_s": null,
+          "total_s": 1.1813,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        }
+      ],
+      "perplexity": null,
+      "perplexity_eval_time_ms": null,
+      "perplexity_eval_tokens_per_s": null,
+      "perplexity_exit_code": 0,
+      "vram_mib": {
+        "before": [
+          1190,
+          122
+        ],
+        "loaded": [
+          6477,
+          7781
+        ],
+        "delta": [
+          5287,
+          7659
+        ],
+        "after_perplexity": [
+          1193,
+          122
+        ]
+      },
+      "commands": {
+        "server": "C:\\LLM\\llama\\llama-server.exe --model C:\\Models\\gpt-oss-20b-Q4_K_M.gguf --host 127.0.0.1 --port 8123 --n-gpu-layers 999 --tensor-split 10,15 --ctx-size 131072 --parallel 1 --batch-size 512 --ubatch-size 256 --flash-attn on --cache-type-k q4_0 --cache-type-v q4_0",
+        "perplexity": "C:\\LLM\\llama\\llama-perplexity.exe -m C:\\Models\\gpt-oss-20b-Q4_K_M.gguf -f c:\\Users\\trist\\Development\\ElectroHire\\noerelay\\evidence\\LLM-01\\quality-corpus.txt -ngl 999 -ts 10,15 -b 512 -ub 256 -ctk q4_0 -ctv q4_0 -fa on -s 0 -n 4096"
+      },
+      "logs": {
+        "server": "evidence\\LLM-01\\T-LLM-003-Q4_K_M-server.log",
+        "perplexity": "evidence\\LLM-01\\T-LLM-003-Q4_K_M-perplexity.log"
+      },
+      "llama_build": null
+    },
+    {
+      "quant": "Q5_K_M",
+      "file": "C:\\Models\\gpt-oss-20b-Q5_K_M.gguf",
+      "file_size_bytes": 11717357248,
+      "ttft_s": null,
+      "tokens_per_s": null,
+      "ttft_runs": [
+        {
+          "ttft_s": null,
+          "total_s": 1.7284,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        },
+        {
+          "ttft_s": null,
+          "total_s": 1.158,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        },
+        {
+          "ttft_s": null,
+          "total_s": 1.0497,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": null
+        }
+      ],
+      "perplexity": null,
+      "perplexity_eval_time_ms": null,
+      "perplexity_eval_tokens_per_s": null,
+      "perplexity_exit_code": 0,
+      "vram_mib": {
+        "before": [
+          1193,
+          122
+        ],
+        "loaded": [
+          6606,
+          7813
+        ],
+        "delta": [
+          5413,
+          7691
+        ],
+        "after_perplexity": [
+          1202,
+          122
+        ]
+      },
+      "commands": {
+        "server": "C:\\LLM\\llama\\llama-server.exe --model C:\\Models\\gpt-oss-20b-Q5_K_M.gguf --host 127.0.0.1 --port 8123 --n-gpu-layers 999 --tensor-split 10,15 --ctx-size 131072 --parallel 1 --batch-size 512 --ubatch-size 256 --flash-attn on --cache-type-k q4_0 --cache-type-v q4_0",
+        "perplexity": "C:\\LLM\\llama\\llama-perplexity.exe -m C:\\Models\\gpt-oss-20b-Q5_K_M.gguf -f c:\\Users\\trist\\Development\\ElectroHire\\noerelay\\evidence\\LLM-01\\quality-corpus.txt -ngl 999 -ts 10,15 -b 512 -ub 256 -ctk q4_0 -ctv q4_0 -fa on -s 0 -n 4096"
+      },
+      "logs": {
+        "server": "evidence\\LLM-01\\T-LLM-003-Q5_K_M-server.log",
+        "perplexity": "evidence\\LLM-01\\T-LLM-003-Q5_K_M-perplexity.log"
+      },
+      "llama_build": null
+    },
+    {
+      "quant": "Q6_K",
+      "file": "C:\\Models\\gpt-oss-20b-Q6_K.gguf",
+      "file_size_bytes": 12041000128,
+      "ttft_s": 1.0592,
+      "tokens_per_s": 931.016,
+      "ttft_runs": [
+        {
+          "ttft_s": 1.5996,
+          "total_s": 1.7837,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": 695.218
+        },
+        {
+          "ttft_s": 1.0592,
+          "total_s": 1.1929,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": 957.422
+        },
+        {
+          "ttft_s": 0.9412,
+          "total_s": 1.0787,
+          "completion_tokens": 128,
+          "prompt_tokens": 280,
+          "tokens_per_s": 931.016
+        }
+      ],
+      "perplexity": null,
+      "perplexity_eval_time_ms": null,
+      "perplexity_eval_tokens_per_s": null,
+      "perplexity_exit_code": 0,
+      "vram_mib": {
+        "before": [
+          1187,
+          122
+        ],
+        "loaded": [
+          6594,
+          7891
+        ],
+        "delta": [
+          5407,
+          7769
+        ],
+        "after_perplexity": [
+          1204,
+          122
+        ]
+      },
+      "commands": {
+        "server": "C:\\LLM\\llama\\llama-server.exe --model C:\\Models\\gpt-oss-20b-Q6_K.gguf --host 127.0.0.1 --port 8123 --n-gpu-layers 999 --tensor-split 10,15 --ctx-size 131072 --parallel 1 --batch-size 512 --ubatch-size 256 --flash-attn on --cache-type-k q4_0 --cache-type-v q4_0",
+        "perplexity": "C:\\LLM\\llama\\llama-perplexity.exe -m C:\\Models\\gpt-oss-20b-Q6_K.gguf -f c:\\Users\\trist\\Development\\ElectroHire\\noerelay\\evidence\\LLM-01\\quality-corpus.txt -ngl 999 -ts 10,15 -b 512 -ub 256 -ctk q4_0 -ctv q4_0 -fa on -s 0 -n 4096"
+      },
+      "logs": {
+        "server": "evidence\\LLM-01\\T-LLM-003-Q6_K-server.log",
+        "perplexity": "evidence\\LLM-01\\T-LLM-003-Q6_K-perplexity.log"
+      },
+      "llama_build": null
+    }
+  ],
+  "chosen_quant": null,
+  "rationale": "no perplexity data recorded",
+  "perplexity_spread": null
+}

@@ -1,0 +1,23 @@
+{
+  "evidence_version": "1.0.0",
+  "evidence_id": "a06efb1f-7f7f-4d7b-98ed-b6d8226e71fe",
+  "work_package_id": "LLM-02",
+  "requirement_ids": [
+    "NR-LLM-004"
+  ],
+  "test_ids": [
+    "T-LLM-004"
+  ],
+  "status": "observed_pass",
+  "source_revision": "9fe6c3b8df72181e9247ed0e966f0586fa7d1533",
+  "artifact_digests": {},
+  "environment_profile": "single-region-org-v1-local-test",
+  "command": "python -m pytest tests/test_scripts_wrappers.py tests/test_lifecycle.py -q",
+  "started_at": "2026-09-12T21:23:17Z",
+  "finished_at": "2026-09-12T21:23:21Z",
+  "runner_identity": "ROLE-RUST",
+  "result_artifact_sha256": "223f0c77ee0a9ff6806eeaca53bdc3cd9e2135bd9674c8b19ec677783918e19a",
+  "logs_artifact_sha256": "223f0c77ee0a9ff6806eeaca53bdc3cd9e2135bd9674c8b19ec677783918e19a",
+  "exceptions": [],
+  "notes": ""
+}

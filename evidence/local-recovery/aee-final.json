@@ -1,0 +1,10 @@
+{
+  "phase": "after_implement",
+  "assessments": [
+    {
+      "exit_code": 0,
+      "artifacts": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_implement-20260915T181734107075Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_implement-20260915T181734107075Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n"
+    }
+  ],
+  "verification_status": "supported"
+}

@@ -1,0 +1,19 @@
+The lighthouse is one of the oldest and most enduring forms of maritime infrastructure. Its purpose is simple in statement but demanding in execution: to give a vessel, in darkness or in fog, a fixed and reliable reference point from which the position of the coast can be judged.
+
+Early coastal markers were open fires built on headlands. Their limitation was obvious. A fire could not be seen from far away, and it could not be distinguished from the lights of a settlement or from a ship's own lantern. Over centuries, builders responded with height, with reflection, and finally with the lens.
+
+The great advance came with the compound lens, first built in 1822 by a French optician named Augustin Fresnel. His design divided a single large refracting surface into concentric rings, each bent to send light into a narrow horizontal beam. The result was a lamp that could be seen at a distance of twenty nautical miles or more, using a fraction of the fuel an open flame would have consumed.
+
+A Fresnel lens is a study in economy. Glass is used only where it must bend the light; elsewhere, the structure is open to the sky. The finished assembly is light enough to be carried up a spiral stair by two workers, yet it concentrates the output of a single flame into a beam of considerable reach.
+
+Lighthouse keepers lived in small stone towers, often at the end of long approaches of rock or causeway. Their days were measured in watches. They trimmed the wick, they polished the glass, they logged the weather, and they kept the clockwork that turned the lens. A foghorn, a bell, or a whistle answered the lamp when the sea mist closed in.
+
+The automation of the lighthouse began in the early twentieth century and continued for a century. First the clocks were replaced by motors, then the lamps by electric bulbs, and finally the keepers by remote monitoring. Today, many historic lights still stand, and many still turn, but the tower itself is often the last thing a visiting engineer must climb.
+
+The economics of a lighthouse are unusual. The service is non-excludable: once the light turns, every vessel in its arc benefits, and it is difficult to prevent any one of them from doing so. For this reason, lighthouses are almost universally public works, funded by the state and maintained by a coast guard or a harbor authority. Their cost is modest compared with the value of the groundings they prevent.
+
+Modern navigation no longer depends on the lighthouse. A ship's position can be fixed by satellite to within a few meters, and its course can be plotted against electronic charts of fine resolution. Yet the light remains, for two reasons. The first is redundancy: no single system of navigation is trusted without a backup. The second is that the light is a physical promise, visible to any eye, asking nothing of the viewer but attention.
+
+In port, the lighthouse has become as much a landmark of identity as a tool of safety. Its pattern of flashes, its color, and its range are registered in the same almanac as the stars, and sailors learn them the way a musician learns a theme. To see a familiar light coming on at dusk is, for those who have worked at sea, a form of greeting.
+
+The story of the lighthouse is, in the end, a story about the management of uncertainty. The sea does not announce itself. The coast does not explain itself. What the keeper provides is not knowledge of where the danger is, but a fixed point from which the navigator may reason. That is a modest service, and it is one that has kept its value for more than two thousand years.

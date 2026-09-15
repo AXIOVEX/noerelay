@@ -1,0 +1,733 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "pass",
+  "summary": "Assessed 13 claim(s); found 0 failure mode(s); 0 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T17:44:42.213220Z",
+  "claims": [
+    {
+      "id": "NR-LLM-007-GPT",
+      "text": "The routine request selects GPT-OSS-20B Q5_K_M.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/LLM-01/T-LLM-007.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-local-stack.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T16:52:26.506625+00:00",
+          "content_hash": "cb83f8a0ed6c2f34499de0e6ad2b59880a0a0fa30eb1daaa7fb3db24d6770f75"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The observed loaded model differs from gpt-oss-20b-Q5_K_M."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-LLM-007"
+      }
+    },
+    {
+      "id": "NR-LLM-007-CODE",
+      "text": "The coding request selects Qwen3.6-35B-A3B.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/LLM-01/T-LLM-007.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-local-stack.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T16:52:26.506625+00:00",
+          "content_hash": "cb83f8a0ed6c2f34499de0e6ad2b59880a0a0fa30eb1daaa7fb3db24d6770f75"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The observed loaded model differs from qwen3.6-35b-a3b."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-LLM-007"
+      }
+    },
+    {
+      "id": "NR-LLM-007-REASON",
+      "text": "The reasoning request selects Qwen3.8-27B.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/LLM-01/T-LLM-007.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-local-stack.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T16:52:26.506625+00:00",
+          "content_hash": "cb83f8a0ed6c2f34499de0e6ad2b59880a0a0fa30eb1daaa7fb3db24d6770f75"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The observed loaded model differs from qwen3.8-27b."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-LLM-007"
+      }
+    },
+    {
+      "id": "NR-OPS-005-ARTIFACTS",
+      "text": "Internal SDD creates persistent feature artifacts.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:04.867769+00:00",
+          "content_hash": "82fadffcfb2ccea09225ecf85b4eca7aa17563b7512d14076aa76c012b4cdaa6"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The artifact-preservation test finds a missing feature file."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-OPS-005"
+      }
+    },
+    {
+      "id": "NR-OPS-005-FAILCLOSED",
+      "text": "Internal SDD rejects a missing AEE extension.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:04.867769+00:00",
+          "content_hash": "82fadffcfb2ccea09225ecf85b4eca7aa17563b7512d14076aa76c012b4cdaa6"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The missing-extension test completes without an exception."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-OPS-005"
+      }
+    },
+    {
+      "id": "NR-OPS-005-PRESERVE",
+      "text": "Repeated requests preserve agent-authored plans.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:04.867769+00:00",
+          "content_hash": "82fadffcfb2ccea09225ecf85b4eca7aa17563b7512d14076aa76c012b4cdaa6"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The repeated-request test observes an overwritten plan."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-OPS-005"
+      }
+    },
+    {
+      "id": "NR-EXEC-009-EXECUTE",
+      "text": "The agent invokes the Docker workspace execution tool.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/MCP-01/T-EXEC-009.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-local-agent.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:42.400993+00:00",
+          "content_hash": "28eec9192be268ab72ab7fb4b556937c36328873794da19fa9a1d85566e98236"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The live trace has no noerelay_workspace_execute invocation."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-EXEC-009"
+      }
+    },
+    {
+      "id": "NR-EXEC-009-RESULT",
+      "text": "The agent reports the observed workspace result.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/MCP-01/T-EXEC-009.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-local-agent.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:42.400993+00:00",
+          "content_hash": "28eec9192be268ab72ab7fb4b556937c36328873794da19fa9a1d85566e98236"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The live arithmetic task response omits the observed result 1000."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-EXEC-009"
+      }
+    },
+    {
+      "id": "NR-EXEC-009-BOUNDS",
+      "text": "The agent stops at its configured step budget.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:04.867769+00:00",
+          "content_hash": "82fadffcfb2ccea09225ecf85b4eca7aa17563b7512d14076aa76c012b4cdaa6"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The bounded-loop test observes an additional inference after exhaustion."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-EXEC-009"
+      }
+    },
+    {
+      "id": "NR-EXEC-009-ESCALATE",
+      "text": "An observed workspace failure escalates the next routed call.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/TOOLS-01/T-OPS-005.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python -m pytest tests/test_internal_sdd.py tests/test_mcp_agent.py tests/test_models_tier.py tests/test_product_requirements.py -q",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:30:04.867769+00:00",
+          "content_hash": "82fadffcfb2ccea09225ecf85b4eca7aa17563b7512d14076aa76c012b4cdaa6"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The regression test observes no reasoning capability on the next call."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-EXEC-009"
+      }
+    },
+    {
+      "id": "NR-API-007-HOST",
+      "text": "The Windows client completes an authenticated API request.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/API-01/T-API-004.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-host-wsl.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:40:51.923655+00:00",
+          "content_hash": "4a0e06c78d7ad47406a5bfd2f19ce2cf39dd36c77b5d0b5c0fc55e8edf4728e2"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The Windows probe cannot receive a READY completion."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-API-007"
+      }
+    },
+    {
+      "id": "NR-API-007-WSL",
+      "text": "The Ubuntu WSL2 client completes an authenticated API request.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/API-01/T-API-004.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-host-wsl.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:40:51.923655+00:00",
+          "content_hash": "4a0e06c78d7ad47406a5bfd2f19ce2cf39dd36c77b5d0b5c0fc55e8edf4728e2"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "The WSL2 probe cannot receive a READY completion."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-API-007"
+      }
+    },
+    {
+      "id": "NR-API-007-AUTH",
+      "text": "The API rejects requests without a bearer credential.",
+      "kind": "requirement",
+      "status": "supported",
+      "boundary": [
+        "Current local Windows/Ubuntu WSL2 deployment; specific recorded tests only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [
+        {
+          "ref": "evidence/API-01/T-API-004.json",
+          "kind": "observed",
+          "direction": "supports",
+          "source_quality": "test",
+          "description": "python scripts/verify-host-wsl.py",
+          "source_id": "local-test-runner",
+          "independent_of": [],
+          "observed_at": "2026-09-15T17:40:51.923655+00:00",
+          "content_hash": "4a0e06c78d7ad47406a5bfd2f19ce2cf39dd36c77b5d0b5c0fc55e8edf4728e2"
+        }
+      ],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "Either client receives success when the credential is absent."
+      ],
+      "uncertainty": "medium",
+      "severity": "medium",
+      "source_ref": ".specify/features/local-consolidation/spec.md",
+      "domain": "",
+      "confidence": 0.9,
+      "confidence_band": "high",
+      "failures": [],
+      "metadata": {
+        "requirement_id": "NR-API-007"
+      }
+    }
+  ],
+  "scores": {
+    "NR-LLM-007-GPT": {
+      "claim_id": "NR-LLM-007-GPT",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-LLM-007-CODE": {
+      "claim_id": "NR-LLM-007-CODE",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-LLM-007-REASON": {
+      "claim_id": "NR-LLM-007-REASON",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-OPS-005-ARTIFACTS": {
+      "claim_id": "NR-OPS-005-ARTIFACTS",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-OPS-005-FAILCLOSED": {
+      "claim_id": "NR-OPS-005-FAILCLOSED",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-OPS-005-PRESERVE": {
+      "claim_id": "NR-OPS-005-PRESERVE",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-EXEC-009-EXECUTE": {
+      "claim_id": "NR-EXEC-009-EXECUTE",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-EXEC-009-RESULT": {
+      "claim_id": "NR-EXEC-009-RESULT",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-EXEC-009-BOUNDS": {
+      "claim_id": "NR-EXEC-009-BOUNDS",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-EXEC-009-ESCALATE": {
+      "claim_id": "NR-EXEC-009-ESCALATE",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-API-007-HOST": {
+      "claim_id": "NR-API-007-HOST",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-API-007-WSL": {
+      "claim_id": "NR-API-007-WSL",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    },
+    "NR-API-007-AUTH": {
+      "claim_id": "NR-API-007-AUTH",
+      "direct_score": 0.9,
+      "propagated_score": 0.9,
+      "band": "high",
+      "components": {
+        "evidence": 1.0,
+        "independence": 0.5,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/local-consolidation/claims-local.json"
+  }
+}

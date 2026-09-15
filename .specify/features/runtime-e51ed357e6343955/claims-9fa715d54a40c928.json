@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-9FA715D54A40C928",
+      "text": "Implement a Python merge_intervals(intervals) function for unsorted integer pairs. Include a docstring, type hints, input validation, and five assert tests covering empty input, overlaps, touching endpoints, nested intervals, and disjoint intervals. Return only Python code.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-e51ed357e6343955\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-FCB02101577C0CEC",
+      "text": "Restore the local model router with GPT OSS Q5 as default and Qwen escalation; verify services and agent-managed SDD.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-431b70044838bc81\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

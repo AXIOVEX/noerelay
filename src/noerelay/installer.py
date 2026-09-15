@@ -8,6 +8,7 @@ stack on disk:
 * creates a **virtualenv** and installs the **noerelay** CLI into it,
 * downloads the **GGUF model** (or adopts an existing one),
 * writes a machine-readable **config.json**,
+* writes the master **llama.yaml** config (all llama-server settings),
 * generates OS-appropriate **scripts** (see :mod:`noerelay.scripts`).
 
 Everything is stdlib-only (``urllib``, ``venv``, ``zipfile``, ``tarfile``) so
@@ -335,9 +336,28 @@ def write_config(plan: ProvisionPlan) -> None:
     _console.print(f"[green]✓[/green] config.json written")
 
 
+def write_llama_yaml(plan: ProvisionPlan) -> None:
+    """Write the master ``llama.yaml`` config (NR-LLM-005).
+
+    The file is placed at ``<install_dir>/llama.yaml`` — the exact path
+    ``noerelay.llm start`` (lifecycle) reads.  The content is rendered from
+    ``plan.llama_config`` via :func:`noerelay.llama_config.render_llama_config`,
+    so the YAML always carries the validated, reference argument set.
+    """
+    if plan.llama_config is None:
+        _console.print("[yellow]! plan.llama_config is empty; skipping llama.yaml.[/yellow]")
+        return
+    from .llama_config import render_llama_config
+
+    text = render_llama_config(plan.llama_config)
+    yaml_path = plan.install_dir / "llama.yaml"
+    yaml_path.write_text(text, encoding="utf-8")
+    _console.print(f"[green]✓[/green] llama.yaml written → {yaml_path}")
+
+
 def write_readme(plan: ProvisionPlan) -> None:
     """Render the bundled README template with the detected values."""
-    template = Path(__file__).resolve().parent.parent.parent / "installer" / "README_TEMPLATE.md"
+    template = Path(__file__).resolve().parent.parent.parent / "deploy" / "host" / "installer" / "README_TEMPLATE.md"
     if not template.exists():
         # Fall back to a copy shipped next to the package, if present.
         template = Path(__file__).resolve().parent / "README_TEMPLATE.md"
@@ -430,6 +450,7 @@ def provision(
         install_noerelay(plan, venv_py, src=noerelay_src)
     ensure_model(plan, skip_download=skip_download)
     write_config(plan)
+    write_llama_yaml(plan)
     generate_scripts(plan)
     write_readme(plan)
     configure_noerelay(plan)
