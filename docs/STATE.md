@@ -23,3 +23,12 @@ Local operation is not production readiness. Run `python scripts/noerelay.py req
 Zoo Code multipart requests with reasoning_effort pass from WSL2. The wire profile is versioned 2026-09-15. All three local models allocate 131072 tokens. A 113764-token coding retrieval request passed (39 seconds with 40704 cached tokens); this is not a cold full-window quality benchmark. Use 24K–32K input / 4096 output normally, or up to 114688 input / 8192 output with overhead reserved.
 
 Host support is in deploy/host; Docker definitions are in deploy/docker. The root Compose include preserves commands. Targeted Python tests: 81 passed. Core/gateway Rust suites passed after compatibility fixtures were updated. G10 and four-phase AEE pass; unrelated production gates remain separate.
+
+
+## Managed client integration verification (2026-09-15)
+
+The primary `noerelay client setup|status|run|test` CLI now manages OpenCode, Zoo Code, and Codex profiles. Windows profiles and WSL native OpenCode are installed/configured. Live tool round trips passed for OpenCode 1.14.28, Zoo Code 3.82.1, and Codex 0.153.4. Native WSL OpenCode also passed. Both environments authenticate to the running gateway without manually copying a key.
+
+The final focused Python suite passed 25 tests; Rust core/gateway suites passed. G11 passes. All four client-feature AEE phases pass for ten atomic claims with zero failure modes; the 154-entry ledger verifies. The gap register retains 20 open and 16 closed entries. These are local feature observations, not a claim that unrelated release gates are complete. Evidence: `evidence/local-recovery/client-integrations.json`, `client-aee.json`, and `client-ledger-verification.json`.
+
+Responses profile is now `2026-09-15.1`, including stateless Codex metadata, developer messages, function tool history, and namespace translation. Codex's live test used an exact-command read-only MCP guard. Native Windows shell execution was blocked by client policy; interactive MCP approvals remain enabled. Zoo's real extension-host test ran on Windows. The Rust router remains authoritative, with whole-word classification fixing the improve/prove false escalation. See ADR 0003 and the README for usage and limits.

@@ -1,0 +1,8 @@
+{
+  "project": "spec-kit-2def9c26-2090-43db-9d71-0c242d36e15f",
+  "feature": ".specify/features/runtime-fc8958b4c8f46bc2",
+  "claim_id": "REQ-C1FDFC06E65E35FD",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T203254760044Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T203254760044Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

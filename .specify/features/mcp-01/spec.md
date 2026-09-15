@@ -25,6 +25,8 @@ Implement one isolated stateful MCP client connection per server/principal scope
   - Acceptance: A model-proposed tool call executes only after deterministic authorization. · Release test(s): `T-EXEC-002`
 - `NR-EXEC-006` — MCP sessions MUST be isolated per server and principal; advertised capability MUST NOT grant authority.
   - Acceptance: Token forwarding and cross-session capability attacks fail. · Release test(s): `T-EXEC-002`
+- `NR-EXEC-009` — Expose Docker MCP and bounded workspace agents through authenticated NoeRelay endpoints.
+  - Acceptance: Tool discovery, real Docker execution, agent budgets, and operator authentication are verified. · Release test(s): `T-EXEC-009`
 
 ## Acceptance criteria
 

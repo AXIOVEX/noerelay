@@ -111,7 +111,7 @@ mod tests {
             .iter()
             .filter_map(|error| error.error.param.as_deref())
             .collect();
-        assert_eq!(params, ["background", "store"]);
+        assert_eq!(params, ["background"]);
         assert!(
             errors
                 .iter()

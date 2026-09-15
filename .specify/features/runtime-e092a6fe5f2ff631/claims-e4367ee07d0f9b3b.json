@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-E4367EE07D0F9B3B",
+      "text": "[{\"text\": \"Read nonce.txt in the current directory using a file or shell tool. Reply with its exact contents. Do not change files or use other directories.\", \"type\": \"input_text\"}]",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-e092a6fe5f2ff631\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

@@ -1,0 +1,567 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_implement",
+  "outcome": "pass",
+  "summary": "Assessed 10 claim(s); found 0 failure mode(s); 0 claim(s) below the 0.70 confidence threshold.",
+  "findings": [],
+  "next_action": {
+    "kind": "pass",
+    "target_phase": null,
+    "message": "No epistemic blockers found; continue to the next phase."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T21:01:51.574994Z",
+    "artifacts_evaluated": [
+      ".specify/features/client-integrations/claims.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "CLIENT-001",
+          "text": "Installed OpenCode returns the observed nonce file contents.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/TOOLS-01/T-OPS-007.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "fa37a51c9822d7e5c940b847a4fa190f516110790e2f18eab0487b846b2bc0d7"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-002",
+          "text": "Installed Zoo Code reads the nonce using its imported NoeRelay profile.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/TOOLS-01/T-OPS-007.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "fa37a51c9822d7e5c940b847a4fa190f516110790e2f18eab0487b846b2bc0d7"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-003",
+          "text": "Installed Codex completes the guarded NoeRelay MCP fixture read.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/TOOLS-01/T-OPS-007.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "fa37a51c9822d7e5c940b847a4fa190f516110790e2f18eab0487b846b2bc0d7"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-004",
+          "text": "Native WSL OpenCode returns the observed nonce file contents.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/local-recovery/client-integrations.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "10f1549e95ee0bd907ff656fd65bf339dfb39f8a91235340c7b131bdec4e4742"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-005",
+          "text": "Profile setup preserves the unrelated settings test fixture.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/local-recovery/client-unit-tests.log",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "3b18c0ca7cec88dff905df48c9d606e7abdf8d13f23887edcef9ffcbebe6160c"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-006",
+          "text": "Responses namespace conversion preserves tool identity in the regression test.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/REG-01/T-ROUTE-003.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "f701509b940cfaeeaa893a3cbc460b2949972054a1830ed22c0ff32213897fbc"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-007",
+          "text": "The tested improve-function prompt selects the coding tier.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/REG-01/T-ROUTE-003.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "f701509b940cfaeeaa893a3cbc460b2949972054a1830ed22c0ff32213897fbc"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-008",
+          "text": "The tested proof prompt selects the reasoning tier.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/REG-01/T-ROUTE-003.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "f701509b940cfaeeaa893a3cbc460b2949972054a1830ed22c0ff32213897fbc"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-009",
+          "text": "Windows authenticates to the deployed model-list endpoint.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/local-recovery/client-integrations.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "10f1549e95ee0bd907ff656fd65bf339dfb39f8a91235340c7b131bdec4e4742"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "CLIENT-010",
+          "text": "WSL authenticates to the deployed model-list endpoint.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local fixtures and installed versions only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/local-recovery/client-integrations.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained local test observation; no independent certification claimed.",
+              "source_id": "local-client-test-runner",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:01:13.839144+00:00",
+              "content_hash": "10f1549e95ee0bd907ff656fd65bf339dfb39f8a91235340c7b131bdec4e4742"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "A rerun of the linked check does not reproduce the claimed result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/client-integrations/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "CLIENT-001": {
+          "claim_id": "CLIENT-001",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-002": {
+          "claim_id": "CLIENT-002",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-003": {
+          "claim_id": "CLIENT-003",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-004": {
+          "claim_id": "CLIENT-004",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-005": {
+          "claim_id": "CLIENT-005",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-006": {
+          "claim_id": "CLIENT-006",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-007": {
+          "claim_id": "CLIENT-007",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-008": {
+          "claim_id": "CLIENT-008",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-009": {
+          "claim_id": "CLIENT-009",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "CLIENT-010": {
+          "claim_id": "CLIENT-010",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": []
+    }
+  }
+}

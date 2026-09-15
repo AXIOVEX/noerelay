@@ -16,7 +16,7 @@ finished = datetime.now(timezone.utc).isoformat()
 path = ROOT / 'evidence/local-recovery' / (test + '.log')
 path.write_text(result.stdout + '\nSTDERR:\n' + result.stderr, encoding='utf-8')
 digest = hashlib.sha256(path.read_bytes()).hexdigest()
-sources = ['deploy/host/local-models.ini', 'deploy/host/local-model-plane.py', 'src/noerelay/sdd.py',
+sources = ['src/noerelay/clients.py', 'src/noerelay/client_test_mcp.py', 'src/noerelay/client_tests.py', 'src/noerelay/zoo_test.cjs', 'tests/test_clients.py', 'deploy/host/setup-cli.ps1', 'deploy/host/setup-cli.sh', 'deploy/host/local-models.ini', 'deploy/host/local-model-plane.py', 'src/noerelay/sdd.py',
            'src/noerelay/mcp_agent.py', 'crates/noerelay-gateway/src/lib.rs', 'crates/noerelay-core/src/wire.rs', 'deploy/docker/compose.yml', 'docker-compose.yml']
 digests = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in sources}
 envelope = write_envelope(ROOT, package, test, subprocess.list2cmdline(command), [requirement],

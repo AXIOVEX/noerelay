@@ -27,6 +27,8 @@ Persist immutable model/provider/agent/tool revisions with provenance, times, ex
   - Acceptance: Property tests prove an inadmissible candidate never wins regardless of price. · Release test(s): `T-ROUTE-001`
 - `NR-ROUTE-003` — Among admissible plans, routing MUST minimize expected total cost, then latency, then maximize calibrated acceptance likelihood.
   - Acceptance: Deterministic fixtures return the same plan and complete rejection reasons. · Release test(s): `T-ROUTE-001`
+- `NR-ROUTE-009` — Local task routing matches complete words and preserves capability constraints.
+  - Acceptance: Improve stays on coding; prove selects reasoning; routing regression tests pass. · Release test(s): `T-ROUTE-003`
 
 ## Acceptance criteria
 

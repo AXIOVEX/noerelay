@@ -8,7 +8,7 @@ Separate untrusted pull-request workflows from protected credentials. Publish mu
 
 - `xtask/ (build automation and evidence)`
 - `.github/ (CI workflows)`
-- `Dockerfile (image build)`
+- `deploy/docker/Dockerfile (image build)`
 - `deploy/ (IaC and orchestration)`
 
 ## Risks

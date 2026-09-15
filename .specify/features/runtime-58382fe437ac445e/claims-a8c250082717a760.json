@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-A8C250082717A760",
+      "text": "Generate a title for this conversation:\n\n\"Reply exactly NOERELAY_READY.\"\n",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-58382fe437ac445e\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

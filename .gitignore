@@ -46,6 +46,7 @@ artifacts/
 .cache/
 *.log
 !evidence/local-recovery/*.log
+!evidence/local-recovery/client-logs/*.log
 
 # Local runtime state (SQLite DB + exports) — auto-created, machine-specific.
 # Ignore the directory contents, but keep the aee-managed verification matrix

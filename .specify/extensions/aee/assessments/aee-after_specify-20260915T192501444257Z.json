@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T19:25:02.492915Z",
+  "claims": [
+    {
+      "id": "REQ-40475FA58CEB7C69",
+      "text": "[{\"cache_control\": {\"type\": \"ephemeral\"}, \"text\": \"<environment_details>\\n# VSCode Visible Files\\n\\n\\n# VSCode Open Tabs\\n\\n\\n# Actively Running Terminals\\n## Terminal 1 (Active)\\n### Working Directory: `/home/tpierson/ismart`\\n### Original command: `kas shell -c \\\"bitbake ismart-gui\\\" yocto/kas/ismart-var-dart-mx8m-plus.yml:yocto/kas/core/dev.yml 2>&1 | tail -80`\\n\\n# Current Time\\nCurrent time in ISO 8601 UTC format: 2026-09-15T19:24:59.758Z\\nUser time zone: America/New_York, UTC-4:00\\n\\n# Git Status\\n## main...origin/main\\n M LEDGER.md\\n M yocto/meta-ismart/conf/distro/ismart-os.conf\\n M yocto/meta-ismart/recipes-bsp/u-boot/files/splash.bmp\\n M yocto/meta-ismart/recipes-core/images/ismart-os-image.bb\\n\\n# Current Mode\\n<slug>code</slug>\\n<name>\ud83d\udcbb Code</name>\\n<model>axiovex-agni-raw</model>\\nYou have not created a todo list yet. Create one with `update_todo_list` if your task is complicated or involves multiple steps.\\n</environment_details>\", \"type\": \"text\"}]",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [],
+      "uncertainty": "high",
+      "severity": "medium",
+      "source_ref": ".specify\\features\\runtime-fcf60196a0cb342d\\spec.md",
+      "domain": "",
+      "confidence": 0.1,
+      "confidence_band": "low",
+      "failures": [
+        {
+          "id": "AEE-REQ-40475FA58CEB7C69-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-40475FA58CEB7C69",
+          "challenge": "Irreducibility challenge",
+          "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+          "severity": "medium",
+          "category": "coverage_gap",
+          "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+          "resolved": false
+        },
+        {
+          "id": "AEE-REQ-40475FA58CEB7C69-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-40475FA58CEB7C69",
+          "challenge": "Falsifiability challenge",
+          "breakpoint": "Non-draft claim has no stated falsification test",
+          "severity": "high",
+          "category": "missing_evidence",
+          "recovery_hint": "Define an observation that would show the claim is wrong.",
+          "resolved": false
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "REQ-40475FA58CEB7C69": {
+      "claim_id": "REQ-40475FA58CEB7C69",
+      "direct_score": 0.1,
+      "propagated_score": 0.1,
+      "band": "low",
+      "components": {
+        "evidence": 0.0,
+        "independence": 0.0,
+        "falsifiability": 0.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "No supporting evidence",
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [
+    {
+      "failure_id": "AEE-REQ-40475FA58CEB7C69-FALSIFIABILITY-CHALLENGE",
+      "claim_id": "REQ-40475FA58CEB7C69",
+      "strategy": "gather_evidence",
+      "action": "Define an observation that would show the claim is wrong.",
+      "priority": 2,
+      "verification": "At least one inspectable non-self-attested evidence item is attached."
+    },
+    {
+      "failure_id": "AEE-REQ-40475FA58CEB7C69-IRREDUCIBILITY-CHALLENGE",
+      "claim_id": "REQ-40475FA58CEB7C69",
+      "strategy": "decompose",
+      "action": "Split the claim into atomic propositions and link them explicitly.",
+      "priority": 3,
+      "verification": "Every resulting claim contains one independently falsifiable proposition."
+    }
+  ],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/runtime-fcf60196a0cb342d/claims-40475fa58ceb7c69.json"
+  }
+}

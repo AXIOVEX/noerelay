@@ -908,7 +908,7 @@ async fn proxy_openai_request(
     body: Bytes,
     profile: ApiProfile,
 ) -> Response {
-    let request_value = match serde_json::from_slice::<Value>(&body) {
+    let mut request_value = match serde_json::from_slice::<Value>(&body) {
         Ok(value @ Value::Object(_)) => value,
         _ => {
             return api_error_response(
@@ -917,6 +917,12 @@ async fn proxy_openai_request(
             );
         }
     };
+    let namespaces = if profile == ApiProfile::Responses {
+        match flatten_tool_namespaces(&mut request_value) {
+            Ok(value) => value,
+            Err(error) => return api_error_response(StatusCode::BAD_REQUEST, error),
+        }
+    } else { BTreeMap::new() };
     let wire_request = match profile {
         ApiProfile::ChatCompletions => ChatCompletionsConverter::parse_request(&request_value),
         ApiProfile::Responses => ResponsesConverter::parse_request(&request_value),
@@ -963,6 +969,20 @@ async fn proxy_openai_request(
         .as_object()
         .cloned()
         .expect("request object checked above");
+    // Codex tracing metadata is validated at ingress, not forwarded as an
+    // undocumented provider parameter. Stateless storage/include defaults have
+    // already been validated by the Responses wire profile.
+    if profile == ApiProfile::Responses {
+        request.remove("client_metadata");
+        // Local backends do not return encrypted reasoning or summaries.
+        request.remove("include");
+        if let Some(Value::Object(reasoning)) = request.get_mut("reasoning") {
+            reasoning.remove("summary");
+            if reasoning.is_empty() {
+                request.remove("reasoning");
+            }
+        }
+    }
     remove_ask_user_tool(&mut request);
     if self_capability_inquiry || repeated_tool_loop {
         disable_tool_use(&mut request);
@@ -1253,6 +1273,7 @@ async fn proxy_openai_request(
     };
     let bytes = normalize_legacy_tool_calls(bytes, stream, profile, &allowed_tool_names);
     let bytes = rewrite_public_model(bytes, stream, &requested_public_model);
+    let bytes = restore_tool_namespaces(bytes, stream, &namespaces);
     release_response(
         &state,
         &prepared,
@@ -1541,6 +1562,105 @@ fn remove_ask_user_tool(request: &mut serde_json::Map<String, Value>) {
     if tools.is_empty() {
         disable_tool_use(request);
     }
+}
+
+type ToolNamespaces = BTreeMap<String, (String, String)>;
+
+fn namespaced_alias(namespace: &str, name: &str) -> String {
+    // Stable and bounded even when client namespaces exceed provider name limits.
+    let digest = Sha256::digest(format!("{namespace}\0{name}").as_bytes());
+    format!("nr_ns_{}", hex::encode(&digest[..12]))
+}
+
+fn flatten_tool_namespaces(request: &mut Value) -> Result<ToolNamespaces, ApiError> {
+    let mut mapping = BTreeMap::new();
+    if let Some(Value::Array(tools)) = request.get_mut("tools") {
+        let mut flat = Vec::new();
+        for tool in tools.iter() {
+            if tool.get("type").and_then(Value::as_str) != Some("namespace") {
+                flat.push(tool.clone());
+                continue;
+            }
+            let namespace = tool.get("name").and_then(Value::as_str).filter(|s| !s.is_empty())
+                .ok_or_else(|| ApiError::invalid_request("Namespace name is required.", Some("tools.name")))?;
+            let members = tool.get("tools").and_then(Value::as_array)
+                .ok_or_else(|| ApiError::invalid_request("Namespace tools must be an array.", Some("tools.tools")))?;
+            for member in members {
+                if member.get("type").and_then(Value::as_str) != Some("function") {
+                    return Err(ApiError::invalid_request("Namespaces support function tools only.", Some("tools.type")));
+                }
+                let name = member.get("name").and_then(Value::as_str).filter(|s| !s.is_empty())
+                    .ok_or_else(|| ApiError::invalid_request("Function name is required.", Some("tools.name")))?;
+                let alias = namespaced_alias(namespace, name);
+                if mapping.insert(alias.clone(), (namespace.into(), name.into())).is_some() {
+                    return Err(ApiError::invalid_request("Duplicate namespaced tool.", Some("tools")));
+                }
+                let mut member = member.clone();
+                member["name"] = json!(alias);
+                member["description"] = json!(format!("{namespace}.{name}: {}", member.get("description").and_then(Value::as_str).unwrap_or("")));
+                flat.push(member);
+            }
+        }
+        let mut names = BTreeSet::new();
+        for tool in &flat {
+            if let Some(name) = tool.get("name").and_then(Value::as_str) {
+                if !names.insert(name.to_owned()) {
+                    return Err(ApiError::invalid_request("Duplicate tool name.", Some("tools")));
+                }
+            }
+        }
+        *tools = flat;
+    }
+    if let Some(Value::Array(input)) = request.get_mut("input") {
+        for item in input {
+            if item.get("type").and_then(Value::as_str) == Some("function_call") {
+                if let (Some(namespace), Some(name)) = (item.get("namespace").and_then(Value::as_str), item.get("name").and_then(Value::as_str)) {
+                    let alias = namespaced_alias(namespace, name);
+                    item["name"] = json!(alias);
+                    item.as_object_mut().unwrap().remove("namespace");
+                }
+            }
+        }
+    }
+    Ok(mapping)
+}
+
+fn restore_tool_namespaces(bytes: Bytes, stream: bool, mapping: &ToolNamespaces) -> Bytes {
+    if mapping.is_empty() { return bytes; }
+    fn restore(value: &mut Value, mapping: &ToolNamespaces) {
+        match value {
+            Value::Object(object) => {
+                if object.get("type").and_then(Value::as_str).is_some_and(|s| s == "function_call" || s.starts_with("response.function_call_arguments.")) {
+                    if let Some((namespace, name)) = object.get("name").and_then(Value::as_str).and_then(|n| mapping.get(n)) {
+                        object.insert("namespace".into(), json!(namespace));
+                        object.insert("name".into(), json!(name));
+                    }
+                }
+                for child in object.values_mut() { restore(child, mapping); }
+            }
+            Value::Array(values) => for child in values { restore(child, mapping); },
+            _ => {},
+        }
+    }
+    if !stream {
+        if let Ok(mut value) = serde_json::from_slice::<Value>(&bytes) {
+            restore(&mut value, mapping);
+            return Bytes::from(serde_json::to_vec(&value).unwrap());
+        }
+        return bytes;
+    }
+    let mut result = String::new();
+    for line in String::from_utf8_lossy(&bytes).split_inclusive('\n') {
+        if let Some(data) = line.strip_prefix("data: ") {
+            if let Ok(mut value) = serde_json::from_str::<Value>(data.trim()) {
+                restore(&mut value, mapping);
+                result.push_str(&format!("data: {}\n", value));
+                continue;
+            }
+        }
+        result.push_str(line);
+    }
+    Bytes::from(result)
 }
 
 fn rewrite_public_model(bytes: Bytes, stream: bool, public_model_id: &str) -> Bytes {
@@ -2183,10 +2303,14 @@ fn local_task_class(request: &WireCanonicalRequest) -> &'static str {
     let text = governance_messages(request).iter().rev()
         .find(|message| message.role == MessageRole::User)
         .map(|message| message.content.to_lowercase()).unwrap_or_default();
-    if ["architecture", "race condition", "security review", "root cause", "failed tests", "prove", "complex reasoning"].iter().any(|term| text.contains(term)) {
+    // Whole-word/phrase matching avoids sending "improve this function" to the
+    // slower reasoning model merely because "improve" contains "prove".
+    let words = format!(" {} ", text.split(|c: char| !c.is_alphanumeric()).filter(|s| !s.is_empty()).collect::<Vec<_>>().join(" "));
+    let contains = |term: &str| words.contains(&format!(" {term} "));
+    if ["architecture", "race condition", "security review", "root cause", "failed tests", "prove", "complex reasoning"].iter().any(|term| contains(term)) {
         "reasoning"
     } else if request.tools.as_ref().is_some_and(|tools| !tools.is_empty()) ||
-        ["code", "coding", "implement", "debug", "refactor", "function", "repository", "unit test", "python", "javascript", "typescript", "rust"].iter().any(|term| text.contains(term)) {
+        ["code", "coding", "implement", "debug", "refactor", "function", "repository", "unit test", "python", "javascript", "typescript", "rust"].iter().any(|term| contains(term)) {
         "code"
     } else { "routine" }
 }
@@ -2279,6 +2403,41 @@ mod tests {
 
     const CLIENT_KEY: &str = "a-client-key-that-is-at-least-32-chars";
 
+    #[test]
+    fn namespace_tools_preserve_identity_and_history() {
+        let mut request = json!({"tools": [
+            {"type":"namespace","name":"mcp_a","tools":[{"type":"function","name":"read","parameters":{"type":"object"}}]},
+            {"type":"namespace","name":"mcp_b","tools":[{"type":"function","name":"read","parameters":{"type":"object"}}]}
+        ], "input":[{"type":"function_call","namespace":"mcp_a","name":"read","call_id":"c1","arguments":"{}"}]});
+        let mapping = flatten_tool_namespaces(&mut request).unwrap();
+        let alias = request["tools"][0]["name"].as_str().unwrap();
+        assert_ne!(request["tools"][0]["name"], request["tools"][1]["name"]);
+        assert_eq!(request["input"][0]["name"], alias);
+        assert!(request["input"][0].get("namespace").is_none());
+        let output = json!({"output":[{"type":"function_call","name":alias,"arguments":"{\"name\":\"untouched\"}"}]});
+        let restored = restore_tool_namespaces(Bytes::from(output.to_string()), false, &mapping);
+        let value: Value = serde_json::from_slice(&restored).unwrap();
+        assert_eq!(value["output"][0]["name"], "read");
+        assert_eq!(value["output"][0]["namespace"], "mcp_a");
+        assert_eq!(value["output"][0]["arguments"], output["output"][0]["arguments"]);
+        let event = json!({"type":"response.output_item.added","item":output["output"][0]});
+        let sse = restore_tool_namespaces(Bytes::from(format!("data: {}\n\ndata: [DONE]\n\n", event)), true, &mapping);
+        let sse = String::from_utf8(sse.to_vec()).unwrap();
+        assert!(sse.contains("\"namespace\":\"mcp_a\""));
+        assert!(sse.ends_with("data: [DONE]\n\n"));
+    }
+
+    #[test]
+    fn namespace_tools_reject_ambiguity_and_unsupported_members() {
+        let member = json!({"type":"function","name":"read"});
+        let mut duplicate = json!({"tools":[{"type":"namespace","name":"mcp","tools":[member, member]}]});
+        assert!(flatten_tool_namespaces(&mut duplicate).is_err());
+        let mut custom = json!({"tools":[{"type":"namespace","name":"mcp","tools":[{"type":"custom","name":"read"}]}]});
+        assert!(flatten_tool_namespaces(&mut custom).is_err());
+        let mut collision = json!({"tools":[{"type":"function","name":namespaced_alias("mcp", "read")},{"type":"namespace","name":"mcp","tools":[member]}]});
+        assert!(flatten_tool_namespaces(&mut collision).is_err());
+    }
+
     fn candidate() -> Candidate {
         Candidate {
             candidate_id: "model-a".into(),
@@ -2342,7 +2501,7 @@ mod tests {
 
     #[test]
     fn local_task_routing_separates_routine_coding_and_reasoning() {
-        for (text, expected) in [("Hello", "routine"), ("Implement a Python function", "code"), ("Investigate this race condition", "reasoning")] {
+        for (text, expected) in [("Hello", "routine"), ("Implement a Python function", "code"), ("Investigate this race condition", "reasoning"), ("Improve this function", "code"), ("Prove this theorem", "reasoning"), ("Explain root-cause analysis", "reasoning"), ("I trust you", "routine"), ("Write a postcard", "routine")] {
             let request = ChatCompletionsConverter::parse_request(&json!({"model": "axiovex-agni", "messages": [{"role": "user", "content": text}]})).unwrap();
             assert_eq!(local_task_class(&request), expected);
         }

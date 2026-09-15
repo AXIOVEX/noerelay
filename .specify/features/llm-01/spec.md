@@ -28,6 +28,10 @@ Make the local profile a two-model plane (fast `gpt-oss-20b`, hard `qwen3.8-27b`
   - Acceptance: Both models appear in the catalog with distinct tier metadata; a routing fixture selects the fast tier by default and the hard tier only under the declared escalation condition. · Release test(s): `T-LLM-002`
 - `NR-LLM-003` — Quantization selection for `gpt-oss-20b` (Q4_K_M / Q5_K_M / Q6_K) MUST be backed by a recorded benchmark (tokens/s, TTFT, VRAM, quality proxy) rather than an unrecorded preference.
   - Acceptance: A benchmark artifact under `evidence/` records per-quant results and the chosen quant; the choice is reproducible from the artifact. · Release test(s): `T-LLM-003`
+- `NR-LLM-007` — Route routine, coding, and reasoning requests through the three local models with measured shared-GPU performance.
+  - Acceptance: Live completions select all three intended models; warm coding throughput and switching latency are recorded without claiming quality calibration. · Release test(s): `T-LLM-007`
+- `NR-LLM-008` — Allocate 131072 total context tokens for each local routed model.
+  - Acceptance: All three loaded model metadata report 131072 context; a retrieval prompt beyond 16384 tokens completes. · Release test(s): `T-LLM-008`
 
 ## Acceptance criteria
 

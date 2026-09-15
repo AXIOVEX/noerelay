@@ -272,3 +272,39 @@ fn wire_types_have_json_schema() {
     let schema = schemars::schema_for!(CanonicalRequest);
     assert!(schema.schema.object.is_some());
 }
+#[test]
+fn responses_stateless_client_metadata_and_tool_history() {
+    use noerelay_core::wire::ResponsesConverter;
+    let mut request = serde_json::json!({
+        "model":"axiovex-agni-raw", "store":false, "include":["reasoning.encrypted_content"],
+        "reasoning":{"summary":"auto"},
+        "prompt_cache_key":"test-thread", "client_metadata":{"thread_id":"test-thread"},
+        "input":[
+            {"role":"developer","content":[{"type":"input_text","text":"Read the file"}]},
+            {"type":"function_call","call_id":"call_1","name":"read_file","arguments":"{}"},
+            {"type":"function_call_output","call_id":"call_1","output":"unique-token"},
+            {"type":"message","role":"assistant","content":[{"type":"output_text","text":"Done"}]}
+        ]
+    });
+    let parsed = ResponsesConverter::parse_request(&request).unwrap();
+    assert_eq!(parsed.messages.len(), 4);
+    assert_eq!(parsed.messages[2].tool_call_id.as_deref(), Some("call_1"));
+    request["store"] = serde_json::json!(true);
+    assert!(ResponsesConverter::parse_request(&request).is_err());
+    request["store"] = serde_json::json!(false);
+    request["include"] = serde_json::json!(["unsupported.future_field"]);
+    assert!(ResponsesConverter::parse_request(&request).is_err());
+    request["include"] = serde_json::json!([]);
+    request["client_metadata"] = serde_json::json!({"nested":{}});
+    assert!(ResponsesConverter::parse_request(&request).is_err());
+}
+
+#[test]
+fn responses_tool_output_accepts_empty_text_and_text_parts_only() {
+    for output in [serde_json::json!(""), serde_json::json!([{"type":"input_text","text":"denied"}])] {
+        let request = serde_json::json!({"model":"m", "input":[{"type":"function_call_output","call_id":"c","output":output}]});
+        assert!(ResponsesConverter::parse_request(&request).is_ok());
+    }
+    let request = serde_json::json!({"model":"m", "input":[{"type":"function_call_output","call_id":"c","output":[{"type":"input_image","image_url":"x"}]}]});
+    assert!(ResponsesConverter::parse_request(&request).is_err());
+}

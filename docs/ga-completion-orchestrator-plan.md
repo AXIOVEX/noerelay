@@ -1048,3 +1048,7 @@ G10 tracks NR-LLM-007 / T-LLM-007 (three-model shared-GPU router), NR-OPS-005 / 
 G10 also covers NR-API-007 / T-API-004: authenticated Windows/WSL2 client access (API-01).
 
 G10 includes NR-API-008 / T-API-005 (Zoo compatibility, API-01), NR-LLM-008 / T-LLM-008 (128K allocation and long-context retrieval, LLM-01), and NR-OPS-006 / T-OPS-006 (deployment separation, TOOLS-01).
+
+## Managed client integrations
+
+G11 tracks NR-OPS-007 / T-OPS-007 (installed OpenCode, Zoo Code, Codex integration checks; TOOLS-01) and NR-ROUTE-009 / T-ROUTE-003 (Rust task classification and governance-preserving routing regression; REG-01). See `.specify/features/client-integrations/`.

@@ -1,22 +1,12 @@
 """Stdio MCP adapter: every request goes through NoeRelay's authenticated /mcp."""
 import json
-import subprocess
 import sys
 import urllib.request
-from pathlib import Path
 
 
 def local_config():
-    from .cli import load_config
-    config = load_config()
-    root = Path(__file__).resolve().parents[2]
-    if (root / 'docker-compose.yml').is_file() and (root / '.env.docker').is_file():
-        result = subprocess.run(['docker', 'compose', '--project-directory', str(root),
-                                 '--env-file', str(root / '.env.docker'), 'config', '--format', 'json'],
-                                capture_output=True, text=True, timeout=30)
-        if result.returncode == 0:
-            config['api_key'] = json.loads(result.stdout)['services']['noerelay']['environment']['NOERELAY_API_KEY']
-    return config
+    from .clients import connection
+    return connection()
 
 
 def main():

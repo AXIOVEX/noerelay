@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "iterate",
+  "summary": "Assessed 1 claim(s); found 0 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T19:52:58.691029Z",
+  "claims": [
+    {
+      "id": "CLIENT-001",
+      "text": "Managed client integrations pass their observed test cases.",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Installed local versions only"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [
+        "A client cannot complete a tool round trip through NoeRelay."
+      ],
+      "uncertainty": "high",
+      "severity": "medium",
+      "source_ref": ".specify/features/client-integrations/spec.md",
+      "domain": "",
+      "confidence": 0.25,
+      "confidence_band": "low",
+      "failures": [],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "CLIENT-001": {
+      "claim_id": "CLIENT-001",
+      "direct_score": 0.25,
+      "propagated_score": 0.25,
+      "band": "low",
+      "components": {
+        "evidence": 0.0,
+        "independence": 0.0,
+        "falsifiability": 1.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "No supporting evidence",
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/client-integrations/claims.json"
+  }
+}

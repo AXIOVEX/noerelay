@@ -330,35 +330,13 @@ def install_tool(name: str) -> bool:
 
 def cmd_run_codex(args):
     """Launch Codex CLI connected to NoeRelay."""
-    config = load_config()
-    model = args.model or config.get("model_raw", "axiovex-agni-raw")
-    base_url = f"{config['base_url']}/v1"
-
-    if not shutil.which("codex"):
-        if not install_tool("codex"):
-            sys.exit(1)
-
-    codex = shutil.which("codex")
-    cmd = [
-        codex,
-        "--model", model,
-        "--base-url", base_url,
-        "--api-key", config["api_key"],
-    ]
+    from .clients import connection, directory, launch
+    config = connection()
+    config['model'] = args.model or config['model']
     if args.yes:
-        cmd.append("--yes")
-    if args.extra:
-        # Validate extra args to prevent path injection
-        for arg in args.extra:
-            if "\0" in arg or arg.startswith("-"):
-                print(f"Invalid argument: {arg!r}")
-                sys.exit(1)
-        cmd.extend(args.extra)
-
-    # Mask API key in output
-    safe_cmd = [c if c != config["api_key"] else "***" for c in cmd]
-    print(f"Launching: {' '.join(safe_cmd)}")
-    subprocess.run(cmd)
+        raise SystemExit('Use client-native approval settings; --yes is not supported by Codex.')
+    cmd, env = launch('codex', directory(), config, args.extra or [])
+    raise SystemExit(subprocess.run(cmd, env=env).returncode)
 
 
 def cmd_run_aider(args):
@@ -423,30 +401,11 @@ def cmd_run_cursor(args):
 
 def cmd_run_opencode(args):
     """Launch OpenCode connected to NoeRelay."""
-    config = load_config()
-    model = args.model or config.get("model_raw", "axiovex-agni-raw")
-    base_url = f"{config['base_url']}/v1"
-
-    if not shutil.which("opencode"):
-        if not install_tool("opencode"):
-            sys.exit(1)
-
-    opencode = shutil.which("opencode")
-    env = os.environ.copy()
-    env["OPENAI_API_BASE"] = base_url
-    env["OPENAI_API_KEY"] = config["api_key"]
-
-    cmd = [opencode, "--model", model]
-    if args.extra:
-        for arg in args.extra:
-            if "\0" in arg or arg.startswith("-"):
-                print(f"Invalid argument: {arg!r}")
-                sys.exit(1)
-        cmd.extend(args.extra)
-
-    safe_cmd = [c if c == config["api_key"] else c for c in cmd]
-    print(f"Launching: {' '.join(safe_cmd)}")
-    subprocess.run(cmd, env=env)
+    from .clients import connection, directory, launch
+    config = connection()
+    config['model'] = args.model or config['model']
+    cmd, env = launch('opencode', directory(), config, args.extra or [])
+    raise SystemExit(subprocess.run(cmd, env=env).returncode)
 
 
 def cmd_install(args):
@@ -1531,13 +1490,22 @@ def main():
     p_req_regen = req_sub.add_parser("regenerate", help="Regenerate .specify/features/ from the manifest")
     p_req_regen.add_argument("--root", "-r", help="Repo root (default: auto-detect)")
 
+    from .clients import register as register_clients
+    register_clients(subparsers.add_parser("client", help="Set up, launch, and verify coding clients"))
+
     args = parser.parse_args()
 
     if not args.command:
         parser.print_help()
         sys.exit(0)
 
-    if args.command == "mcp":
+    if args.command == "client":
+        from .clients import main as client_main
+        try:
+            sys.exit(client_main(args))
+        except (ValueError, RuntimeError, OSError) as exc:
+            parser.exit(1, str(exc) + "\n")
+    elif args.command == "mcp":
         from .mcp_stdio import main as mcp_main
         mcp_main()
     elif args.command == "agent":

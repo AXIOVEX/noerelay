@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "findings": [
+    {
+      "id": "AEE-REQ-29D6BE621BAE1C54-IRREDUCIBILITY-CHALLENGE",
+      "severity": "medium",
+      "kind": "coverage_gap",
+      "subject": ".specify\\features\\runtime-b58f77c831693a65\\spec.md",
+      "description": "Claim may contain multiple independently falsifiable propositions",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-b58f77c831693a65\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "revise",
+      "rationale": "Irreducibility challenge"
+    },
+    {
+      "id": "AEE-REQ-29D6BE621BAE1C54-FALSIFIABILITY-CHALLENGE",
+      "severity": "high",
+      "kind": "missing_evidence",
+      "subject": ".specify\\features\\runtime-b58f77c831693a65\\spec.md",
+      "description": "Non-draft claim has no stated falsification test",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-b58f77c831693a65\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "gather_evidence",
+      "rationale": "Falsifiability challenge"
+    }
+  ],
+  "next_action": {
+    "kind": "gather_evidence",
+    "target_phase": null,
+    "message": "Pause and collect independently inspectable evidence."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T20:51:26.647895Z",
+    "artifacts_evaluated": [
+      ".specify/features/runtime-b58f77c831693a65/claims-29d6be621bae1c54.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "REQ-29D6BE621BAE1C54",
+          "text": "[{\"text\": \"Use the NoeRelay MCP noerelay_workspace_execute tool to run cat /workspace/.noerelay/clients/tests/codex-89d379088c4b/nonce.txt. The file is in the Docker workspace, not the host shell. Reply with its exact contents. Do not change files. If tools are still loading, discover the NoeRelay MCP tools first.\", \"type\": \"input_text\"}]",
+          "kind": "requirement",
+          "status": "unsupported",
+          "boundary": [
+            "Current local project and requested task"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [],
+          "uncertainty": "high",
+          "severity": "medium",
+          "source_ref": ".specify\\features\\runtime-b58f77c831693a65\\spec.md",
+          "domain": "",
+          "confidence": 0.1,
+          "confidence_band": "low",
+          "failures": [
+            {
+              "id": "AEE-REQ-29D6BE621BAE1C54-IRREDUCIBILITY-CHALLENGE",
+              "claim_id": "REQ-29D6BE621BAE1C54",
+              "challenge": "Irreducibility challenge",
+              "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+              "severity": "medium",
+              "category": "coverage_gap",
+              "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+              "resolved": false
+            },
+            {
+              "id": "AEE-REQ-29D6BE621BAE1C54-FALSIFIABILITY-CHALLENGE",
+              "claim_id": "REQ-29D6BE621BAE1C54",
+              "challenge": "Falsifiability challenge",
+              "breakpoint": "Non-draft claim has no stated falsification test",
+              "severity": "high",
+              "category": "missing_evidence",
+              "recovery_hint": "Define an observation that would show the claim is wrong.",
+              "resolved": false
+            }
+          ],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "REQ-29D6BE621BAE1C54": {
+          "claim_id": "REQ-29D6BE621BAE1C54",
+          "direct_score": 0.1,
+          "propagated_score": 0.1,
+          "band": "low",
+          "components": {
+            "evidence": 0.0,
+            "independence": 0.0,
+            "falsifiability": 0.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "No supporting evidence",
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": [
+        {
+          "failure_id": "AEE-REQ-29D6BE621BAE1C54-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-29D6BE621BAE1C54",
+          "strategy": "gather_evidence",
+          "action": "Define an observation that would show the claim is wrong.",
+          "priority": 2,
+          "verification": "At least one inspectable non-self-attested evidence item is attached."
+        },
+        {
+          "failure_id": "AEE-REQ-29D6BE621BAE1C54-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-29D6BE621BAE1C54",
+          "strategy": "decompose",
+          "action": "Split the claim into atomic propositions and link them explicitly.",
+          "priority": 3,
+          "verification": "Every resulting claim contains one independently falsifiable proposition."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "methodology_version": "1.0",
+  "project": "noerelay",
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "created_at": "2026-09-15T20:27:56.119197Z",
+  "claims": [
+    {
+      "id": "REQ-B2C00E0D5C1BA84A",
+      "text": "\"Read nonce.txt in the current directory using a file or shell tool. Reply with its exact contents. Do not change files or use other directories.\"\n",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "evidence": [],
+      "assumptions": [],
+      "alternatives": [],
+      "falsification_tests": [],
+      "uncertainty": "high",
+      "severity": "medium",
+      "source_ref": ".specify\\features\\runtime-b2522b5f0201b8f3\\spec.md",
+      "domain": "",
+      "confidence": 0.1,
+      "confidence_band": "low",
+      "failures": [
+        {
+          "id": "AEE-REQ-B2C00E0D5C1BA84A-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-B2C00E0D5C1BA84A",
+          "challenge": "Irreducibility challenge",
+          "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+          "severity": "medium",
+          "category": "coverage_gap",
+          "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+          "resolved": false
+        },
+        {
+          "id": "AEE-REQ-B2C00E0D5C1BA84A-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-B2C00E0D5C1BA84A",
+          "challenge": "Falsifiability challenge",
+          "breakpoint": "Non-draft claim has no stated falsification test",
+          "severity": "high",
+          "category": "missing_evidence",
+          "recovery_hint": "Define an observation that would show the claim is wrong.",
+          "resolved": false
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "scores": {
+    "REQ-B2C00E0D5C1BA84A": {
+      "claim_id": "REQ-B2C00E0D5C1BA84A",
+      "direct_score": 0.1,
+      "propagated_score": 0.1,
+      "band": "low",
+      "components": {
+        "evidence": 0.0,
+        "independence": 0.0,
+        "falsifiability": 0.0,
+        "boundary": 1.0,
+        "contradiction_penalty": 0
+      },
+      "notes": [
+        "No supporting evidence",
+        "Fewer than two independent supporting sources"
+      ]
+    }
+  },
+  "recoveries": [
+    {
+      "failure_id": "AEE-REQ-B2C00E0D5C1BA84A-FALSIFIABILITY-CHALLENGE",
+      "claim_id": "REQ-B2C00E0D5C1BA84A",
+      "strategy": "gather_evidence",
+      "action": "Define an observation that would show the claim is wrong.",
+      "priority": 2,
+      "verification": "At least one inspectable non-self-attested evidence item is attached."
+    },
+    {
+      "failure_id": "AEE-REQ-B2C00E0D5C1BA84A-IRREDUCIBILITY-CHALLENGE",
+      "claim_id": "REQ-B2C00E0D5C1BA84A",
+      "strategy": "decompose",
+      "action": "Split the claim into atomic propositions and link them explicitly.",
+      "priority": 3,
+      "verification": "Every resulting claim contains one independently falsifiable proposition."
+    }
+  ],
+  "metadata": {
+    "threshold": 0.7,
+    "input": "C:/Users/trist/Development/ElectroHire/noerelay/.specify/features/runtime-b2522b5f0201b8f3/claims-b2c00e0d5c1ba84a.json"
+  }
+}

@@ -11,6 +11,8 @@ Current implementation evidence and unresolved release blockers are tracked in [
 |---|---|---|---|
 | `T-API-005` | `NR-API-008` | Compatibility | Zoo-style multipart requests with validated reasoning effort complete from WSL2. |
 | `T-LLM-008` | `NR-LLM-008` | Local inference | Three models allocate 131072 context; beyond-16K retrieval succeeds. |
+| `T-OPS-007` | `NR-OPS-007` | Integration | Installed OpenCode, Zoo Code and Codex read fresh fixture data through NoeRelay; managed profiles preserve user settings. |
+| `T-ROUTE-003` | `NR-ROUTE-009` | Regression | Rust routing and Responses namespace/tool history regressions pass. |
 | `T-OPS-006` | `NR-OPS-006` | Deployment | Host and Docker assets are separated; imports, Compose and lifecycle remain functional. |
 | `T-API-004` | `NR-API-007` | Local integration | Windows and WSL2 complete authenticated requests at the documented API endpoint; missing keys are rejected. |
 | `T-LLM-007` | `NR-LLM-007` | Local integration | All three routes complete; shared-GPU cold/warm timing artifacts recorded. |

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-939E05E07E2CDCFA",
+      "text": "[{\"text\": \"Use the NoeRelay MCP noerelay_workspace_execute tool to run cat /workspace/.noerelay/clients/tests/codex-f720cce3913f/nonce.txt. The file is in the Docker workspace, not the host shell. Reply with its exact contents. Do not change files. If tools are still loading, discover the NoeRelay MCP tools first.\", \"type\": \"input_text\"}]",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-dd9ac13af3032231\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

@@ -25,6 +25,10 @@ Freeze the supported OpenAI compatibility profile (text, structured output, tool
   - Acceptance: Official OpenAI-client-shaped fixtures pass for supported fields without client-specific adapters. · Release test(s): `T-API-001`
 - `NR-API-003` — Unsupported fields MUST be rejected or explicitly documented; they MUST NOT be silently reinterpreted.
   - Acceptance: Negative compatibility fixtures produce stable OpenAI-shaped errors. · Release test(s): `T-API-001`
+- `NR-API-007` — Allow authenticated Windows and WSL2 clients to access the same local routed API.
+  - Acceptance: Windows and Ubuntu WSL2 list models and complete a request at the documented endpoint; unauthenticated requests are rejected. · Release test(s): `T-API-004`
+- `NR-API-008` — Accept validated Zoo Code reasoning effort on multipart chat requests.
+  - Acceptance: Supported effort values parse and reach live WSL inference; invalid values remain rejected. · Release test(s): `T-API-005`
 
 ## Acceptance criteria
 

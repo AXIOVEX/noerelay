@@ -101,3 +101,10 @@ The local consolidation now passes all four AEE phases for 20 atomic claims. The
 ## Repository layout
 
 Machine-side support is consolidated in `deploy/host/`. Container definitions, Dockerfiles, model-plane mappings, and WebUI assets are in `deploy/docker/`. The root `docker-compose.yml` is a compatibility include. Runtime secrets stay in ignored root environment files; models, data volumes, live state, source code, tests, and evidence are retained. Generated build/test caches and superseded probes were removed. See `evidence/local-recovery/cleanup.json`.
+
+
+## Managed coding clients
+
+Run `noerelay client setup all` after activating the CLI environment, then `noerelay client run opencode`, `noerelay client run zoo`, or `noerelay client run codex`. OpenCode is the default recommendation for this deployment. The generated profiles use NoeRelay for inference and MCP. See [README](../README.md#primary-cli-and-coding-clients) for Windows/WSL setup, token budgets, and actual installed-client tests.
+
+`noerelay client test all` creates fresh disposable fixtures and checks tool results. The Codex fixture uses the repository's Docker bind mount and a read-only command guard. Zoo's extension test requires Windows VS Code. Profile setup is idempotent and separate from existing client configuration.

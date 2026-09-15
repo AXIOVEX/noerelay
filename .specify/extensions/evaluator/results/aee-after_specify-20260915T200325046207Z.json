@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "findings": [
+    {
+      "id": "AEE-REQ-65AD21524C2507D1-IRREDUCIBILITY-CHALLENGE",
+      "severity": "medium",
+      "kind": "coverage_gap",
+      "subject": ".specify\\features\\runtime-c582e6366aa33e64\\spec.md",
+      "description": "Claim may contain multiple independently falsifiable propositions",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-c582e6366aa33e64\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "revise",
+      "rationale": "Irreducibility challenge"
+    },
+    {
+      "id": "AEE-REQ-65AD21524C2507D1-FALSIFIABILITY-CHALLENGE",
+      "severity": "high",
+      "kind": "missing_evidence",
+      "subject": ".specify\\features\\runtime-c582e6366aa33e64\\spec.md",
+      "description": "Non-draft claim has no stated falsification test",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-c582e6366aa33e64\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "gather_evidence",
+      "rationale": "Falsifiability challenge"
+    }
+  ],
+  "next_action": {
+    "kind": "gather_evidence",
+    "target_phase": null,
+    "message": "Pause and collect independently inspectable evidence."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T20:03:26.428155Z",
+    "artifacts_evaluated": [
+      ".specify/features/runtime-c582e6366aa33e64/claims-65ad21524c2507d1.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "REQ-65AD21524C2507D1",
+          "text": "[{\"text\": \"<user_message>\\nRead the file nonce.txt in the current workspace using your file tool. Then complete the task with its exact contents. Do not modify any files.\\n</user_message>\", \"type\": \"text\"}, {\"text\": \"<environment_details>\\n# VSCode Visible Files\\n\\n\\n# VSCode Open Tabs\\n\\n\\n# Current Time\\nCurrent time in ISO 8601 UTC format: 2026-09-15T20:03:17.946Z\\nUser time zone: America/New_York, UTC-4:00\\n\\n# Current Cost\\n$0.00\\n\\n# Current Mode\\n<slug>code</slug>\\n<name>\ud83d\udcbb Code</name>\\n<model>axiovex-agni-raw</model>\\n\\n\\n# Current Workspace Directory (c:/Users/trist/Development/ElectroHire/noerelay/.noerelay/clients/tests/zoo-52ad1c75b031) Files\\nnonce.txt\\nextensions/\\nextensions/extensions.json\\nvscode/\\nvscode/code.lock\\nvscode/DIPS\\nvscode/DIPS-wal\\nvscode/languagepacks.json\\nvscode/Local State\\nvscode/machineid\\nvscode/Preferences\\nvscode/agent-host/\\nvscode/agent-host/local-endpoint/\\nvscode/agent-host/local-endpoint/entries/\\nvscode/agent-host/local-endpoint/entries/b0f0cb7bf1e07659a75186026d541bc3752fa62da462a1f147b0dc712047405d.json\\nvscode/Backups/\\nvscode/blob_storage/\\nvscode/blob_storage/8998cfc1-47c0-4cc3-ba75-54627fda438f/\\nvscode/Cache/\\nvscode/Cache/Cache_Data/\\nvscode/Cache/Cache_Data/data_0\\nvscode/Cache/Cache_Data/data_1\\nvscode/Cache/Cache_Data/data_2\\nvscode/Cache/Cache_Data/data_3\\nvscode/Cache/Cache_Data/index\\nvscode/Cache/No_Vary_Search/\\nvscode/Cache/No_Vary_Search/journal.baj\\nvscode/Cache/No_Vary_Search/snapshot.baf\\nvscode/CachedData/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/0f0e9c4dc9df1616_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/7a04c9b8588ff959_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/67a51864c90c0f5a_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/72e7583d3f4226db_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/92e7657d58594d99_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/a9b4904c6ef845d5_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/d030f8e666efca37_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/d60677396ccdda69_0\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/index\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/index-dir/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/js/index-dir/the-real-index\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/wasm/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/wasm/index\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/wasm/index-dir/\\nvscode/CachedData/645f29cc3176500b4b5762ba887cf2a7f0ffdf2c/chrome/wasm/index-dir/the-real-index\\nvscode/CachedProfilesData/\\nvscode/CachedProfilesData/__default__profile__/\\nvscode/CachedProfilesData/__default__profile__/extensions.builtin.cache\\nvscode/CachedProfilesData/__default__profile__/extensions.user.cache\\nvscode/Code Cache/\\nvscode/Code Cache/electron-preload/\\nvscode/Code Cache/electron-preload/A0F76370E358FA29F618B57F5B1507CE795C2C4967C83941D9D1820E91C5ADDF-67A64C46445250C0C0E1103FCA3290FE88811449B7F10FD5FBBE5AA8F3AC1EB2.cache\\nvscode/Code Cache/js/\\nvscode/Code Cache/js/index\\nvscode/Code Cache/js/index-dir/\\nvscode/Code Cache/js/index-dir/the-real-index\\nvscode/Code Cache/wasm/\\nvscode/Code Cache/wasm/index\\nvscode/Code Cache/wasm/index-dir/\\nvscode/Code Cache/wasm/index-dir/the-real-index\\nvscode/Crashpad/\\nvscode/Crashpad/metadata\\nvscode/Crashpad/settings.dat\\nvscode/Crashpad/attachments/\\nvscode/Crashpad/reports/\\nvscode/DawnGraphiteCache/\\nvscode/DawnGraphiteCache/data_0\\nvscode/DawnGraphiteCache/data_1\\nvscode/DawnGraphiteCache/data_2\\nvscode/DawnGraphiteCache/data_3\\nvscode/DawnGraphiteCache/index\\nvscode/DawnWebGPUCache/\\nvscode/DawnWebGPUCache/data_0\\nvscode/DawnWebGPUCache/data_1\\nvscode/DawnWebGPUCache/data_2\\nvscode/DawnWebGPUCache/data_3\\nvscode/DawnWebGPUCache/index\\nvscode/GPUCache/\\nvscode/GPUCache/data_0\\nvscode/GPUCache/data_1\\nvscode/GPUCache/data_2\\nvscode/GPUCache/data_3\\nvscode/GPUCache/index\\nvscode/Local Storage/\\nvscode/Local Storage/leveldb/\\nvscode/Local Storage/leveldb/000003.log\\nvscode/Local Storage/leveldb/CURRENT\\nvscode/Local Storage/leveldb/LOCK\\nvscode/Local Storage/leveldb/LOG\\nvscode/Local Storage/leveldb/MANIFEST-000001\\nvscode/logs/20260915T160301/agenthost.log\\nvscode/logs/20260915T160301/editSessions.log\\nvscode/logs/20260915T160301/main.log\\nvscode/logs/20260915T160301/mcpGateway.log\\nvscode/logs/20260915T160301/network-shared.log\\nvscode/logs/20260915T160301/remoteTunnelService.log\\nvscode/logs/20260915T160301/sharedprocess.log\\nvscode/logs/20260915T160301/telemetry.log\\nvscode/logs/20260915T160301/terminal.log\\nvscode/logs/20260915T160301/userDataSync.log\\nvscode/logs/20260915T160301/window1/network.log\\nvscode/logs/20260915T160301/window1/notebook.rendering.log\\nvscode/logs/20260915T160301/window1/renderer.log\\nvscode/logs/20260915T160301/window1/textModelChanges.log\\nvscode/logs/20260915T160301/window1/views.log\\nvscode/logs/20260915T160301/window1/exthost/exthost.log\\nvscode/logs/20260915T160301/window1/exthost/extHostTelemetry.log\\nvscode/logs/20260915T160301/window1/exthost/output_logging_20260915T160307/1-Zoo-Code.log\\nvscode/logs/20260915T160301/window1/exthost/output_logging_20260915T160307/2-Zoo Code Ripgrep Diagnostic.log\\nvscode/logs/20260915T160301/window1/exthost/vscode.git/Git.log\\nvscode/logs/20260915T160301/window1/exthost/vscode.github/GitHub.log\\nvscode/logs/20260915T160301/window1/exthost/vscode.github-authentication/GitHub Authentication.log\\nvscode/logs/20260915T160301/window1/exthost/vscode.json-language-features/JSON Language Server.log\\nvscode/logs/20260915T160301/window1/output_20260915T160305/agentSessionsOutput.log\\nvscode/logs/20260915T160301/window1/output_20260915T160305/tasks.log\\nvscode/Network/\\nvscode/Network/Network Persistent State\\nvscode/Network/NetworkDataMigrated\\nvscode/Network/Trust Tokens\\nvscode/Network/Trust Tokens-journal\\nvscode/Service Worker/\\nvscode/Service Worker/Database/\\nvscode/Service Worker/Database/000003.log\\nvscode/Service Worker/Database/CURRENT\\nvscode/Service Worker/Database/LOCK\\nvscode/Service Worker/Database/LOG\\nvscode/Service Worker/Database/MANIFEST-000001\\nvscode/Service Worker/ScriptCache/\\nvscode/Service Worker/ScriptCache/2cc80dabc69f58b6_0\\nvscode/Service Worker/ScriptCache/index\\nvscode/Service Worker/ScriptCache/index-dir/\\nvscode/Service Worker/ScriptCache/index-dir/the-real-index\\nvscode/Shared Dictionary/\\nvscode/Shared Dictionary/db\\nvscode/Shared Dictionary/db-journal\\nvscode/Shared Dictionary/cache/\\nvscode/Shared Dictionary/cache/index\\nvscode/Shared Dictionary/cache/index-dir/\\nvscode/Shared Dictionary/cache/index-dir/the-real-index\\nvscode/User/\\nvscode/User/chatLanguageModels.json\\nvscode/User/settings.json\\nvscode/User/globalStorage/\\nvscode/User/globalStorage/agent-host-config.json\\nvscode/User/globalStorage/agent-host.db\\nvscode/User/globalStorage/storage.json\\nvscode/User/globalStorage/vscode.git/\\nvscode/User/globalStorage/vscode.git/askpass/\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/askpass-empty.sh\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/askpass-main.js\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/askpass.sh\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/ssh-askpass-empty.sh\\nvscode/User/globalStorage/vscode.git/askpass/70789581cae28aa7/ssh-askpass.sh\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/settings/\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/settings/custom_modes.yaml\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/settings/mcp_settings.json\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/tasks/\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/tasks/01a0a6aa-a94b-748a-ad32-af15a10138f5/\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/tasks/01a0a6aa-a94b-748a-ad32-af15a10138f5/history_item.json\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/tasks/01a0a6aa-a94b-748a-ad32-af15a10138f5/ui_messages.json\\nvscode/User/globalStorage/zoocodeorganization.zoo-code/tasks/01a0a6aa-a94b-748a-ad32-af15a10138f5/checkpoints/\\nvscode/User/History/\\nvscode/User/History/2cac5d77/\\nvscode/User/History/2cac5d77/WXGi.json\\nvscode/User/snippets/\\nvscode/User/workspaceStorage/\\nvscode/User/workspaceStorage/14bd9fc72da210bf737af53a854b32ac/\\nvscode/User/workspaceStorage/14bd9fc72da210bf737af53a854b32ac/meta.json\\nvscode/WebStorage/\\nvscode/WebStorage/QuotaManager\\nvscode/WebStorage/QuotaManager-journal\\nvscode/WebStorage/1/\\nvscode/WebStorage/1/CacheStorage/\\nvscode/WebStorage/1/CacheStorage/index.txt\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/0ed07dc3ea686c8d_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/2bf8ebdbc9f7edb7_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/8b7556b8dc2d64a1_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/9a53a3024f6a8cf8_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/107ed69ee474a655_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/216f22fb8541a713_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/846ba68094252b99_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/2853b99acf00e0f9_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/6544b60045d4113d_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/9579d22b9af9afdf_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/a2cca7fb12e62fe6_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/b5e64f114bcbf343_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/b6bdb0749131f23e_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/b9d4546734ceff93_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/c6f01a2f4a68c9e6_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/d645967af5622830_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/dc0f63f9ab841c4b_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/e129b5309b815e75_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/f7b62b29264c68fe_0\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/index\\nvscode/WebStorage/1/CacheStorage/d157194a-a444-4843-bee1-d66473d5b09d/index-dir/the-real-index\\n\\n(File list truncated. Use list_files on specific subdirectories if you need to explore further.)\\nYou have not created a todo list yet. Create one with `update_todo_list` if your task is complicated or involves multiple steps.\\n</environment_details>\", \"type\": \"text\"}]",
+          "kind": "requirement",
+          "status": "unsupported",
+          "boundary": [
+            "Current local project and requested task"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [],
+          "uncertainty": "high",
+          "severity": "medium",
+          "source_ref": ".specify\\features\\runtime-c582e6366aa33e64\\spec.md",
+          "domain": "",
+          "confidence": 0.1,
+          "confidence_band": "low",
+          "failures": [
+            {
+              "id": "AEE-REQ-65AD21524C2507D1-IRREDUCIBILITY-CHALLENGE",
+              "claim_id": "REQ-65AD21524C2507D1",
+              "challenge": "Irreducibility challenge",
+              "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+              "severity": "medium",
+              "category": "coverage_gap",
+              "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+              "resolved": false
+            },
+            {
+              "id": "AEE-REQ-65AD21524C2507D1-FALSIFIABILITY-CHALLENGE",
+              "claim_id": "REQ-65AD21524C2507D1",
+              "challenge": "Falsifiability challenge",
+              "breakpoint": "Non-draft claim has no stated falsification test",
+              "severity": "high",
+              "category": "missing_evidence",
+              "recovery_hint": "Define an observation that would show the claim is wrong.",
+              "resolved": false
+            }
+          ],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "REQ-65AD21524C2507D1": {
+          "claim_id": "REQ-65AD21524C2507D1",
+          "direct_score": 0.1,
+          "propagated_score": 0.1,
+          "band": "low",
+          "components": {
+            "evidence": 0.0,
+            "independence": 0.0,
+            "falsifiability": 0.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "No supporting evidence",
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": [
+        {
+          "failure_id": "AEE-REQ-65AD21524C2507D1-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-65AD21524C2507D1",
+          "strategy": "gather_evidence",
+          "action": "Define an observation that would show the claim is wrong.",
+          "priority": 2,
+          "verification": "At least one inspectable non-self-attested evidence item is attached."
+        },
+        {
+          "failure_id": "AEE-REQ-65AD21524C2507D1-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-65AD21524C2507D1",
+          "strategy": "decompose",
+          "action": "Split the claim into atomic propositions and link them explicitly.",
+          "priority": 3,
+          "verification": "Every resulting claim contains one independently falsifiable proposition."
+        }
+      ]
+    }
+  }
+}

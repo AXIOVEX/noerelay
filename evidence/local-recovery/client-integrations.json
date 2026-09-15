@@ -1,0 +1,101 @@
+{
+  "clients": {
+    "opencode": {
+      "passed": true,
+      "exit_code": 0,
+      "tool_completed": true,
+      "nonce_verified": true,
+      "version": "1.14.28",
+      "seconds": 169.12,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\opencode-024a892f6460"
+    },
+    "zoo": {
+      "passed": true,
+      "version": "3.82.1",
+      "historyLength": 4,
+      "readToolUsed": true,
+      "nonceVerified": true,
+      "exit_code": 0,
+      "seconds": 49.86,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\zoo-5b9f73f7509a"
+    },
+    "codex": {
+      "passed": true,
+      "exit_code": 0,
+      "tool_completed": true,
+      "nonce_verified": true,
+      "version": "codex-cli 0.153.4",
+      "seconds": 16.36,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\codex-fd1e8b7e815d"
+    }
+  },
+  "scope": "Installed clients; synthetic file read and tool-result round trip",
+  "wsl": {
+    "clients": {
+      "opencode": {
+        "passed": true,
+        "exit_code": 0,
+        "tool_completed": true,
+        "nonce_verified": true,
+        "version": "1.14.28",
+        "seconds": 180.12,
+        "workspace": "/mnt/c/Users/trist/Development/ElectroHire/noerelay/.noerelay/clients-linux/tests/opencode-082828414fbd"
+      }
+    },
+    "scope": "Installed clients; synthetic file read and tool-result round trip"
+  },
+  "health": {
+    "windows": {
+      "base_url": "http://127.0.0.1:8080",
+      "checks": {
+        "/ready": {
+          "status": 200
+        },
+        "/v1/models": {
+          "status": 200,
+          "models": [
+            "axiovex-agni",
+            "axiovex-agni-raw"
+          ]
+        }
+      }
+    },
+    "wsl": {
+      "base_url": "http://localhost:8080",
+      "checks": {
+        "/ready": {
+          "status": 200
+        },
+        "/v1/models": {
+          "status": 200,
+          "models": [
+            "axiovex-agni",
+            "axiovex-agni-raw"
+          ]
+        }
+      }
+    }
+  },
+  "observed_at": "2026-09-15T21:01:13.839144+00:00",
+  "python_tests": {
+    "passed": 25,
+    "log": "evidence/local-recovery/client-unit-tests.log"
+  },
+  "router_evidence": "evidence/REG-01/T-ROUTE-003.json",
+  "limitations": [
+    "Installed versions and recorded smoke cases only; no broad coding-quality or isolated speed benchmark.",
+    "Codex uses a fixture-limited read-only MCP guard for the noninteractive test; normal MCP approvals remain enabled.",
+    "Native Codex Windows shell commands were blocked by execution policy in this environment.",
+    "Zoo extension-host test ran on Windows, not WSL."
+  ],
+  "log_digests": {
+    "evidence/local-recovery/client-logs/opencode-stdout.log": "6ae97b4fbf5b7290996c8ce6fab8f5d235895f472e0eab4ece316768e2424659",
+    "evidence/local-recovery/client-logs/opencode-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evidence/local-recovery/client-logs/zoo-stdout.log": "c70583981b8f4b43c6fb256fc26a1c5095eb9d07c1a24c84ee665859eea1498f",
+    "evidence/local-recovery/client-logs/zoo-stderr.log": "fc2fc4b0931d1c3e75a065b46983b3a9b0327f1c858f56e94342cf18edb1d5e6",
+    "evidence/local-recovery/client-logs/codex-stdout.log": "f07b32fca7bde50942e02820c3af7e9c3df3646995cf8ed69dcca428f790eb29",
+    "evidence/local-recovery/client-logs/codex-stderr.log": "253bbc76a6060b630305a57ed64eee2bab4ff4478daa26fcc447d358fc4fdfb3",
+    "evidence/local-recovery/client-logs/wsl-opencode-stdout.log": "3e1bf8f652a9715c088d5ed8b5149e72bc226e310b0299ed884e09d3b26c80bb",
+    "evidence/local-recovery/client-logs/wsl-opencode-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

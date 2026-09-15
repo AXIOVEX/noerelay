@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_specify",
+  "outcome": "gather_evidence",
+  "summary": "Assessed 1 claim(s); found 2 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "findings": [
+    {
+      "id": "AEE-REQ-D2C3A8AA11873C85-IRREDUCIBILITY-CHALLENGE",
+      "severity": "medium",
+      "kind": "coverage_gap",
+      "subject": ".specify\\features\\runtime-25985b3bcaae958e\\spec.md",
+      "description": "Claim may contain multiple independently falsifiable propositions",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-25985b3bcaae958e\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "revise",
+      "rationale": "Irreducibility challenge"
+    },
+    {
+      "id": "AEE-REQ-D2C3A8AA11873C85-FALSIFIABILITY-CHALLENGE",
+      "severity": "high",
+      "kind": "missing_evidence",
+      "subject": ".specify\\features\\runtime-25985b3bcaae958e\\spec.md",
+      "description": "Non-draft claim has no stated falsification test",
+      "evidence_refs": [],
+      "provenance_refs": [
+        ".specify\\features\\runtime-25985b3bcaae958e\\spec.md"
+      ],
+      "uncertainty": "high",
+      "recommended_action": "gather_evidence",
+      "rationale": "Falsifiability challenge"
+    }
+  ],
+  "next_action": {
+    "kind": "gather_evidence",
+    "target_phase": null,
+    "message": "Pause and collect independently inspectable evidence."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T19:04:13.857616Z",
+    "artifacts_evaluated": [
+      ".specify/features/runtime-25985b3bcaae958e/claims-d2c3a8aa11873c85.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "REQ-D2C3A8AA11873C85",
+          "text": "[{\"cache_control\": {\"type\": \"ephemeral\"}, \"text\": \"<environment_details>\\n# VSCode Visible Files\\n\\n\\n# VSCode Open Tabs\\n\\n\\n# Recently Modified Files\\nThese files have been modified since you last accessed them (file was just edited so you may need to re-read it before editing):\\nyocto/meta-ismart/recipes-core/images/ismart-os-image.bb\\n\\n# Current Time\\nCurrent time in ISO 8601 UTC format: 2026-09-15T19:04:13.089Z\\nUser time zone: America/New_York, UTC-4:00\\n\\n# Git Status\\n## main...origin/main\\n M LEDGER.md\\n M yocto/meta-ismart/conf/distro/ismart-os.conf\\n M yocto/meta-ismart/recipes-bsp/u-boot/files/splash.bmp\\n M yocto/meta-ismart/recipes-core/images/ismart-os-image.bb\\n\\n# Current Mode\\n<slug>code</slug>\\n<name>\ud83d\udcbb Code</name>\\n<model>axiovex-agni-raw</model>\\nYou have not created a todo list yet. Create one with `update_todo_list` if your task is complicated or involves multiple steps.\\n</environment_details>\", \"type\": \"text\"}]",
+          "kind": "requirement",
+          "status": "unsupported",
+          "boundary": [
+            "Current local project and requested task"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [],
+          "uncertainty": "high",
+          "severity": "medium",
+          "source_ref": ".specify\\features\\runtime-25985b3bcaae958e\\spec.md",
+          "domain": "",
+          "confidence": 0.1,
+          "confidence_band": "low",
+          "failures": [
+            {
+              "id": "AEE-REQ-D2C3A8AA11873C85-IRREDUCIBILITY-CHALLENGE",
+              "claim_id": "REQ-D2C3A8AA11873C85",
+              "challenge": "Irreducibility challenge",
+              "breakpoint": "Claim may contain multiple independently falsifiable propositions",
+              "severity": "medium",
+              "category": "coverage_gap",
+              "recovery_hint": "Split the claim into atomic propositions and link them explicitly.",
+              "resolved": false
+            },
+            {
+              "id": "AEE-REQ-D2C3A8AA11873C85-FALSIFIABILITY-CHALLENGE",
+              "claim_id": "REQ-D2C3A8AA11873C85",
+              "challenge": "Falsifiability challenge",
+              "breakpoint": "Non-draft claim has no stated falsification test",
+              "severity": "high",
+              "category": "missing_evidence",
+              "recovery_hint": "Define an observation that would show the claim is wrong.",
+              "resolved": false
+            }
+          ],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "REQ-D2C3A8AA11873C85": {
+          "claim_id": "REQ-D2C3A8AA11873C85",
+          "direct_score": 0.1,
+          "propagated_score": 0.1,
+          "band": "low",
+          "components": {
+            "evidence": 0.0,
+            "independence": 0.0,
+            "falsifiability": 0.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "No supporting evidence",
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": [
+        {
+          "failure_id": "AEE-REQ-D2C3A8AA11873C85-FALSIFIABILITY-CHALLENGE",
+          "claim_id": "REQ-D2C3A8AA11873C85",
+          "strategy": "gather_evidence",
+          "action": "Define an observation that would show the claim is wrong.",
+          "priority": 2,
+          "verification": "At least one inspectable non-self-attested evidence item is attached."
+        },
+        {
+          "failure_id": "AEE-REQ-D2C3A8AA11873C85-IRREDUCIBILITY-CHALLENGE",
+          "claim_id": "REQ-D2C3A8AA11873C85",
+          "strategy": "decompose",
+          "action": "Split the claim into atomic propositions and link them explicitly.",
+          "priority": 3,
+          "verification": "Every resulting claim contains one independently falsifiable proposition."
+        }
+      ]
+    }
+  }
+}

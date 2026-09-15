@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-058A23248E390C54",
+      "text": "\"Reply exactly NOERELAY_READY.\"\n",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-4ac1017ba66b01f8\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

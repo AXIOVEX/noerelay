@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "id": "REQ-781262C064900458",
+      "text": "[{\"text\": \"Read nonce.txt with a tool and report its exact contents.\", \"type\": \"input_text\"}]",
+      "kind": "requirement",
+      "status": "unsupported",
+      "boundary": [
+        "Current local project and requested task"
+      ],
+      "depends_on": [],
+      "conflicts_with": [],
+      "falsification_tests": [],
+      "source_ref": ".specify\\features\\runtime-fff28ecef64f4975\\spec.md",
+      "uncertainty": "high",
+      "evidence": []
+    }
+  ]
+}

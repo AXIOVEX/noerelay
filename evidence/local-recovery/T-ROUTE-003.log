@@ -1,0 +1,620 @@
+
+running 165 tests
+test agent_dispatch::tests::budget_exceeded_is_rejected ... ok
+test agent_dispatch::tests::no_endpoint_is_rejected ... ok
+test agent_dispatch::tests::disallowed_model_is_rejected ... ok
+test agent_dispatch::tests::valid_dispatch_passes ... ok
+test agent_dispatch::tests::missing_capability_is_rejected ... ok
+test agent_dispatch::tests::delegation_depth_exceeded_is_rejected ... ok
+test context::tests::impossible_protected_budget_fails_closed ... ok
+test contract::tests::high_risk_requires_acceptance ... ok
+test analytics::tests::projector_metadata_serializes ... ok
+test budget::tests::failed_reconciliation_is_atomic ... ok
+test agent_dispatch::tests::cycle_limit_exceeded_is_rejected ... ok
+test budget::tests::reconciliation_returns_unused_capacity ... ok
+test evaluator_ingestion::tests::all_outcomes_have_mappings ... ok
+test evaluator_ingestion::tests::block_maps_to_block ... ok
+test evaluator_ingestion::tests::clarify_maps_to_request_clarification ... ok
+test evaluator_ingestion::tests::gather_evidence_maps_to_gather_evidence ... ok
+test evaluator_ingestion::tests::iterate_maps_to_create_repair_task ... ok
+test evaluator_result::tests::evaluator_result_serializes_to_json ... ok
+test context::tests::protected_nodes_survive_pressure ... ok
+test context::tests::optional_selection_prefers_salience_then_recency ... ok
+test contract::tests::duplicate_acceptance_is_rejected ... ok
+test epistemic::tests::four_valued_merge_preserves_contradiction ... ok
+test contract::tests::low_risk_can_use_empty_acceptance ... ok
+test evaluator_ingestion::tests::block_hook_prevents_continue ... ok
+test budget::tests::reservations_prevent_overspend_before_execution ... ok
+test analytics::tests::all_core_metrics_have_required_fields ... ok
+test evaluator_result::tests::finding_from_passed_check_result ... ok
+test evaluator_ingestion::tests::pass_hook_allows_continue ... ok
+test evaluator_ingestion::tests::pass_maps_to_continue ... ok
+test evaluator_ingestion::tests::warn_maps_to_continue_with_warnings ... ok
+test evaluator_result::tests::derive_outcome_from_findings ... ok
+test epistemic::tests::evidence_is_deduplicated_without_erasing_conflict ... ok
+test evaluator_result::tests::finding_from_failed_check_result ... ok
+test contract::tests::compiles_deterministically ... ok
+test context::tests::manifest_hash_is_deterministic ... ok
+test evidence::tests::accepted_is_release_ready ... ok
+test evidence::tests::claimed_is_not_release_ready ... ok
+test evidence::tests::contradicted_is_not_release_ready ... ok
+test evidence::tests::empty_revision_fails ... ok
+test evidence::tests::has_artifact_hashes_when_both_present ... ok
+test evidence::tests::inferred_is_not_release_ready ... ok
+test evidence::tests::envelope_serializes_correctly ... ok
+test evidence::tests::envelope_without_verifier_serializes_null ... ok
+test evidence::tests::missing_logs_hash_fails_artifact_check ... ok
+test evidence::tests::missing_result_hash_fails_artifact_check ... ok
+test evidence::tests::non_hex_revision_fails ... ok
+test evidence::tests::observed_pass_is_release_ready ... ok
+test evidence::tests::observed_fail_is_not_release_ready ... ok
+test evidence::tests::rejected_is_not_release_ready ... ok
+test evidence::tests::short_revision_passes ... ok
+test evidence::tests::valid_sha_passes_revision_check ... ok
+test execution::tests::attempt_pending_to_running_is_legal ... ok
+test execution::tests::attempt_running_to_succeeded_is_legal ... ok
+test execution::tests::attempt_state_machine_rejects_illegal ... ok
+test execution::tests::attempt_succeeded_is_terminal ... ok
+test execution::tests::reservation_active_to_consumed_is_legal ... ok
+test execution::tests::reservation_active_to_released_is_legal ... ok
+test execution::tests::reservation_released_is_terminal ... ok
+test execution::tests::reservation_state_machine_rejects_illegal ... ok
+test execution::tests::run_completed_is_terminal ... ok
+test execution::tests::run_id_serialization_is_transparent ... ok
+test execution::tests::run_pending_to_cancelled_is_legal ... ok
+test execution::tests::run_pending_to_completed_is_illegal ... ok
+test execution::tests::run_pending_to_running_is_legal ... ok
+test execution::tests::run_running_to_awaiting_approval_is_legal ... ok
+test execution::tests::run_state_machine_rejects_illegal ... ok
+test execution::tests::step_completed_is_terminal ... ok
+test execution::tests::run_struct_serialization_roundtrip ... ok
+test execution::tests::run_status_serialization_roundtrip ... ok
+test execution::tests::step_failed_can_retry_to_pending ... ok
+test execution::tests::step_pending_to_ready_is_legal ... ok
+test execution::tests::step_running_to_completed_is_legal ... ok
+test execution::tests::step_state_machine_rejects_illegal ... ok
+test execution::tests::step_status_serialization_roundtrip ... ok
+test execution::tests::work_item_claimed_to_running_is_legal ... ok
+test execution::tests::work_item_completed_is_terminal ... ok
+test execution::tests::work_item_failed_can_retry_to_pending ... ok
+test execution::tests::work_item_failed_to_dead_letter_is_legal ... ok
+test execution::tests::work_item_pending_to_claimed_is_legal ... ok
+test execution::tests::work_item_state_machine_rejects_illegal ... ok
+test execution::tests::work_item_status_serialization_roundtrip ... ok
+test iam::tests::entity_status_default_is_active ... ok
+test iam::tests::entity_status_serialization_roundtrips ... ok
+test iam::tests::iam_error_display_messages ... ok
+test iam::tests::id_newtypes_serialize_as_transparent_uuid ... ok
+test iam::tests::resolved_identity_has_permission_checks_scope_hierarchy ... ok
+test iam::tests::membership_scope_derives_correctly ... ok
+test iam::tests::resolved_identity_to_legacy_scope_conversion ... ok
+test iam::tests::resolved_identity_project_scope_does_not_cover_other_projects ... ok
+test iam::tests::scope_organization_id_extracts_correctly ... ok
+test iam::tests::quota_period_serialization_roundtrips ... ok
+test iam::tests::scope_type_discriminates_correctly ... ok
+test iam::tests::suspended_membership_denies_permission ... ok
+test ledger::tests::deletion_is_detected ... ok
+test ledger::tests::floating_payload_is_rejected ... ok
+test ledger::tests::checkpoint_covers_correct_range ... ok
+test ledger::tests::merkle_proof_rejects_out_of_range ... ok
+test ledger::tests::changed_payload_is_detected ... ok
+test ledger::tests::merkle_proof_rejects_wrong_hash ... ok
+test ledger::tests::merkle_proof_verifies ... ok
+test ledger::tests::merkle_root_is_deterministic ... ok
+test ledger::tests::reordering_is_detected ... ok
+test ledger::tests::valid_chain_verifies ... ok
+test ranking::tests::candidate_set_hash_changes_with_different_candidates ... ok
+test ranking::tests::candidate_set_hash_is_deterministic ... ok
+test ranking::tests::candidate_set_hash_is_order_independent ... ok
+test ranking::tests::candidate_set_hash_mismatch_is_rejected ... ok
+test ranking::tests::duplicate_candidate_is_rejected ... ok
+test ranking::tests::empty_scores_is_rejected ... ok
+test ranking::tests::expired_advice_is_rejected ... ok
+test ranking::tests::features_hash_is_deterministic ... ok
+test ranking::tests::features_hash_mismatch_is_rejected ... ok
+test ranking::tests::non_advisory_advice_is_rejected ... ok
+test ranking::tests::non_expired_advice_without_expiry_passes ... ok
+test ranking::tests::ranker_error_display ... ok
+test ranking::tests::score_out_of_bounds_is_rejected ... ok
+test ranking::tests::unknown_candidate_is_rejected ... ok
+test ranking::tests::valid_advice_passes_validation ... ok
+test ranking::tests::wrong_schema_version_is_rejected ... ok
+test recommendation::tests::cohort_data_does_not_cross_contaminate ... ok
+test recommendation::tests::insufficient_data_abstains ... ok
+test recommendation::tests::stronger_acceptance_wins_before_cost ... ok
+test route_target::tests::route_target_model_from_candidate ... ok
+test route_target::tests::route_target_serializes_with_kind_tag ... ok
+test routing::staged_tests::disabled_ranking_is_identical_to_baseline ... ok
+test routing::staged_tests::advisory_mode_reorders_by_ranker_scores ... ok
+test routing::staged_tests::ranker_failure_falls_back_to_deterministic ... ok
+test routing::tests::cheapest_admissible_candidate_wins ... ok
+test receipt::tests::replacement_key_is_not_trusted ... ok
+test routing::staged_tests::shadow_mode_records_but_does_not_affect_selection ... ok
+test routing::tests::every_hard_failure_is_recorded ... ok
+test routing::tests::inadmissible_cheapest_never_wins ... ok
+test routing::tests::selection_is_stable_for_equal_scores ... ok
+test runtime::tests::failed_prepare_does_not_mutate_budget_or_ledger ... ok
+test runtime::tests::snapshot_rejects_unknown_versions_and_invalid_budgets ... ok
+test tool_execution::tests::compact_with_wrong_derived_from_is_invalid ... ok
+test tool_execution::tests::has_raw_evidence_when_both_present ... ok
+test runtime::tests::high_risk_cannot_self_verify ... ok
+test tool_execution::tests::is_not_success_for_nonzero_exit_code ... ok
+test tool_execution::tests::is_success_for_zero_exit_code ... ok
+test runtime::tests::provider_abort_releases_reservation_and_records_rejection ... ok
+test tool_execution::tests::missing_raw_sha256_fails_evidence_check ... ok
+test runtime::tests::snapshot_round_trip_preserves_active_reservations_and_chain ... ok
+test tool_execution::tests::rtk_reduction_ratio_is_correct ... ok
+test tool_execution::tests::rtk_reduction_ratio_none_when_no_metrics ... ok
+test runtime::tests::accepted_run_atomically_reserves_reconciles_ledgers_and_receipts ... ok
+test tool_execution::tests::valid_compact_links_to_raw ... ok
+test tools::tests::advertised_tool_without_grant_is_denied ... ok
+test tools::tests::fully_authorized_proposal_is_allowed ... ok
+test tools::tests::side_effect_requires_idempotency_before_approval ... ok
+test tools::tests::unlisted_egress_is_denied ... ok
+test traceability::tests::model_claim_is_not_evidence ... ok
+test traceability::tests::observed_evidence_releases ... ok
+test traceability::tests::orphan_test_is_rejected ... ok
+test types::tests::empty_scope_fails ... ok
+test types::tests::path_character_fails ... ok
+test types::tests::valid_scope_passes ... ok
+test usage::tests::cost_detects_overflow ... ok
+test usage::tests::rollup_preserves_org_project_user_totals ... ok
+test verification::tests::claim_without_observed_evidence_cannot_accept ... ok
+test verification::tests::critical_requires_human_approval ... ok
+test verification::tests::cycles_fail_closed ... ok
+test verification::tests::deterministic_checks_are_ordered_before_review ... ok
+test verification::tests::high_risk_rejects_same_family_review ... ok
+test receipt::tests::trusted_key_verifies_and_tampering_fails ... ok
+
+test result: ok. 165 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 15 tests
+test api_key_hash_newtype_serializes_as_string ... ok
+test api_key_id_newtype_serializes_as_uuid ... ok
+test api_key_prefix_newtype_serializes_as_string ... ok
+test api_key_secret_debug_is_redacted ... ok
+test api_key_secret_display_is_redacted ... ok
+test entity_status_revoked_serialization ... ok
+test rate_limit_decision_blocked ... ok
+test api_key_issuance_includes_secret ... ok
+test api_key_serialization_excludes_plaintext_secret ... ok
+test iam_error_api_key_variants ... ok
+test rate_limit_decision_allowed ... ok
+test api_key_with_all_optional_fields ... ok
+test api_key_verification_expired ... ok
+test api_key_verification_invalid ... ok
+test api_key_verification_valid ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test artifact_type_serializes_all_variants_as_snake_case ... ok
+test artifact_ref_serialization_binds_id_hash_type_and_size ... ok
+test artifact_type_deserializes_snake_case ... ok
+test integrity_error_serialization_preserves_hashes ... ok
+test retention_policy_supports_retain_forever ... ok
+test storage_backend_serializes_named_backends ... ok
+test metadata_serialization_preserves_authority_fields ... ok
+test artifact_metadata_has_a_json_schema ... ok
+test metadata_round_trips_without_loss ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 15 tests
+test test_fixtures::chat_invalid_model_is_negative ... ok
+test test_fixtures::chat_missing_messages_is_negative ... ok
+test test_fixtures::responses_unsupported_field_is_negative ... ok
+test test_fixtures::responses_basic_text_is_positive ... ok
+test test_fixtures::chat_unsupported_field_is_negative ... ok
+test test_fixtures::responses_with_tools_is_positive ... ok
+test test_fixtures::chat_basic_text ... ok
+test test_fixtures::support_matrix_version_matches_code ... ok
+test test_fixtures::support_matrix_chat_profile_is_generated_from_code ... ok
+test test_fixtures::support_matrix_responses_profile_is_generated_from_code ... ok
+test test_fixtures::chat_with_response_format ... ok
+test test_fixtures::chat_with_vision ... ok
+test test_fixtures::chat_with_tools ... ok
+test test_fixtures::chat_with_streaming ... ok
+test test_fixtures::chat_with_multiple_messages ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 13 tests
+test active_can_begin_drain ... ok
+test active_can_fail ... ok
+test conflict_resolution_variants_use_snake_case ... ok
+test decommissioned_is_terminal ... ok
+test all_conflict_types_roundtrip ... ok
+test drain_cannot_return_to_active ... ok
+test drained_can_only_be_decommissioned ... ok
+test conflict_report_serialization_roundtrip ... ok
+test draining_can_complete ... ok
+test stream_ownership_serialization_roundtrip ... ok
+test worker_registration_serialization_roundtrip ... ok
+test draining_can_fail ... ok
+test failed_can_be_decommissioned ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test cancellation_reason_variants_use_wire_names ... ok
+test completed_cannot_transition ... ok
+test effect_intent_variants_use_wire_names ... ok
+test effect_result_status_variants_use_wire_names ... ok
+test in_progress_can_fail_or_expire ... ok
+test effect_request_serialization_round_trips ... ok
+test unknown_effect_result_serialization_round_trips ... ok
+test effect_request_supports_no_downstream_idempotency ... ok
+test idempotency_key_serialization_round_trips ... ok
+test idempotency_status_uses_wire_names ... ok
+test in_progress_can_complete ... ok
+test failed_and_expired_can_be_reclaimed ... ok
+test reconciled_effect_result_retains_external_reference ... ok
+test idempotency_key_contains_scope_fields ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 29 tests
+test circuit_breaker_closed_allows_requests ... ok
+test circuit_breaker_allow_request_open_with_elapsed_cooldown ... ok
+test circuit_breaker_closed_to_open_on_threshold ... ok
+test circuit_breaker_open_extends_cooldown_on_repeated_failures ... ok
+test circuit_breaker_half_open_to_open_on_failure ... ok
+test circuit_breaker_open_denies_requests ... ok
+test failure_class_semantic_is_not_retryable ... ok
+test circuit_breaker_half_open_to_closed_on_success_threshold ... ok
+test failure_class_transport_trips_circuit_breaker ... ok
+test failure_class_cancellation_does_not_trip_circuit_breaker ... ok
+test retry_policy_default_values ... ok
+test retry_policy_delay_respects_max_delay ... ok
+test lease_info_serialization_roundtrip ... ok
+test failure_class_permanent_trips_circuit_breaker ... ok
+test retry_policy_respects_max_attempts ... ok
+test failure_class_semantic_does_not_trip_circuit_breaker ... ok
+test failure_class_transport_is_retryable ... ok
+test circuit_breaker_success_in_closed_resets_failure_count ... ok
+test retry_policy_serialization_roundtrip ... ok
+test failure_class_cancellation_is_not_retryable ... ok
+test outbox_event_serialization_roundtrip ... ok
+test retry_policy_delay_exponential_backoff ... ok
+test retry_policy_delay_with_different_multiplier ... ok
+test retry_policy_filters_non_retryable_failures ... ok
+test retry_policy_respects_budget_limit ... ok
+test circuit_breaker_open_to_half_open_after_cooldown ... ok
+test failure_class_permanent_is_not_retryable ... ok
+test circuit_breaker_serialization_roundtrip ... ok
+test failure_class_rate_quota_is_retryable ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 70 tests
+test attempt_failed_is_terminal ... ok
+test attempt_pending_to_cancelled_is_legal ... ok
+test attempt_pending_to_running_is_legal ... ok
+test attempt_running_to_timed_out_is_legal ... ok
+test attempt_succeeded_is_terminal ... ok
+test attempt_running_to_succeeded_is_legal ... ok
+test attempt_status_serialization_roundtrip ... ok
+test reservation_active_to_consumed_is_legal ... ok
+test reservation_active_to_released_is_legal ... ok
+test attempt_running_to_failed_is_legal ... ok
+test reservation_released_is_terminal ... ok
+test reservation_status_serialization_roundtrip ... ok
+test execution_error_conflict ... ok
+test run_cancelled_is_terminal ... ok
+test reservation_active_to_expired_is_legal ... ok
+test reservation_consumed_is_terminal ... ok
+test reservation_struct_serialization_roundtrip ... ok
+test reservation_state_machine_rejects_illegal ... ok
+test execution_error_display_formatting ... ok
+test execution_error_not_found ... ok
+test run_running_to_awaiting_approval_is_legal ... ok
+test run_awaiting_verification_to_completed_is_legal ... ok
+test run_completed_is_terminal ... ok
+test run_failed_is_terminal ... ok
+test provider_call_struct_serialization_roundtrip ... ok
+test run_id_serialization_is_transparent ... ok
+test run_running_to_timed_out_is_legal ... ok
+test attempt_struct_serialization_roundtrip ... ok
+test run_state_machine_accepts_legal_transition ... ok
+test run_pending_to_completed_is_illegal ... ok
+test run_pending_to_running_is_legal ... ok
+test run_running_to_awaiting_verification_is_legal ... ok
+test run_pending_to_cancelled_is_legal ... ok
+test reservation_expired_is_terminal ... ok
+test run_state_machine_rejects_illegal_transition ... ok
+test attempt_state_machine_rejects_illegal ... ok
+test run_awaiting_approval_to_running_is_legal ... ok
+test run_status_serialization_roundtrip ... ok
+test run_struct_serialization_roundtrip ... ok
+test step_failed_can_retry_to_pending ... ok
+test step_pending_to_ready_is_legal ... ok
+test step_completed_is_terminal ... ok
+test step_failed_can_retry_to_ready ... ok
+test step_id_serialization_is_transparent ... ok
+test step_cancelled_is_terminal ... ok
+test run_timed_out_is_terminal ... ok
+test step_running_to_failed_is_legal ... ok
+test step_skipped_is_terminal ... ok
+test step_running_to_completed_is_legal ... ok
+test step_ready_to_running_is_legal ... ok
+test step_pending_to_skipped_is_legal ... ok
+test step_state_machine_rejects_illegal ... ok
+test step_status_serialization_roundtrip ... ok
+test step_struct_serialization_roundtrip ... ok
+test tool_effect_struct_serialization_roundtrip ... ok
+test work_item_cancelled_is_terminal ... ok
+test step_type_serialization_roundtrip ... ok
+test work_item_claimed_to_failed_is_legal ... ok
+test work_item_completed_is_terminal ... ok
+test work_item_claimed_to_running_is_legal ... ok
+test work_item_dead_letter_is_terminal ... ok
+test work_item_failed_can_retry_to_pending ... ok
+test work_item_failed_to_dead_letter_is_legal ... ok
+test work_item_pending_to_cancelled_is_legal ... ok
+test work_item_pending_to_claimed_is_legal ... ok
+test work_item_running_to_completed_is_legal ... ok
+test work_item_running_to_failed_is_legal ... ok
+test work_item_state_machine_rejects_illegal ... ok
+test work_item_status_serialization_roundtrip ... ok
+test work_item_struct_serialization_roundtrip ... ok
+
+test result: ok. 70 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 17 tests
+test active_transitions_only_to_superseded ... ok
+test all_unlisted_transitions_are_illegal ... ok
+test approved_transitions_to_active_or_rejected ... ok
+test rejected_is_terminal ... ok
+test governance_entity_type_has_all_registry_variants ... ok
+test impact_analysis_serialization_round_trips ... ok
+test dependency_link_serialization_round_trips ... ok
+test dependency_type_has_all_graph_edge_variants ... ok
+test governance_revision_rejects_unknown_fields ... ok
+test only_active_state_reports_active ... ok
+test governance_revision_serialization_round_trips ... ok
+test proposed_transitions_to_reviewed_or_rejected ... ok
+test draft_transitions_to_proposed_or_rejected ... ok
+test reviewed_transitions_to_approved_or_rejected ... ok
+test superseded_is_terminal ... ok
+test run_pin_serialization_round_trips_exact_revision_uuid ... ok
+test illegal_transition_error_serializes_with_states ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 12 tests
+test data_category_variants_use_stable_wire_names ... ok
+test deletion_status_state_machine_allows_documented_transitions ... ok
+test deletion_status_state_machine_rejects_terminal_transitions ... ok
+test export_status_variants_round_trip ... ok
+test deletion_job_serialization_preserves_counters ... ok
+test lifecycle_error_messages_are_stable ... ok
+test lifecycle_policy_rejects_unknown_fields ... ok
+test export_request_serialization_preserves_artifact_reference ... ok
+test data_inventory_serialization_preserves_locations ... ok
+test retention_action_variants_round_trip ... ok
+test lifecycle_policy_serialization_preserves_version_and_deadline ... ok
+test tombstone_serialization_preserves_deletion_proof ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test exact_route_matches ... ok
+test mapped_route_with_permission_allows ... ok
+test expired_oidc_identity_denies ... ok
+test mapped_route_without_permission_denies ... ok
+test authenticated_identity_serialization_round_trips ... ok
+test nil_principal_is_invalid ... ok
+test mapped_step_up_route_challenges ... ok
+test pattern_does_not_match_multiple_segments ... ok
+test oidc_config_serialization_round_trips ... ok
+test query_string_does_not_change_route_match ... ok
+test unmapped_route_denies_by_default ... ok
+test step_up_approval_serialization_round_trips ... ok
+test wrong_method_does_not_match ... ok
+test parameterized_route_matches_one_segment ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 17 tests
+test active_can_be_quarantined ... ok
+test active_can_be_superseded ... ok
+test approved_can_be_active ... ok
+test all_modalities_round_trip ... ok
+test data_policy_round_trips ... ok
+test reviewed_can_be_approved ... ok
+test health_status_uses_snake_case_variants ... ok
+test agent_revision_round_trips ... ok
+test provider_revision_round_trips ... ok
+test proposed_can_be_reviewed ... ok
+test draft_can_be_proposed ... ok
+test model_revision_round_trips ... ok
+test registry_entity_types_use_stable_wire_names ... ok
+test terminal_states_have_no_transitions ... ok
+test price_snapshot_round_trips ... ok
+test draft_cannot_skip_to_active ... ok
+test tool_revision_round_trips ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 11 tests
+test tests::format_response_with_usage ... ok
+test tests::format_basic_response ... ok
+test tests::format_response_with_tool_calls ... ok
+test tests::parse_max_output_tokens ... ok
+test tests::parse_instructions_prepended ... ok
+test tests::parse_array_input ... ok
+test tests::reject_missing_input ... ok
+test tests::parse_optional_response_fields ... ok
+test tests::round_trip_parse_and_format ... ok
+test tests::reject_unsupported_field ... ok
+test tests::parse_string_input ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 28 tests
+test canonical_response_serialization_round_trip ... ok
+test canonical_request_serialization_round_trip ... ok
+test chat_parser_accepts_vision_parts ... ok
+test chat_parser_accepts_basic_request ... ok
+test chat_parser_normalizes_string_stop ... ok
+test invalid_request_error_is_openai_shaped ... ok
+test responses_parser_accepts_string_input ... ok
+test stream_chunk_projection_includes_usage ... ok
+test profile_support_version_is_frozen ... ok
+test validator_rejects_non_object ... ok
+test rate_limit_has_stable_shape ... ok
+test chat_parser_rejects_empty_model ... ok
+test responses_parser_accepts_input_text_parts ... ok
+test chat_parser_rejects_missing_messages ... ok
+test chat_parser_rejects_unsupported_field ... ok
+test chat_response_projection_has_expected_object ... ok
+test responses_parser_prepends_instructions ... ok
+test responses_projection_maps_usage_names ... ok
+test chat_validator_rejects_unknown_field ... ok
+test responses_stateless_client_metadata_and_tool_history ... ok
+test parse_and_project_round_trip_preserves_text ... ok
+test unsupported_error_is_openai_shaped ... ok
+test responses_tool_output_accepts_empty_text_and_text_parts_only ... ok
+test chat_validator_accepts_supported_fields ... ok
+test model_not_found_has_stable_code ... ok
+test chat_parser_accepts_function_tool ... ok
+test zoo_reasoning_effort_is_validated_and_preserved ... ok
+test wire_types_have_json_schema ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 28 tests
+test iam::tests::constant_time_equality_is_correct ... ok
+test iam::tests::default_identity_has_nil_uuids ... ok
+test iam::tests::default_identity_with_org_id ... ok
+test tests::constant_time_equality_is_correct ... ok
+test tests::arbitrary_json_content_is_not_promoted_without_an_allowed_tool ... ok
+test tests::ask_user_is_removed_without_disabling_execution_tools ... ok
+test tests::escaped_ask_user_is_removed_and_tool_choice_is_disabled ... ok
+test tests::error_shape_matches_openai_convention ... ok
+test tests::repeated_identical_tool_calls_activate_circuit_breaker ... ok
+test tests::distinct_tool_progress_does_not_activate_circuit_breaker ... ok
+test tests::legacy_json_tool_envelope_is_promoted_to_native_chat_tool_call ... ok
+test tests::namespace_tools_reject_ambiguity_and_unsupported_members ... ok
+test tests::public_model_is_rewritten_in_stream_events ... ok
+test tests::namespace_tools_preserve_identity_and_history ... ok
+test tests::wire_context_fails_closed_when_protected_content_exceeds_budget ... ok
+test tests::architecture_question_is_answered_without_tools ... ok
+test tests::streamed_legacy_json_tool_envelope_is_promoted_to_native_tool_call ... ok
+test tests::wire_context_drops_optional_history_but_preserves_authority_nodes ... ok
+test tests::wrapped_and_tagged_legacy_tool_calls_are_promoted ... ok
+test tests::local_task_routing_separates_routine_coding_and_reasoning ... ok
+test tests::model_list_exposes_only_governed_primary_model ... ok
+test tests::health_is_public_but_models_require_authentication ... ok
+test tests::cors_preflight_succeeds_but_mcp_still_requires_authentication ... ok
+test tests::high_risk_without_acceptance_never_reaches_provider ... ok
+test tests::governance_gate_requires_observed_requirement_linked_evidence ... ok
+test tests::high_risk_output_is_withheld_without_independent_evidence ... ok
+test tests::cost_report_rolls_up_requests_tokens_and_integer_cost_by_user ... ok
+test tests::selected_model_is_explicitly_forwarded_to_openrouter ... ok
+
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test missing_authentication_returns_unauthorized ... ok
+test unknown_field_fails_closed ... ok
+test unknown_model_returns_not_found ... ok
+test missing_messages_is_invalid_request ... ok
+test json_object_response_is_valid_json_text ... ok
+test max_tokens_limits_stub_output ... ok
+test basic_text_has_chat_completion_shape ... ok
+test vision_image_url_is_accepted ... ok
+test usage_is_nonzero_and_balanced ... ok
+test streaming_returns_basic_sse ... ok
+test tools_produce_function_call ... ok
+test multi_turn_conversation_is_accepted ... ok
+test responses_endpoint_uses_responses_shape ... ok
+test tools_with_auto_choice_returns_text ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 8 tests
+test constant_time_equal_is_correct ... ok
+test require_permission_with_no_identity_returns_false ... ok
+test middleware_state_has_correct_defaults ... ok
+test deny_by_default_returns_403_when_no_permission ... ok
+test extract_identity_returns_none_when_not_set ... ok
+test middleware_state_with_org_stores_org_id ... ok
+test resolved_identity_with_no_memberships_has_no_permissions ... ok
+test resolved_identity_with_permission_but_no_membership_denies ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test registry_maps_every_declared_admin_method_path_pair ... ok
+test query_string_preserves_mapping ... ok
+test nil_identity_returns_forbidden ... ok
+test mutation_with_permission_requires_step_up ... ok
+test method_is_part_of_permission_mapping ... ok
+test expired_identity_returns_forbidden ... ok
+test correct_permission_passes ... ok
+test wrong_permission_returns_forbidden ... ok
+test unmapped_route_returns_forbidden ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+STDERR:
+   Compiling noerelay-core v0.1.0 (C:\Users\trist\Development\ElectroHire\noerelay\crates\noerelay-core)
+   Compiling noerelay-store v0.1.0 (C:\Users\trist\Development\ElectroHire\noerelay\crates\noerelay-store)
+   Compiling noerelay-gateway v0.1.0 (C:\Users\trist\Development\ElectroHire\noerelay\crates\noerelay-gateway)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 36.69s
+     Running unittests src\lib.rs (.noerelay/test-target\debug\deps\noerelay_core-119a62c77ac2bba0.exe)
+     Running tests\api_key_types.rs (.noerelay/test-target\debug\deps\api_key_types-8f830a22f199eb62.exe)
+     Running tests\artifact_types.rs (.noerelay/test-target\debug\deps\artifact_types-7ab21de8558509e3.exe)
+     Running tests\compat_fixtures.rs (.noerelay/test-target\debug\deps\compat_fixtures-d3909b5f69fbdcd2.exe)
+     Running tests\execution_ha.rs (.noerelay/test-target\debug\deps\execution_ha-6d16a0f6f94279aa.exe)
+     Running tests\execution_idempotency.rs (.noerelay/test-target\debug\deps\execution_idempotency-c524827bcebd82d3.exe)
+     Running tests\execution_retry.rs (.noerelay/test-target\debug\deps\execution_retry-64fea3cc6743b9ea.exe)
+     Running tests\execution_types.rs (.noerelay/test-target\debug\deps\execution_types-adaf022129d2c0f0.exe)
+     Running tests\governance_types.rs (.noerelay/test-target\debug\deps\governance_types-994ba569f4aecc51.exe)
+     Running tests\iam_lifecycle.rs (.noerelay/test-target\debug\deps\iam_lifecycle-6fa35303584c5c9b.exe)
+     Running tests\iam_rbac.rs (.noerelay/test-target\debug\deps\iam_rbac-15effe97bf99a20e.exe)
+     Running tests\registry_types.rs (.noerelay/test-target\debug\deps\registry_types-d73874d14f714513.exe)
+     Running tests\responses_converter.rs (.noerelay/test-target\debug\deps\responses_converter-abc71cfb4baa11c6.exe)
+     Running tests\wire_types.rs (.noerelay/test-target\debug\deps\wire_types-052fb40580e1509f.exe)
+     Running unittests src\lib.rs (.noerelay/test-target\debug\deps\noerelay_gateway-888bf57f3c675309.exe)
+     Running unittests src\main.rs (.noerelay/test-target\debug\deps\noerelay_gateway-899a3b14b141eba2.exe)
+     Running tests\chat_completions.rs (.noerelay/test-target\debug\deps\chat_completions-c84596a15d2f750f.exe)
+     Running tests\iam_middleware.rs (.noerelay/test-target\debug\deps\iam_middleware-1c6319f0099ef713.exe)
+     Running tests\iam_rbac.rs (.noerelay/test-target\debug\deps\iam_rbac-9fa2f05e1c8f4116.exe)
+   Doc-tests noerelay_core
+   Doc-tests noerelay_gateway

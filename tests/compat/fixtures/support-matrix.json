@@ -1,5 +1,5 @@
 {
-  "version": "2026-09-15",
+  "version": "2026-09-15.1",
   "profiles": [
     {
       "profile": "chat_completions_v1",
@@ -40,6 +40,11 @@
     {
       "profile": "responses_v1",
       "supported_fields": [
+        "reasoning",
+        "store",
+        "include",
+        "prompt_cache_key",
+        "client_metadata",
         "model",
         "input",
         "instructions",
@@ -57,14 +62,11 @@
       "unsupported_fields": [
         "background",
         "conversation",
-        "include",
         "max_tool_calls",
         "previous_response_id",
         "prompt",
-        "reasoning",
         "safety_identifier",
         "service_tier",
-        "store",
         "truncation"
       ]
     }

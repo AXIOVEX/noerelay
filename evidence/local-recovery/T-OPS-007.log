@@ -1,0 +1,38 @@
+opencode: PASS
+zoo: PASS
+codex: PASS
+{
+  "clients": {
+    "opencode": {
+      "passed": true,
+      "exit_code": 0,
+      "tool_completed": true,
+      "nonce_verified": true,
+      "version": "1.14.28",
+      "seconds": 169.12,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\opencode-024a892f6460"
+    },
+    "zoo": {
+      "passed": true,
+      "version": "3.82.1",
+      "historyLength": 4,
+      "readToolUsed": true,
+      "nonceVerified": true,
+      "exit_code": 0,
+      "seconds": 49.86,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\zoo-5b9f73f7509a"
+    },
+    "codex": {
+      "passed": true,
+      "exit_code": 0,
+      "tool_completed": true,
+      "nonce_verified": true,
+      "version": "codex-cli 0.153.4",
+      "seconds": 16.36,
+      "workspace": "C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\.noerelay\\clients\\tests\\codex-fd1e8b7e815d"
+    }
+  },
+  "scope": "Installed clients; synthetic file read and tool-result round trip"
+}
+
+STDERR:

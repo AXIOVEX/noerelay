@@ -1,0 +1,145 @@
+
+[main 2026-09-15T20:58:49.690Z] StorageMainService: creating application shared storage
+[main 2026-09-15T20:58:49.954Z] [shared storage] Creating shared storage database at ':memory:' (wasCreated: true)
+[main 2026-09-15T20:58:49.969Z] [shared storage] Initializing fallback application storage (path: in-memory)
+[main 2026-09-15T20:58:50.048Z] [shared storage] Fallback application storage initialized with 3 items
+[main 2026-09-15T20:58:51.977Z] update#disable - updates are disabled by user preference
+[main 2026-09-15T20:58:51.978Z] update#setState disabled
+[RemoteAgentHost] Reconciling: desired=[], current=[]
+[AgentHost:renderer] Acquiring MessagePort to agent host...
+[main 2026-09-15T20:58:52.061Z] AgentHostProcessManager: agent host started
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey=undefined conversationKey=undefined modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey="local" conversationKey="vscode-chat-session://local/MmY3OTRjNGEtNGMzYS00YTJiLWI2NjMtM2I0ZjM4NzcxN2Vk" modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[AgentHost:renderer] MessagePort acquired, creating client...
+Started local extension host with pid 54736.
+Started initializing default profile extensions in extensions installation folder. file:///c%3A/Users/trist/Development/ElectroHire/noerelay/.noerelay/clients/tests/zoo-5b9f73f7509a/extensions
+[AccountPolicyGate] apply: state=inactive, reason=undefined, isRestricted=false
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey="local" conversationKey="vscode-chat-session://local/MmY3OTRjNGEtNGMzYS00YTJiLWI2NjMtM2I0ZjM4NzcxN2Vk" modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+Completed initializing default profile extensions in extensions installation folder. file:///c%3A/Users/trist/Development/ElectroHire/noerelay/.noerelay/clients/tests/zoo-5b9f73f7509a/extensions
+Loading development extension at c:\Users\trist\.vscode\extensions\zoocodeorganization.zoo-code-3.82.1
+Settings Sync: Account status changed from uninitialized to unavailable
+[AgentHost:renderer] Protocol connection established; clientId=f3699f95-dcce-4b8e-98b0-446271015f4a
+Loaded translations for languages: ca, de, en, es, fr, hi, id, it, ja, ko, nl, pl, pt-BR, ru, tr, vi, zh-CN, zh-TW
+🌐 i18next is made possible by our own product, Locize — consider powering your project with managed localization (AI, CDN, integrations): https://locize.com 💙
+[AccountPolicyGate] apply: state=inactive, reason=undefined, isRestricted=false
+Extension host (LocalProcess pid: 54736) is unresponsive.
+Extension host (LocalProcess pid: 54736) is responsive.
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[auth] Using WebAuthService
+[auth] changeState: initializing -> logged-out
+[initializeTaskHistoryStore] Migration complete
+[createTask] parent task 01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b.40de9ed6 instantiated
+[Task#getCheckpointService] initializing checkpoints service
+[Task#getCheckpointService] initializing shadow git
+[Task#getCheckpointService] initializing shadow git
+[createSanitizedGit] Removed git environment variables for checkpoint isolation: GIT_PAGER, PAGER
+[createSanitizedGit] Created git instance for baseDir: c:\Users\trist\Development\ElectroHire\noerelay\.noerelay\clients\tests\zoo-5b9f73f7509a\vscode\User\globalStorage\zoocodeorganization.zoo-code\tasks\01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b\checkpoints
+[t#create] git = 2.51.0
+[t#create] git = 2.51.0
+[t#initShadowGit] creating shadow git repo at c:\Users\trist\Development\ElectroHire\noerelay\.noerelay\clients\tests\zoo-5b9f73f7509a\vscode\User\globalStorage\zoocodeorganization.zoo-code\tasks\01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b\checkpoints
+[t#initShadowGit] creating shadow git repo at c:\Users\trist\Development\ElectroHire\noerelay\.noerelay\clients\tests\zoo-5b9f73f7509a\vscode\User\globalStorage\zoocodeorganization.zoo-code\tasks\01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b\checkpoints
+Extension host (LocalProcess pid: 54736) is unresponsive.
+Extension host (LocalProcess pid: 54736) is responsive.
+[t#initShadowGit] initialized shadow repo with base commit 46638f902ae6120c5b26d541fd3f2b74c89069d9 in 5757ms
+[t#initShadowGit] initialized shadow repo with base commit 46638f902ae6120c5b26d541fd3f2b74c89069d9 in 5757ms
+[Task#getCheckpointService] service initialized
+[Task#getCheckpointService] service initialized
+[cancelTask] cancelling task 01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b.40de9ed6
+[Task#dispose] disposing task 01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b.40de9ed6
+[createTaskWithHistoryItem] rehydrated task 01a0a6dd-b806-76cf-8a8e-2cb7f020ac2b.00e2622f in-place (flicker-free)
+[main 2026-09-15T20:59:37.764Z] Extension host with pid 54736 exited with code: 0, signal: unknown.

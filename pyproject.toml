@@ -65,4 +65,4 @@ Issues = "https://github.com/noerelay/noerelay/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
-noerelay = ["py.typed"]
+noerelay = ["py.typed", "zoo_test.cjs"]

@@ -67,3 +67,14 @@ Zoo Code's `reasoning_effort` field is now explicitly accepted and validated by 
 - Use a 600-second client timeout for unusually large prompts. Larger input increases prompt-processing latency; keep ordinary requests smaller even though the larger window is available.
 
 Current context observations are in `evidence/local-recovery/verification.json` and `long-context.json`. A retrieval smoke test does not prove general reasoning accuracy at every context length.
+
+
+## Managed OpenCode, Zoo Code, and Codex
+
+Create the CLI environment with `deploy/host/setup-cli.ps1` on Windows or `deploy/host/setup-cli.sh` in WSL. Activate it, then run `noerelay client setup all`. Launch the selected client with `noerelay client run opencode`, `noerelay client run zoo`, or `noerelay client run codex`. See the README for installation and real-client test commands.
+
+OpenCode uses Chat Completions; Codex uses stateless Responses with a managed local-model catalog. Wire profile `2026-09-15.1` accepts developer messages, function-call history, text tool results, validated stateless metadata, and function namespaces. Namespace names are translated for local providers and restored in Responses/SSE output. Stored responses, hosted tools, and non-text tool-result parts are unsupported. An optional encrypted-reasoning include is accepted but does not manufacture encrypted content.
+
+Codex forwards connection variables explicitly to NoeRelay MCP and requires successful MCP startup. Interactive MCP calls retain approval prompts. Noninteractive exec cannot answer those prompts. The real Codex test approves only an exact nonce-file read through a guarded NoeRelay MCP process; it does not grant general shell access. Native Windows Codex shell execution was blocked by its execution policy in this test environment, so successful verification covers the Docker MCP workspace path.
+
+NoeRelay's Docker workspace is this repository at `/workspace`. A client opened in another host project can use native file tools there, but Docker tools still target the configured repository mount. Change the workspace mount deliberately before using Docker tools for a different project.
