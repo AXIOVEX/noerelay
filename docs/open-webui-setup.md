@@ -2,7 +2,7 @@
 
 **AXIOVEX Sentinel** is the enterprise-facing interface. **NoeRelay** is the
 Intelligent AI Control Plane that selects and governs models underneath it.
-Copyright © 2026 AXIOVEX Systems Inc. All rights reserved.
+Copyright © 2026 Axiovex Systems, LLC All rights reserved.
 
 Open WebUI, Open Terminal, and the local Docling OCR/PDF service are part of the
 primary GPU-enabled Compose stack.

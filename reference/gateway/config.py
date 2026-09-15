@@ -225,7 +225,7 @@ class GatewayConfig:
             env, "OPENROUTER_BASE_URL", _DEFAULT_OPENROUTER_BASE_URL
         ).rstrip("/")
         openrouter_http_referer = _value(
-            env, "OPENROUTER_HTTP_REFERER", "https://github.com/electrohire/noerelay"
+            env, "OPENROUTER_HTTP_REFERER", "https://github.com/AXIOVEX/noerelay"
         )
         openrouter_app_title = _value(env, "OPENROUTER_APP_TITLE", "NoeRelay")
 

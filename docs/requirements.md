@@ -165,6 +165,12 @@ NoeRelay is a virtual OpenAI API endpoint for people who want a low-friction, â€
 | `NR-OPS-007` | The primary CLI configures OpenCode, Zoo Code, and Codex through NoeRelay. | All three installed clients complete a verified tool round trip using generated profiles. |
 | `NR-ROUTE-009` | Local task routing matches complete words and preserves capability constraints. | Improve stays on coding; prove selects reasoning; routing regression tests pass. |
 
+### Phase 2 additions
+
+| ID | Requirement | Acceptance outcome |
+|---|---|---|
+| `NR-OPS-008` | Active project metadata and branding use Axiovex Systems, LLC under AXIOVEX/noerelay. | Ownership references, approved asset digests, affected tests, and live WebUI branding verify. |
+
 ## Supported v1 deployment profile
 
 The intended first organizational profile is a single-region highly available service using the Rust gateway/core, PostgreSQL, S3-compatible artifact storage, a durable worker queue/outbox, OpenRouter over restricted HTTPS egress, an external secret manager, and an identity-aware TLS ingress. Redis is optional and never authoritative. Python evaluation workers and the Go A2A adapter run with independent least-privilege identities.

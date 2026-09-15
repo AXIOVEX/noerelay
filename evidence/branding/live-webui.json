@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "base_url": "http://127.0.0.1:3001",
+  "watermark": "\u00a9 2026 Axiovex Systems, LLC \u00b7 AXIOVEX Sentinel \u00b7 NoeRelay Intelligent AI Control Plane",
+  "identity_banner_verified": true,
+  "served_asset_sha256": {
+    "axiovex-full-logo.svg": "1b67cca6490384d344b14a6885c2d106aa74b98915d0f0e6de7c8b3db4d8854d",
+    "axiovex-logo-mark.svg": "836b6d90d6baf3c978fff17c9bc13c33dc21b07e732bb7056b8db1bdc71d53d1",
+    "axiovex-readme-banner-1200x675.png": "e85f7e2aba204d0d21980427cd6fc72fc8c3260be67c6114bb08640b3dbbc5ab"
+  }
+}

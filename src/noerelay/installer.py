@@ -71,12 +71,12 @@ except ImportError:  # pragma: no cover
         def rule(self, *a, **k):
             print("-" * 60)
 
-        class _Panel:
-            @staticmethod
-            def fit(text, **k):
-                return text
+    class _Panel:
+        @staticmethod
+        def fit(text, **k):
+            return text
 
-        Panel = _Panel
+    Panel = _Panel
 
     _console = _PlainConsole()
 

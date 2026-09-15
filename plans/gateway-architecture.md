@@ -104,7 +104,7 @@ Existing (read, never logged — values are secrets):
 |---|---|---|
 | `OPENROUTER_API_KEY` | live mode only | — (absent in stub mode) |
 | `OPENROUTER_BASE_URL` | live mode only | `https://openrouter.ai/api/v1` |
-| `OPENROUTER_HTTP_REFERER` | live mode | `https://github.com/electrohire/noerelay` |
+| `OPENROUTER_HTTP_REFERER` | live mode | `https://github.com/AXIOVEX/noerelay` |
 | `OPENROUTER_APP_TITLE` | live mode | `NoeRelay` |
 | `NOERELAY_LIVE_TESTS` | tests only | `0` |
 

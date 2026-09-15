@@ -25,7 +25,7 @@ Start the stack first. The helper reads the running gateway's key, avoiding stal
 
 ### Windows PowerShell
 
-From `C:\Users\trist\Development\ElectroHire\noerelay`:
+From the NoeRelay checkout root:
 
 ```powershell
 Invoke-Expression ((& python deploy/host/client-env.py --shell powershell) -join "`n")
@@ -37,12 +37,11 @@ Invoke-RestMethod "$env:OPENAI_BASE_URL/models" -Headers @{
 
 ### Ubuntu WSL2 Bash
 
-This invokes the installed Windows Python helper to read the same running gateway credential. It does not require installing NoeRelay or AEE inside WSL.
+Use the native WSL CLI environment created by `bash deploy/host/setup-cli.sh`. It discovers the running gateway credential.
 
 ```bash
-eval "$(/mnt/c/Users/trist/scoop/apps/python312/current/python.exe \
-  C:/Users/trist/Development/ElectroHire/noerelay/deploy/host/client-env.py \
-  --shell bash </dev/null)"
+source .noerelay/cli-venv-linux/bin/activate
+eval "$(noerelay client env --shell bash)"
 
 curl --fail "$OPENAI_BASE_URL/models" \
   -H "Authorization: Bearer $OPENAI_API_KEY"

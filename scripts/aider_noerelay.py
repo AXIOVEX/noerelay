@@ -6,18 +6,18 @@ Usage:
 
 This monkey-patches aider's Commands class to add noerelay subcommands
 that shell out to the noerelay.py CLI. The noerelay script path is
-resolved from the NOERELAY_SCRIPT env var or defaults to the known
-ElectroHire location.
+resolved from the NOERELAY_SCRIPT env var or this checkout.
 """
 
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 # --- Resolve noerelay.py path ---
 NOERELAY_SCRIPT = os.environ.get(
     "NOERELAY_SCRIPT",
-    r"C:\\Users\\trist\\Development\\ElectroHire\\noerelay\\scripts\\noerelay.py",
+    str(Path(__file__).resolve().with_name("noerelay.py")),
 )
 
 # --- Noerelay subcommands to expose ---

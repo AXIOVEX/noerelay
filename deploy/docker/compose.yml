@@ -164,7 +164,7 @@ services:
       ENABLE_OAUTH_PERSISTENT_CONFIG: "true"
       ENABLE_LDAP: ${NOERELAY_WEBUI_ENABLE_LDAP:-false}
       DEFAULT_INTERFACE_SETTINGS: '{"widescreenMode":true}'
-      RESPONSE_WATERMARK: '© 2026 AXIOVEX Systems Inc. · AXIOVEX Sentinel · NoeRelay Intelligent AI Control Plane'
+      RESPONSE_WATERMARK: '© 2026 Axiovex Systems, LLC · AXIOVEX Sentinel · NoeRelay Intelligent AI Control Plane'
     networks: [frontend, model-plane]
     depends_on:
       noerelay: {condition: service_healthy}

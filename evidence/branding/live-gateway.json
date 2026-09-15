@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "gateway_ready": {
+    "authority": "rust",
+    "model_plane": "openrouter",
+    "status": "ready"
+  },
+  "completion": "READY",
+  "docker_mcp_round_trip": true
+}

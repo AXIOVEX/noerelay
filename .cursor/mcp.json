@@ -2,7 +2,7 @@
   "mcpServers": {
     "noerelay": {
       "command": "python",
-      "args": ["C:/Users/trist/Development/ElectroHire/noerelay/scripts/noerelay.py", "mcp"]
+      "args": ["${workspaceFolder}/scripts/noerelay.py", "mcp"]
     }
   }
 }

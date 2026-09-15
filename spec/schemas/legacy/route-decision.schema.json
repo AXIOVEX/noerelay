@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/schemas/route-decision.schema.json",
+  "$id": "https://axiovex.example/epr/schemas/route-decision.schema.json",
   "title": "EPR Route Decision",
   "type": "object",
   "required": ["decision_id", "task_id", "status", "policy_version", "required_acceptance_lcb", "candidate_audit"],

@@ -31,6 +31,8 @@ Keep all NoeRelay-managed local state inside the project-local `.noerelay/` dire
   - Acceptance: Moved host scripts and Docker definitions pass targeted tests; the reorganized stack restarts successfully. · Release test(s): `T-OPS-006`
 - `NR-OPS-007` — The primary CLI configures OpenCode, Zoo Code, and Codex through NoeRelay.
   - Acceptance: All three installed clients complete a verified tool round trip using generated profiles. · Release test(s): `T-OPS-007`
+- `NR-OPS-008` — Active project metadata and branding use Axiovex Systems, LLC under AXIOVEX/noerelay.
+  - Acceptance: Ownership references, approved asset digests, affected tests, and live WebUI branding verify. · Release test(s): `T-OPS-008`
 
 ## Acceptance criteria
 

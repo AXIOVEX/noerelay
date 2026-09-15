@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "wheel": "noerelay-0.2.0-py3-none-any.whl",
+  "sha256": "0379e8781b7eb6511553ec5509482ab97bac78f5a8373a749594d0591eef7b56",
+  "author": "Axiovex Systems, LLC",
+  "license_matches_proprietary_notice": true,
+  "project_urls": [
+    "Homepage, https://github.com/AXIOVEX/noerelay",
+    "Documentation, https://github.com/AXIOVEX/noerelay#readme",
+    "Issues, https://github.com/AXIOVEX/noerelay/issues"
+  ]
+}

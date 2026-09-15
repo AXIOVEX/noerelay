@@ -89,7 +89,7 @@ class ConfigTests(unittest.TestCase):
         self.assertIsNone(config.openrouter_api_key)
         self.assertEqual(
             config.openrouter_http_referer,
-            "https://github.com/electrohire/noerelay",
+            "https://github.com/AXIOVEX/noerelay",
         )
         self.assertEqual(config.openrouter_app_title, "NoeRelay")
         self.assertFalse(config.live_tests)

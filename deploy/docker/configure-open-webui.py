@@ -273,7 +273,7 @@ admin_config.update(
         "ENABLE_USER_STATUS": True,
         "DEFAULT_INTERFACE_SETTINGS": {"widescreenMode": True},
         "RESPONSE_WATERMARK": (
-            "© 2026 AXIOVEX Systems Inc. · AXIOVEX Sentinel · "
+            "© 2026 Axiovex Systems, LLC · AXIOVEX Sentinel · "
             "NoeRelay Intelligent AI Control Plane"
         ),
     }
@@ -291,7 +291,7 @@ request(
                     '<img src="/static/axiovex/axiovex-logo-mark.svg" '
                     'alt="AXIOVEX" width="18" height="18"> '
                     "**AXIOVEX Sentinel** · NoeRelay — Intelligent AI Control Plane · "
-                    "© 2026 AXIOVEX Systems Inc."
+                    "© 2026 Axiovex Systems, LLC"
                 ),
                 "dismissible": False,
                 "timestamp": 1788472800,

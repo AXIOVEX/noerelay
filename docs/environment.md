@@ -24,7 +24,7 @@ In the GitHub repository:
 | Variable | Value |
 |---|---|
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` |
-| `OPENROUTER_HTTP_REFERER` | `https://github.com/electrohire/noerelay` |
+| `OPENROUTER_HTTP_REFERER` | `https://github.com/AXIOVEX/noerelay` |
 | `OPENROUTER_APP_TITLE` | `NoeRelay` |
 | `NOERELAY_LIVE_TESTS` | `1` only in a budget-limited live-test job; omit or set `0` for ordinary tests |
 
@@ -51,7 +51,7 @@ Use User variables so the secrets do not enter the repository:
 
 ```text
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
-OPENROUTER_HTTP_REFERER=https://github.com/electrohire/noerelay
+OPENROUTER_HTTP_REFERER=https://github.com/AXIOVEX/noerelay
 OPENROUTER_APP_TITLE=NoeRelay
 NOERELAY_LIVE_TESTS=0
 HF_HOME=C:\Users\<your-user>\.cache\huggingface

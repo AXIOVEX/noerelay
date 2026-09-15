@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_specify",
+  "outcome": "iterate",
+  "summary": "Assessed 1 claim(s); found 0 failure mode(s); 1 claim(s) below the 0.70 confidence threshold.",
+  "findings": [],
+  "next_action": {
+    "kind": "iterate",
+    "target_phase": "specify",
+    "message": "Revise the current phase to address 0 finding(s)."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T21:17:46.007649Z",
+    "artifacts_evaluated": [
+      ".specify/features/axiovex-branding/claims.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "BRAND-001",
+          "text": "Active repository metadata uses the requested owner.",
+          "kind": "requirement",
+          "status": "unsupported",
+          "boundary": [
+            "Current repository metadata only"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "An active project file uses the superseded owner."
+          ],
+          "uncertainty": "high",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.25,
+          "confidence_band": "low",
+          "failures": [],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "BRAND-001": {
+          "claim_id": "BRAND-001",
+          "direct_score": 0.25,
+          "propagated_score": 0.25,
+          "band": "low",
+          "components": {
+            "evidence": 0.0,
+            "independence": 0.0,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "No supporting evidence",
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": []
+    }
+  }
+}

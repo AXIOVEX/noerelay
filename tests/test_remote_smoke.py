@@ -11,7 +11,7 @@ VALID_ENV = {
     "OPENROUTER_API_KEY": "test-openrouter-secret",
     "HF_TOKEN": "test-hugging-face-secret",
     "OPENROUTER_BASE_URL": "https://openrouter.ai/api/v1",
-    "OPENROUTER_HTTP_REFERER": "https://github.com/electrohire/noerelay",
+    "OPENROUTER_HTTP_REFERER": "https://github.com/AXIOVEX/noerelay",
     "OPENROUTER_APP_TITLE": "NoeRelay",
     "NOERELAY_LIVE_TESTS": "0",
 }

@@ -29,11 +29,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install schema validator
-        run: python -m pip install --disable-pip-version-check "jsonschema==4.25.1"
+      - name: Install test dependencies
+        run: python -m pip install --disable-pip-version-check "jsonschema==4.25.1" pytest
 
       - name: Run conformance suite
-        run: python -m unittest discover -s tests -v
+        run: python -m pytest tests/ -v --tb=short
 
       - name: Compile remote smoke checker
         run: python -m py_compile scripts/remote_service_smoke.py

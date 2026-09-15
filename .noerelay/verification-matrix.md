@@ -11,6 +11,7 @@ Current implementation evidence and unresolved release blockers are tracked in [
 |---|---|---|---|
 | `T-API-005` | `NR-API-008` | Compatibility | Zoo-style multipart requests with validated reasoning effort complete from WSL2. |
 | `T-LLM-008` | `NR-LLM-008` | Local inference | Three models allocate 131072 context; beyond-16K retrieval succeeds. |
+| `T-OPS-008` | `NR-OPS-008` | Integration | AXIOVEX ownership, approved brand assets, affected tests, and live WebUI identity verify. |
 | `T-OPS-007` | `NR-OPS-007` | Integration | Installed OpenCode, Zoo Code and Codex read fresh fixture data through NoeRelay; managed profiles preserve user settings. |
 | `T-ROUTE-003` | `NR-ROUTE-009` | Regression | Rust routing and Responses namespace/tool history regressions pass. |
 | `T-OPS-006` | `NR-OPS-006` | Deployment | Host and Docker assets are separated; imports, Compose and lifecycle remain functional. |

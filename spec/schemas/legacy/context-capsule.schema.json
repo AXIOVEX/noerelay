@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/schemas/context-capsule.schema.json",
+  "$id": "https://axiovex.example/epr/schemas/context-capsule.schema.json",
   "title": "EPR Context Capsule",
   "type": "object",
   "required": [

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/benchmark-manifest.schema.json",
+  "$id": "https://axiovex.example/epr/benchmark-manifest.schema.json",
   "title": "EPR Benchmark Manifest",
   "type": "object",
   "required": ["manifest_id", "version", "policy_version", "acquisition", "candidates", "cohorts", "global_promotion_gates"],

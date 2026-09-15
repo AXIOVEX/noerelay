@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/schemas/task-contract.schema.json",
+  "$id": "https://axiovex.example/epr/schemas/task-contract.schema.json",
   "title": "EPR Task Contract",
   "type": "object",
   "required": [

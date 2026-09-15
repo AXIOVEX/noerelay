@@ -534,29 +534,74 @@ fn parse_responses_request(value: &Value) -> Result<CanonicalRequest, Vec<ApiErr
     let object = value.as_object().expect("field validator requires object");
     // Stateless clients may explicitly disable storage. Never imply support for
     // persisted response retrieval or encrypted reasoning that we do not offer.
-    if object.get("store").is_some_and(|v| v != &Value::Bool(false)) {
-        return Err(vec![ApiError::invalid_request("Only store=false is supported.", Some("store"))]);
+    if object
+        .get("store")
+        .is_some_and(|v| v != &Value::Bool(false))
+    {
+        return Err(vec![ApiError::invalid_request(
+            "Only store=false is supported.",
+            Some("store"),
+        )]);
     }
-    if object.get("include").is_some_and(|v| v.as_array().is_none_or(|a| a.iter().any(|s| s.as_str() != Some("reasoning.encrypted_content")))) {
-        return Err(vec![ApiError::invalid_request("Unsupported include value.", Some("include"))]);
+    if object.get("include").is_some_and(|v| {
+        v.as_array().is_none_or(|a| {
+            a.iter()
+                .any(|s| s.as_str() != Some("reasoning.encrypted_content"))
+        })
+    }) {
+        return Err(vec![ApiError::invalid_request(
+            "Unsupported include value.",
+            Some("include"),
+        )]);
     }
     // Include requests optional fields if available; local providers return no
     // encrypted reasoning artifacts. Never synthesize encrypted state.
     if let Some(reasoning) = object.get("reasoning").filter(|v| !v.is_null()) {
-        let fields = reasoning.as_object().ok_or_else(|| vec![ApiError::invalid_request("reasoning must be an object.", Some("reasoning"))])?;
-        if fields.keys().any(|k| !matches!(k.as_str(), "effort" | "summary")) {
-            return Err(vec![ApiError::invalid_request("Unsupported reasoning field.", Some("reasoning"))]);
+        let fields = reasoning.as_object().ok_or_else(|| {
+            vec![ApiError::invalid_request(
+                "reasoning must be an object.",
+                Some("reasoning"),
+            )]
+        })?;
+        if fields
+            .keys()
+            .any(|k| !matches!(k.as_str(), "effort" | "summary"))
+        {
+            return Err(vec![ApiError::invalid_request(
+                "Unsupported reasoning field.",
+                Some("reasoning"),
+            )]);
         }
-        if fields.get("effort").is_some_and(|v| !matches!(v.as_str(), Some("none" | "minimal" | "low" | "medium" | "high" | "xhigh"))) {
-            return Err(vec![ApiError::invalid_request("Invalid reasoning effort.", Some("reasoning.effort"))]);
+        if fields.get("effort").is_some_and(|v| {
+            !matches!(
+                v.as_str(),
+                Some("none" | "minimal" | "low" | "medium" | "high" | "xhigh")
+            )
+        }) {
+            return Err(vec![ApiError::invalid_request(
+                "Invalid reasoning effort.",
+                Some("reasoning.effort"),
+            )]);
         }
-        if fields.get("summary").is_some_and(|v| !matches!(v.as_str(), Some("none" | "auto"))) {
-            return Err(vec![ApiError::invalid_request("Only optional automatic summaries are supported.", Some("reasoning.summary"))]);
+        if fields
+            .get("summary")
+            .is_some_and(|v| !matches!(v.as_str(), Some("none" | "auto")))
+        {
+            return Err(vec![ApiError::invalid_request(
+                "Only optional automatic summaries are supported.",
+                Some("reasoning.summary"),
+            )]);
         }
     }
     optional_string(object, "prompt_cache_key")?;
-    if object.get("client_metadata").is_some_and(|v| v.as_object().is_none_or(|m| m.values().any(|v| !v.is_string()))) {
-        return Err(vec![ApiError::invalid_request("client_metadata must contain strings.", Some("client_metadata"))]);
+    if object.get("client_metadata").is_some_and(|v| {
+        v.as_object()
+            .is_none_or(|m| m.values().any(|v| !v.is_string()))
+    }) {
+        return Err(vec![ApiError::invalid_request(
+            "client_metadata must contain strings.",
+            Some("client_metadata"),
+        )]);
     }
     let model = required_non_empty_string(object, "model")?;
     let input = object.get("input").ok_or_else(|| {
@@ -599,7 +644,10 @@ fn parse_response_message(value: &Value) -> Result<CanonicalMessage, Vec<ApiErro
     })?;
     match object.get("type").and_then(Value::as_str) {
         Some("function_call") => {
-            let mut result = message(CanonicalRole::Assistant, CanonicalContent::Text(String::new()));
+            let mut result = message(
+                CanonicalRole::Assistant,
+                CanonicalContent::Text(String::new()),
+            );
             result.tool_calls = Some(vec![CanonicalToolCall {
                 id: required_non_empty_string(object, "call_id")?,
                 function: CanonicalFunctionCall {
@@ -610,19 +658,44 @@ fn parse_response_message(value: &Value) -> Result<CanonicalMessage, Vec<ApiErro
             return Ok(result);
         }
         Some("function_call_output") => {
-            let output = object.get("output").ok_or_else(|| vec![ApiError::invalid_request("Tool output is required.", Some("output"))])?;
+            let output = object.get("output").ok_or_else(|| {
+                vec![ApiError::invalid_request(
+                    "Tool output is required.",
+                    Some("output"),
+                )]
+            })?;
             let content = match output {
                 Value::String(text) => CanonicalContent::Text(text.clone()),
-                Value::Array(parts) if parts.iter().all(|p| matches!(p.get("type").and_then(Value::as_str), Some("input_text" | "output_text"))) =>
-                    parse_response_message(&serde_json::json!({"role":"tool", "content":output}))?.content.unwrap(),
-                _ => return Err(vec![ApiError::invalid_request("Tool output must be text or text parts.", Some("output"))]),
+                Value::Array(parts)
+                    if parts.iter().all(|p| {
+                        matches!(
+                            p.get("type").and_then(Value::as_str),
+                            Some("input_text" | "output_text")
+                        )
+                    }) =>
+                {
+                    parse_response_message(&serde_json::json!({"role":"tool", "content":output}))?
+                        .content
+                        .unwrap()
+                }
+                _ => {
+                    return Err(vec![ApiError::invalid_request(
+                        "Tool output must be text or text parts.",
+                        Some("output"),
+                    )]);
+                }
             };
             let mut result = message(CanonicalRole::Tool, content);
             result.tool_call_id = Some(required_non_empty_string(object, "call_id")?);
             return Ok(result);
         }
-        None | Some("message") => {},
-        _ => return Err(vec![ApiError::invalid_request("Unsupported Responses input item type.", Some("input.type"))]),
+        None | Some("message") => {}
+        _ => {
+            return Err(vec![ApiError::invalid_request(
+                "Unsupported Responses input item type.",
+                Some("input.type"),
+            )]);
+        }
     }
     let role: CanonicalRole = object
         .get("role")
@@ -718,8 +791,16 @@ fn build_request(
         Some(value) => Some(decode(value, response_format_field)?),
     };
     let reasoning_effort = optional_string(object, "reasoning_effort")?;
-    if reasoning_effort.as_deref().is_some_and(|value| !matches!(value, "none" | "minimal" | "low" | "medium" | "high" | "xhigh")) {
-        return Err(vec![ApiError::invalid_request("Invalid reasoning_effort.", Some("reasoning_effort"))]);
+    if reasoning_effort.as_deref().is_some_and(|value| {
+        !matches!(
+            value,
+            "none" | "minimal" | "low" | "medium" | "high" | "xhigh"
+        )
+    }) {
+        return Err(vec![ApiError::invalid_request(
+            "Invalid reasoning_effort.",
+            Some("reasoning_effort"),
+        )]);
     }
     Ok(CanonicalRequest {
         messages,

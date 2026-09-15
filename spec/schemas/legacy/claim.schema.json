@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/schemas/claim.schema.json",
+  "$id": "https://axiovex.example/epr/schemas/claim.schema.json",
   "title": "EPR Typed Claim",
   "type": "object",
   "required": ["claim_id", "kind", "statement", "state", "created_at", "created_by"],

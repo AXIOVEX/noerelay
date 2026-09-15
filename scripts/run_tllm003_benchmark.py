@@ -32,7 +32,7 @@ import time
 import urllib.request
 from pathlib import Path
 
-REPO = Path(r"c:\Users\trist\Development\ElectroHire\noerelay")
+REPO = Path(__file__).resolve().parents[1]
 STOP = r"C:\LLM\stop-llama-server.ps1"
 START = r"C:\LLM\start-llama-server.ps1"
 HEALTH = "http://127.0.0.1:8080/health"

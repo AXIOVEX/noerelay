@@ -119,8 +119,9 @@ fn collect_envelopes(dir: &Path, envelopes: &mut Vec<EvidenceEnvelope>) -> Resul
             if !is_envelope {
                 continue;
             }
-            let envelope: EvidenceEnvelope = serde_json::from_value(value)
-                .with_context(|| format!("failed to parse evidence envelope: {}", path.display()))?;
+            let envelope: EvidenceEnvelope = serde_json::from_value(value).with_context(|| {
+                format!("failed to parse evidence envelope: {}", path.display())
+            })?;
             envelopes.push(envelope);
         }
     }

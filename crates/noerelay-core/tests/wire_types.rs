@@ -301,7 +301,10 @@ fn responses_stateless_client_metadata_and_tool_history() {
 
 #[test]
 fn responses_tool_output_accepts_empty_text_and_text_parts_only() {
-    for output in [serde_json::json!(""), serde_json::json!([{"type":"input_text","text":"denied"}])] {
+    for output in [
+        serde_json::json!(""),
+        serde_json::json!([{"type":"input_text","text":"denied"}]),
+    ] {
         let request = serde_json::json!({"model":"m", "input":[{"type":"function_call_output","call_id":"c","output":output}]});
         assert!(ResponsesConverter::parse_request(&request).is_ok());
     }

@@ -1,0 +1,677 @@
+{
+  "schema_version": "1.0",
+  "evaluator": {
+    "id": "aee",
+    "version": "1.0.0",
+    "name": "Applied Epistemic Engineering",
+    "url": "https://github.com/electrohire/spec-kit-aee"
+  },
+  "phase": "after_tasks",
+  "outcome": "pass",
+  "summary": "Assessed 12 claim(s); found 0 failure mode(s); 0 claim(s) below the 0.70 confidence threshold.",
+  "findings": [],
+  "next_action": {
+    "kind": "pass",
+    "target_phase": null,
+    "message": "No epistemic blockers found; continue to the next phase."
+  },
+  "metadata": {
+    "timestamp": "2026-09-15T21:39:24.779308Z",
+    "artifacts_evaluated": [
+      ".specify/features/axiovex-branding/claims.json"
+    ],
+    "model": null,
+    "deterministic": true,
+    "aee_methodology_version": "1.0"
+  },
+  "state": {
+    "aee": {
+      "project": "noerelay",
+      "claims": [
+        {
+          "id": "BRAND-001",
+          "text": "The canonical GitHub repository name is AXIOVEX/noerelay.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/github-repository.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "dda2e2252549373d04bc30c2d84b585e2da36f3943c3c0b3b6d52819a00dff10"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-002",
+          "text": "The imported artwork matches the approved pinned checksums.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/repository.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "372c0b7995a8f5822cd67369bf776aa2fba8fb6f60bb60ce9b8bd4a493d530b4"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-003",
+          "text": "Active ownership references pass the migration audit.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/repository.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "372c0b7995a8f5822cd67369bf776aa2fba8fb6f60bb60ce9b8bd4a493d530b4"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-004",
+          "text": "The built package author matches the requested legal entity.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/package.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "2fd55ca90902658865c427155d12b2ee22a17baf7b0d2300c01594fe47f352e9"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {
+            "expected_author": "Axiovex Systems, LLC"
+          }
+        },
+        {
+          "id": "BRAND-005",
+          "text": "The live Web UI watermark identifies the requested legal entity.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/live-webui.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "3c13df948b0b218efb877a0fb312d61b4f3de0c7b564e2b723e85a0aa6a4739a"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {
+            "expected_company": "Axiovex Systems, LLC"
+          }
+        },
+        {
+          "id": "BRAND-006",
+          "text": "The gateway returns the requested READY completion after deployment.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/live-gateway.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "9b88bc686d49dd2ef39ab2c2d98f499cd3506d0f082d00c440ebd8043d9cc274"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-007",
+          "text": "The post-deployment Docker MCP check succeeds.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/live-gateway.json",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "9b88bc686d49dd2ef39ab2c2d98f499cd3506d0f082d00c440ebd8043d9cc274"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-008",
+          "text": "The Windows Python suite passes its recorded tests.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/windows-full-tests.txt",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "e34b755a056ace5449299362aa48912917afffe420e4808e7b2fe5d57e66a685"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-009",
+          "text": "The clean Linux Python suite passes its recorded tests.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/linux-full-tests.txt",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "aa117a31ac7a0d80d5b4eb992be9fd7dfa3498566f831d00f5194d61f18b1ec5"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-010",
+          "text": "The Go adapter passes tests under the AXIOVEX module path.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/go-tests.txt",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "9ba7355bafc6e5ea1dc71e24fc57426b4e6d19009d63c5bce7b135205cbe90ce"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-011",
+          "text": "Rust core passes strict clippy.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/rust-clippy.txt",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "173de1d1ede522302575618e07281d7c15621bcae87955696ff665cd981f866b"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        },
+        {
+          "id": "BRAND-012",
+          "text": "Rust gateway passes strict clippy.",
+          "kind": "requirement",
+          "status": "supported",
+          "boundary": [
+            "Recorded local migration checks only; historical evidence unchanged"
+          ],
+          "depends_on": [],
+          "conflicts_with": [],
+          "evidence": [
+            {
+              "ref": "evidence/branding/rust-clippy.txt",
+              "kind": "observed",
+              "direction": "supports",
+              "source_quality": "test",
+              "description": "Retained migration check; no independent certification claimed.",
+              "source_id": "local-migration-checks",
+              "independent_of": [],
+              "observed_at": "2026-09-15T21:38:38.614151+00:00",
+              "content_hash": "173de1d1ede522302575618e07281d7c15621bcae87955696ff665cd981f866b"
+            }
+          ],
+          "assumptions": [],
+          "alternatives": [],
+          "falsification_tests": [
+            "The linked check fails to reproduce this result."
+          ],
+          "uncertainty": "medium",
+          "severity": "medium",
+          "source_ref": ".specify/features/axiovex-branding/spec.md",
+          "domain": "",
+          "confidence": 0.9,
+          "confidence_band": "high",
+          "failures": [],
+          "metadata": {}
+        }
+      ],
+      "scores": {
+        "BRAND-001": {
+          "claim_id": "BRAND-001",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-002": {
+          "claim_id": "BRAND-002",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-003": {
+          "claim_id": "BRAND-003",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-004": {
+          "claim_id": "BRAND-004",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-005": {
+          "claim_id": "BRAND-005",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-006": {
+          "claim_id": "BRAND-006",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-007": {
+          "claim_id": "BRAND-007",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-008": {
+          "claim_id": "BRAND-008",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-009": {
+          "claim_id": "BRAND-009",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-010": {
+          "claim_id": "BRAND-010",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-011": {
+          "claim_id": "BRAND-011",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        },
+        "BRAND-012": {
+          "claim_id": "BRAND-012",
+          "direct_score": 0.9,
+          "propagated_score": 0.9,
+          "band": "high",
+          "components": {
+            "evidence": 1.0,
+            "independence": 0.5,
+            "falsifiability": 1.0,
+            "boundary": 1.0,
+            "contradiction_penalty": 0
+          },
+          "notes": [
+            "Fewer than two independent supporting sources"
+          ]
+        }
+      },
+      "recoveries": []
+    }
+  }
+}

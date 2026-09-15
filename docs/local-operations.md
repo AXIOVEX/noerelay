@@ -1,6 +1,6 @@
 # Local NoeRelay operations
 
-Run these commands from `C:\Users\trist\Development\ElectroHire\noerelay` in PowerShell. Docker Desktop must be running.
+Run these commands from the NoeRelay checkout root in PowerShell. Docker Desktop must be running.
 
 ```powershell
 # Start everything

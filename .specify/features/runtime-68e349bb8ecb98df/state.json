@@ -1,0 +1,8 @@
+{
+  "project": "axiovex-branding-verification",
+  "feature": ".specify/features/runtime-68e349bb8ecb98df",
+  "claim_id": "REQ-85C84ECA54AF2900",
+  "aee_exit_code": 1,
+  "assessment": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T212537229985Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T212537229985Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 1\n}",
+  "status": "requires_agent_verification"
+}

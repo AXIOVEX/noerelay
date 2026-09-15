@@ -76,7 +76,7 @@ The following types in `crates/noerelay-core/src/` are **canonical authority typ
 
 ### 1.2 Existing JSON Schema Files (`spec/schemas/`)
 
-There are **10 hand-written JSON Schema files** in `spec/schemas/`. They use JSON Schema Draft 2020-12 and share a common `$id` prefix of `https://electrohire.example/epr/schemas/`.
+There are **10 hand-written JSON Schema files** in `spec/schemas/`. They use JSON Schema Draft 2020-12 and share a common `$id` prefix of `https://axiovex.example/epr/schemas/`.
 
 | File | Title | Alignment with Rust | Status |
 |------|-------|---------------------|--------|

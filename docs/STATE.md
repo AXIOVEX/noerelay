@@ -32,3 +32,12 @@ The primary `noerelay client setup|status|run|test` CLI now manages OpenCode, Zo
 The final focused Python suite passed 25 tests; Rust core/gateway suites passed. G11 passes. All four client-feature AEE phases pass for ten atomic claims with zero failure modes; the 154-entry ledger verifies. The gap register retains 20 open and 16 closed entries. These are local feature observations, not a claim that unrelated release gates are complete. Evidence: `evidence/local-recovery/client-integrations.json`, `client-aee.json`, and `client-ledger-verification.json`.
 
 Responses profile is now `2026-09-15.1`, including stateless Codex metadata, developer messages, function tool history, and namespace translation. Codex's live test used an exact-command read-only MCP guard. Native Windows shell execution was blocked by client policy; interactive MCP approvals remain enabled. Zoo's real extension-host test ran on Windows. The Rust router remains authoritative, with whole-word classification fixing the improve/prove false escalation. See ADR 0003 and the README for usage and limits.
+
+
+## AXIOVEX ownership migration (2026-09-15)
+
+The canonical repository is now `https://github.com/AXIOVEX/noerelay`, owned by Axiovex Systems, LLC. Public visibility and repository history were preserved. Current legal notices, package metadata, URLs, telemetry vendor labels, schema namespaces, and UI company copy use the new identity. The approved banner is pinned alongside the existing approved logos; live served bytes match upstream checksums. Historical evidence and AEE records retain their original paths and hashes.
+
+G12 tracks NR-OPS-008 / T-OPS-008. See `docs/branding.md` and `evidence/branding/` for migration checks. Publication checks also corrected Rust formatting and Linux CI issues in the optional console fallback, platform-specific test fixtures, stale model assertion, and Conformance test dependencies.
+
+Final migration validation: Windows 1270 passed / 5 skipped; clean Linux container 1201 passed / 74 skipped plus 920 subtests. Rust formatting and strict core/gateway clippy, Go tests, package build, live gateway/MCP and served branding checks pass. G12 and all four AEE phases pass for 12 atomic claims; the 164-entry ledger verifies. WSL full-suite attempts were interrupted; no WSL full-suite pass is claimed.

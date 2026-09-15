@@ -14,7 +14,7 @@ For security assumptions and a production checklist, read [production-deployment
 
 ```bash
 # Clone and build
-git clone https://github.com/electrohire/noerelay.git
+git clone https://github.com/AXIOVEX/noerelay.git
 cd noerelay
 
 # Start with Docker Compose

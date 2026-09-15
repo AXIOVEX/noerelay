@@ -1,4 +1,4 @@
-module github.com/electrohire/noerelay/services/a2a-adapter
+module github.com/AXIOVEX/noerelay/services/a2a-adapter
 
 go 1.26.6
 

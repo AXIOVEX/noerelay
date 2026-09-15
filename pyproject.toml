@@ -8,9 +8,9 @@ version = "0.2.0"
 description = "NoeRelay — local AI agent orchestration, tool integration, and one-command local LLM stack provisioning (llama.cpp + venv + model) across Windows, macOS, and Linux."
 readme = "README.md"
 requires-python = ">=3.9"
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [
-    { name = "NoeRelay" },
+    { name = "Axiovex Systems, LLC" },
 ]
 keywords = [
     "llm",
@@ -57,9 +57,9 @@ dev = ["build>=1.0", "twine>=4.0", "rich>=13.0", "huggingface_hub>=0.23"]
 noerelay = "noerelay.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/noerelay/noerelay"
-Documentation = "https://github.com/noerelay/noerelay#readme"
-Issues = "https://github.com/noerelay/noerelay/issues"
+Homepage = "https://github.com/AXIOVEX/noerelay"
+Documentation = "https://github.com/AXIOVEX/noerelay#readme"
+Issues = "https://github.com/AXIOVEX/noerelay/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

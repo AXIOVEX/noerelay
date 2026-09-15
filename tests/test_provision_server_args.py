@@ -72,7 +72,7 @@ class MasterConfigDelegationTests(unittest.TestCase):
         args = p.server_args()
         self.assertEqual(args[0], "-m")
         # The plan's own model file is used for -m (model_path override)...
-        self.assertTrue(args[1].endswith("gpt-oss-20b-Q4_K_M.gguf"), args[1])
+        self.assertEqual(args[1], str(p.model_file))
         # ...but every other setting comes from the master YAML.
         self.assertEqual(args[args.index("--n-gpu-layers") + 1], "7")
         self.assertEqual(args[args.index("--ctx-size") + 1], "4096")

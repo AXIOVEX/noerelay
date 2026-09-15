@@ -1,6 +1,6 @@
 # Contributing to NoeRelay
 
-NoeRelay is publicly visible but remains a proprietary ElectroHire project. Contributions are limited to authorized collaborators unless ElectroHire expressly invites otherwise.
+NoeRelay is publicly visible but remains a proprietary Axiovex Systems, LLC project. Contributions are limited to authorized collaborators unless Axiovex Systems, LLC expressly invites otherwise.
 
 ## Development workflow
 

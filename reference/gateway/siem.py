@@ -30,7 +30,7 @@ class SIEMIntegration:
 
     # CEF header fields
     CEF_VERSION = "0"
-    CEF_DEVICE_VENDOR = "ElectroHire"
+    CEF_DEVICE_VENDOR = "Axiovex Systems, LLC"
     CEF_DEVICE_PRODUCT = "NoeRelay"
     CEF_DEVICE_VERSION = "0.1.0"
 

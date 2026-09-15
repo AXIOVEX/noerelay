@@ -283,7 +283,7 @@ class SIEMIntegrationTests(unittest.TestCase):
             "model_id": "qwen3:8b",
         }
         result = self.siem.format_cef(event)
-        self.assertIn("CEF:0|ElectroHire|NoeRelay|0.1.0", result)
+        self.assertIn("CEF:0|Axiovex Systems, LLC|NoeRelay|0.1.0", result)
         self.assertIn("run.completed", result)
         self.assertIn("Run Completed", result)
         self.assertIn("run_id=run-123", result)
@@ -313,7 +313,7 @@ class SIEMIntegrationTests(unittest.TestCase):
             "model_id": "llama3:8b",
         }
         result = self.siem.format_leef(event)
-        self.assertIn("LEEF:2.0|ElectroHire|NoeRelay|0.1.0", result)
+        self.assertIn("LEEF:2.0|Axiovex Systems, LLC|NoeRelay|0.1.0", result)
         self.assertIn("run.escalated", result)
         self.assertIn("run_id=run-456", result)
 

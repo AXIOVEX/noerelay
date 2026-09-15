@@ -6,7 +6,7 @@ NoeRelay is currently a pre-production draft (`0.1.0-draft`). Security fixes app
 
 ## Reporting a vulnerability
 
-Report suspected vulnerabilities privately to the ElectroHire repository owners or through a private GitHub Security Advisory for this repository. Do not disclose the issue in a public issue, discussion, pull request, commit message, or external channel.
+Report suspected vulnerabilities privately to the Axiovex Systems, LLC repository owners or through a private GitHub Security Advisory for this repository. Do not disclose the issue in a public issue, discussion, pull request, commit message, or external channel.
 
 Include, when available:
 
@@ -66,5 +66,5 @@ All contributors should review the threat model before making changes to securit
 
 ## Security contacts
 
-- Report vulnerabilities via GitHub Security Advisory: https://github.com/electrohire/noerelay/security/advisories/new
+- Report vulnerabilities via GitHub Security Advisory: https://github.com/AXIOVEX/noerelay/security/advisories/new
 - For non-sensitive security questions, open a discussion in the repository

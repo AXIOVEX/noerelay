@@ -81,7 +81,8 @@
     {"requirement_id": "NR-LLM-008", "primary_work_packages": ["LLM-01"], "primary_release_tests": ["T-LLM-008"], "must": true},
     {"requirement_id": "NR-OPS-006", "primary_work_packages": ["TOOLS-01"], "primary_release_tests": ["T-OPS-006"], "must": true},
     {"requirement_id": "NR-OPS-007", "primary_work_packages": ["TOOLS-01"], "primary_release_tests": ["T-OPS-007"], "must": true},
-    {"requirement_id": "NR-ROUTE-009", "primary_work_packages": ["REG-01"], "primary_release_tests": ["T-ROUTE-003"], "must": true}
+    {"requirement_id": "NR-ROUTE-009", "primary_work_packages": ["REG-01"], "primary_release_tests": ["T-ROUTE-003"], "must": true},
+    {"requirement_id": "NR-OPS-008", "primary_work_packages": ["TOOLS-01"], "primary_release_tests": ["T-OPS-008"], "must": true}
   ],
   "release_gates": {
     "G0": {"description": "Scope baseline and requirement freeze", "requirements": ["NR-REL-003"], "tests": ["T-SPEC-001"]},
@@ -95,6 +96,7 @@
     "G8": {"description": "Security, operations, compliance, and release", "requirements": ["NR-SEC-001", "NR-SEC-002", "NR-SEC-003", "NR-OPS-001", "NR-OPS-002", "NR-OPS-003", "NR-COMP-001", "NR-COMP-002", "NR-REL-001", "NR-REL-002", "NR-REL-003"], "tests": ["T-SEC-001", "T-OPS-001", "T-COMP-001", "T-REL-001"]},
     "G9": {"description": "Phase 2: RTK native compression, local LLM stack, and operator tooling", "requirements": ["NR-RTK-001", "NR-RTK-002", "NR-OPS-004", "NR-LLM-001", "NR-LLM-002", "NR-LLM-003", "NR-LLM-004", "NR-LLM-005", "NR-LLM-006"], "tests": ["T-RTK-001", "T-OPS-004", "T-LLM-001", "T-LLM-002", "T-LLM-003", "T-LLM-004", "T-LLM-005", "T-LLM-006"]},
     "G10": {"description": "Local router, internal SDD, and Docker agent consolidation", "requirements": ["NR-LLM-007", "NR-OPS-005", "NR-EXEC-009", "NR-API-007", "NR-API-008", "NR-LLM-008", "NR-OPS-006"], "tests": ["T-LLM-007", "T-OPS-005", "T-EXEC-009", "T-API-004", "T-API-005", "T-LLM-008", "T-OPS-006"]},
-    "G11": {"description": "Managed coding clients and router regression", "requirements": ["NR-OPS-007", "NR-ROUTE-009"], "tests": ["T-OPS-007", "T-ROUTE-003"]}
+    "G11": {"description": "Managed coding clients and router regression", "requirements": ["NR-OPS-007", "NR-ROUTE-009"], "tests": ["T-OPS-007", "T-ROUTE-003"]},
+    "G12": {"description": "AXIOVEX ownership and branding", "requirements": ["NR-OPS-008"], "tests": ["T-OPS-008"]}
   }
 }

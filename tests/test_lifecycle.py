@@ -31,6 +31,7 @@ def _make_wrapper(install: Path) -> Path:
     return wrapper
 
 
+@mock.patch.object(lifecycle, "IS_WINDOWS", True)
 class ScheduleWindowsTests(unittest.TestCase):
     def test_schtasks_argv(self):
         with tempfile.TemporaryDirectory() as td:

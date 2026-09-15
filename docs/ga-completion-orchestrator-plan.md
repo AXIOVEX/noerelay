@@ -2,7 +2,7 @@
 
 **Document status:** Execution directive  
 **Target:** NoeRelay v1 general availability for the named organizational deployment profile  
-**Repository root:** `C:\Users\trist\Development\ElectroHire\norelay`  
+**Repository:** `https://github.com/AXIOVEX/noerelay` (run from the local checkout root).
 **Authority boundary:** Rust  
 **Primary inference plane:** OpenRouter with explicit NoeRelay-selected model IDs  
 **Method:** architecture -> requirement -> implementation -> test -> observed evidence -> independent approval -> release  
@@ -1052,3 +1052,5 @@ G10 includes NR-API-008 / T-API-005 (Zoo compatibility, API-01), NR-LLM-008 / T-
 ## Managed client integrations
 
 G11 tracks NR-OPS-007 / T-OPS-007 (installed OpenCode, Zoo Code, Codex integration checks; TOOLS-01) and NR-ROUTE-009 / T-ROUTE-003 (Rust task classification and governance-preserving routing regression; REG-01). See `.specify/features/client-integrations/`.
+
+G12 tracks NR-OPS-008 / T-OPS-008 (AXIOVEX ownership and branding, TOOLS-01). Historical evidence remains unchanged.

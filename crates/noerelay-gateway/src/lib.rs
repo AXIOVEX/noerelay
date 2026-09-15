@@ -6,9 +6,9 @@ pub mod stub_provider;
 use axum::{
     Json, Router,
     body::{Body, Bytes},
-    extract::{DefaultBodyLimit, Extension, Path, State, Request},
-    middleware::Next,
+    extract::{DefaultBodyLimit, Extension, Path, Request, State},
     http::{HeaderMap, StatusCode},
+    middleware::Next,
     response::{IntoResponse, Response},
     routing::{get, post},
 };
@@ -45,7 +45,15 @@ const PRIMARY_PUBLIC_MODEL_ID: &str = "axiovex-agni";
 const RAW_PUBLIC_MODEL_ID: &str = "axiovex-agni-raw";
 
 /// Whitelist of valid capability values for the `x-noerelay-capability` header.
-const VALID_CAPABILITIES: &[&str] = &["text", "cursor", "codex", "aider", "vision", "code", "reasoning"];
+const VALID_CAPABILITIES: &[&str] = &[
+    "text",
+    "cursor",
+    "codex",
+    "aider",
+    "vision",
+    "code",
+    "reasoning",
+];
 
 /// HTTP client for the LLMRouter sidecar, implementing [`AdvisoryRanker`].
 ///
@@ -586,7 +594,10 @@ pub fn app(state: AppState) -> Router {
 }
 
 async fn cors(request: Request, next: Next) -> Response {
-    let requested_headers = request.headers().get("access-control-request-headers").cloned();
+    let requested_headers = request
+        .headers()
+        .get("access-control-request-headers")
+        .cloned();
     let mut response = if request.method() == axum::http::Method::OPTIONS {
         StatusCode::NO_CONTENT.into_response()
     } else {
@@ -594,37 +605,83 @@ async fn cors(request: Request, next: Next) -> Response {
     };
     let headers = response.headers_mut();
     headers.insert("access-control-allow-origin", "*".parse().unwrap());
-    headers.insert("access-control-allow-methods", "GET, POST, OPTIONS, DELETE".parse().unwrap());
+    headers.insert(
+        "access-control-allow-methods",
+        "GET, POST, OPTIONS, DELETE".parse().unwrap(),
+    );
     headers.insert("access-control-allow-headers", requested_headers.unwrap_or_else(|| "Authorization, Content-Type, Mcp-Session-Id, MCP-Protocol-Version, x-noerelay-project, x-noerelay-capability, x-noerelay-risk".parse().unwrap()));
-    headers.insert("access-control-expose-headers", "x-noerelay-run-id, x-noerelay-receipt-id, Mcp-Session-Id".parse().unwrap());
+    headers.insert(
+        "access-control-expose-headers",
+        "x-noerelay-run-id, x-noerelay-receipt-id, Mcp-Session-Id"
+            .parse()
+            .unwrap(),
+    );
     response
 }
 
-async fn local_agent_bridge(state: AppState, headers: HeaderMap, body: Value, path: &str) -> Response {
+async fn local_agent_bridge(
+    state: AppState,
+    headers: HeaderMap,
+    body: Value,
+    path: &str,
+) -> Response {
     // Tool/agent execution is currently an operator capability, not a tenant API.
     if !authorized(&headers, &state.config.bearer_key_sha256) {
-        return error(StatusCode::FORBIDDEN, "operator_required", "Operator API key required for local agent tools");
+        return error(
+            StatusCode::FORBIDDEN,
+            "operator_required",
+            "Operator API key required for local agent tools",
+        );
     }
-    let base = std::env::var("NOERELAY_LOCAL_PLANE_URL").unwrap_or_else(|_| "http://host.docker.internal:8082".into());
-    match state.client.post(format!("{base}{path}"))
-        .timeout(Duration::from_secs(if path == "/agent" { 5100 } else { 120 }))
-        .bearer_auth(&state.config.openrouter_api_key).json(&body).send().await {
+    let base = std::env::var("NOERELAY_LOCAL_PLANE_URL")
+        .unwrap_or_else(|_| "http://host.docker.internal:8082".into());
+    match state
+        .client
+        .post(format!("{base}{path}"))
+        .timeout(Duration::from_secs(if path == "/agent" {
+            5100
+        } else {
+            120
+        }))
+        .bearer_auth(&state.config.openrouter_api_key)
+        .json(&body)
+        .send()
+        .await
+    {
         Ok(response) => {
             let status = response.status();
             match response.bytes().await {
-                Ok(bytes) => (status, [("content-type", "application/json")], bytes).into_response(),
-                Err(_) => error(StatusCode::BAD_GATEWAY, "local_plane_failed", "Local agent response failed"),
+                Ok(bytes) => {
+                    (status, [("content-type", "application/json")], bytes).into_response()
+                }
+                Err(_) => error(
+                    StatusCode::BAD_GATEWAY,
+                    "local_plane_failed",
+                    "Local agent response failed",
+                ),
             }
         }
-        Err(_) => error(StatusCode::BAD_GATEWAY, "local_plane_unavailable", "Local agent service unavailable"),
+        Err(_) => error(
+            StatusCode::BAD_GATEWAY,
+            "local_plane_unavailable",
+            "Local agent service unavailable",
+        ),
     }
 }
 
-async fn mcp_bridge(State(state): State<AppState>, headers: HeaderMap, Json(body): Json<Value>) -> Response {
+async fn mcp_bridge(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<Value>,
+) -> Response {
     local_agent_bridge(state, headers, body, "/mcp").await
 }
 
-async fn agent_bridge(State(state): State<AppState>, headers: HeaderMap, Json(body): Json<Value>) -> Response {
+async fn agent_bridge(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    Json(body): Json<Value>,
+) -> Response {
     local_agent_bridge(state, headers, body, "/agent").await
 }
 
@@ -922,7 +979,9 @@ async fn proxy_openai_request(
             Ok(value) => value,
             Err(error) => return api_error_response(StatusCode::BAD_REQUEST, error),
         }
-    } else { BTreeMap::new() };
+    } else {
+        BTreeMap::new()
+    };
     let wire_request = match profile {
         ApiProfile::ChatCompletions => ChatCompletionsConverter::parse_request(&request_value),
         ApiProfile::Responses => ResponsesConverter::parse_request(&request_value),
@@ -1045,9 +1104,16 @@ async fn proxy_openai_request(
     let mut required_capabilities: Vec<String> = vec!["text".into()];
     // Local task routing is deterministic and auditable, with explicit overrides.
     // Uncalibrated task heuristics never relax risk/acceptance constraints.
-    let task_class = if state.config.candidates.iter().any(|c| c.candidate_id == "qwen3.6-35b-a3b") {
+    let task_class = if state
+        .config
+        .candidates
+        .iter()
+        .any(|c| c.candidate_id == "qwen3.6-35b-a3b")
+    {
         local_task_class(&wire_request)
-    } else { "routine" };
+    } else {
+        "routine"
+    };
     if task_class != "routine" {
         required_capabilities.push(task_class.into());
     }
@@ -1150,12 +1216,22 @@ async fn proxy_openai_request(
     request.insert("model".into(), Value::String(model));
     // The local model plane creates actual artifacts and runs AEE before inference.
     // LiteLLM merges extra_body into the upstream request after parameter filtering.
-    if state.config.candidates.iter().any(|candidate| candidate.candidate_id == "gpt-oss-20b-Q5_K_M") {
-        let extra = request.entry("extra_body").or_insert_with(|| serde_json::json!({}));
+    if state
+        .config
+        .candidates
+        .iter()
+        .any(|candidate| candidate.candidate_id == "gpt-oss-20b-Q5_K_M")
+    {
+        let extra = request
+            .entry("extra_body")
+            .or_insert_with(|| serde_json::json!({}));
         if let Some(extra) = extra.as_object_mut() {
-            extra.insert("noerelay_sdd".into(), serde_json::json!({
-                "project": canonical.metadata.get("spec_kit_project")
-            }));
+            extra.insert(
+                "noerelay_sdd".into(),
+                serde_json::json!({
+                    "project": canonical.metadata.get("spec_kit_project")
+                }),
+            );
         }
     }
     apply_agent_instructions(
@@ -1581,23 +1657,49 @@ fn flatten_tool_namespaces(request: &mut Value) -> Result<ToolNamespaces, ApiErr
                 flat.push(tool.clone());
                 continue;
             }
-            let namespace = tool.get("name").and_then(Value::as_str).filter(|s| !s.is_empty())
-                .ok_or_else(|| ApiError::invalid_request("Namespace name is required.", Some("tools.name")))?;
-            let members = tool.get("tools").and_then(Value::as_array)
-                .ok_or_else(|| ApiError::invalid_request("Namespace tools must be an array.", Some("tools.tools")))?;
+            let namespace = tool
+                .get("name")
+                .and_then(Value::as_str)
+                .filter(|s| !s.is_empty())
+                .ok_or_else(|| {
+                    ApiError::invalid_request("Namespace name is required.", Some("tools.name"))
+                })?;
+            let members = tool.get("tools").and_then(Value::as_array).ok_or_else(|| {
+                ApiError::invalid_request("Namespace tools must be an array.", Some("tools.tools"))
+            })?;
             for member in members {
                 if member.get("type").and_then(Value::as_str) != Some("function") {
-                    return Err(ApiError::invalid_request("Namespaces support function tools only.", Some("tools.type")));
+                    return Err(ApiError::invalid_request(
+                        "Namespaces support function tools only.",
+                        Some("tools.type"),
+                    ));
                 }
-                let name = member.get("name").and_then(Value::as_str).filter(|s| !s.is_empty())
-                    .ok_or_else(|| ApiError::invalid_request("Function name is required.", Some("tools.name")))?;
+                let name = member
+                    .get("name")
+                    .and_then(Value::as_str)
+                    .filter(|s| !s.is_empty())
+                    .ok_or_else(|| {
+                        ApiError::invalid_request("Function name is required.", Some("tools.name"))
+                    })?;
                 let alias = namespaced_alias(namespace, name);
-                if mapping.insert(alias.clone(), (namespace.into(), name.into())).is_some() {
-                    return Err(ApiError::invalid_request("Duplicate namespaced tool.", Some("tools")));
+                if mapping
+                    .insert(alias.clone(), (namespace.into(), name.into()))
+                    .is_some()
+                {
+                    return Err(ApiError::invalid_request(
+                        "Duplicate namespaced tool.",
+                        Some("tools"),
+                    ));
                 }
                 let mut member = member.clone();
                 member["name"] = json!(alias);
-                member["description"] = json!(format!("{namespace}.{name}: {}", member.get("description").and_then(Value::as_str).unwrap_or("")));
+                member["description"] = json!(format!(
+                    "{namespace}.{name}: {}",
+                    member
+                        .get("description")
+                        .and_then(Value::as_str)
+                        .unwrap_or("")
+                ));
                 flat.push(member);
             }
         }
@@ -1605,7 +1707,10 @@ fn flatten_tool_namespaces(request: &mut Value) -> Result<ToolNamespaces, ApiErr
         for tool in &flat {
             if let Some(name) = tool.get("name").and_then(Value::as_str) {
                 if !names.insert(name.to_owned()) {
-                    return Err(ApiError::invalid_request("Duplicate tool name.", Some("tools")));
+                    return Err(ApiError::invalid_request(
+                        "Duplicate tool name.",
+                        Some("tools"),
+                    ));
                 }
             }
         }
@@ -1614,7 +1719,10 @@ fn flatten_tool_namespaces(request: &mut Value) -> Result<ToolNamespaces, ApiErr
     if let Some(Value::Array(input)) = request.get_mut("input") {
         for item in input {
             if item.get("type").and_then(Value::as_str) == Some("function_call") {
-                if let (Some(namespace), Some(name)) = (item.get("namespace").and_then(Value::as_str), item.get("name").and_then(Value::as_str)) {
+                if let (Some(namespace), Some(name)) = (
+                    item.get("namespace").and_then(Value::as_str),
+                    item.get("name").and_then(Value::as_str),
+                ) {
                     let alias = namespaced_alias(namespace, name);
                     item["name"] = json!(alias);
                     item.as_object_mut().unwrap().remove("namespace");
@@ -1626,20 +1734,34 @@ fn flatten_tool_namespaces(request: &mut Value) -> Result<ToolNamespaces, ApiErr
 }
 
 fn restore_tool_namespaces(bytes: Bytes, stream: bool, mapping: &ToolNamespaces) -> Bytes {
-    if mapping.is_empty() { return bytes; }
+    if mapping.is_empty() {
+        return bytes;
+    }
     fn restore(value: &mut Value, mapping: &ToolNamespaces) {
         match value {
             Value::Object(object) => {
-                if object.get("type").and_then(Value::as_str).is_some_and(|s| s == "function_call" || s.starts_with("response.function_call_arguments.")) {
-                    if let Some((namespace, name)) = object.get("name").and_then(Value::as_str).and_then(|n| mapping.get(n)) {
+                if object.get("type").and_then(Value::as_str).is_some_and(|s| {
+                    s == "function_call" || s.starts_with("response.function_call_arguments.")
+                }) {
+                    if let Some((namespace, name)) = object
+                        .get("name")
+                        .and_then(Value::as_str)
+                        .and_then(|n| mapping.get(n))
+                    {
                         object.insert("namespace".into(), json!(namespace));
                         object.insert("name".into(), json!(name));
                     }
                 }
-                for child in object.values_mut() { restore(child, mapping); }
+                for child in object.values_mut() {
+                    restore(child, mapping);
+                }
             }
-            Value::Array(values) => for child in values { restore(child, mapping); },
-            _ => {},
+            Value::Array(values) => {
+                for child in values {
+                    restore(child, mapping);
+                }
+            }
+            _ => {}
         }
     }
     if !stream {
@@ -2300,19 +2422,60 @@ fn compile_wire_context(
 }
 
 fn local_task_class(request: &WireCanonicalRequest) -> &'static str {
-    let text = governance_messages(request).iter().rev()
+    let text = governance_messages(request)
+        .iter()
+        .rev()
         .find(|message| message.role == MessageRole::User)
-        .map(|message| message.content.to_lowercase()).unwrap_or_default();
+        .map(|message| message.content.to_lowercase())
+        .unwrap_or_default();
     // Whole-word/phrase matching avoids sending "improve this function" to the
     // slower reasoning model merely because "improve" contains "prove".
-    let words = format!(" {} ", text.split(|c: char| !c.is_alphanumeric()).filter(|s| !s.is_empty()).collect::<Vec<_>>().join(" "));
+    let words = format!(
+        " {} ",
+        text.split(|c: char| !c.is_alphanumeric())
+            .filter(|s| !s.is_empty())
+            .collect::<Vec<_>>()
+            .join(" ")
+    );
     let contains = |term: &str| words.contains(&format!(" {term} "));
-    if ["architecture", "race condition", "security review", "root cause", "failed tests", "prove", "complex reasoning"].iter().any(|term| contains(term)) {
+    if [
+        "architecture",
+        "race condition",
+        "security review",
+        "root cause",
+        "failed tests",
+        "prove",
+        "complex reasoning",
+    ]
+    .iter()
+    .any(|term| contains(term))
+    {
         "reasoning"
-    } else if request.tools.as_ref().is_some_and(|tools| !tools.is_empty()) ||
-        ["code", "coding", "implement", "debug", "refactor", "function", "repository", "unit test", "python", "javascript", "typescript", "rust"].iter().any(|term| contains(term)) {
+    } else if request
+        .tools
+        .as_ref()
+        .is_some_and(|tools| !tools.is_empty())
+        || [
+            "code",
+            "coding",
+            "implement",
+            "debug",
+            "refactor",
+            "function",
+            "repository",
+            "unit test",
+            "python",
+            "javascript",
+            "typescript",
+            "rust",
+        ]
+        .iter()
+        .any(|term| contains(term))
+    {
         "code"
-    } else { "routine" }
+    } else {
+        "routine"
+    }
 }
 
 fn parse_risk(value: Option<&str>) -> RiskClass {
@@ -2419,9 +2582,16 @@ mod tests {
         let value: Value = serde_json::from_slice(&restored).unwrap();
         assert_eq!(value["output"][0]["name"], "read");
         assert_eq!(value["output"][0]["namespace"], "mcp_a");
-        assert_eq!(value["output"][0]["arguments"], output["output"][0]["arguments"]);
+        assert_eq!(
+            value["output"][0]["arguments"],
+            output["output"][0]["arguments"]
+        );
         let event = json!({"type":"response.output_item.added","item":output["output"][0]});
-        let sse = restore_tool_namespaces(Bytes::from(format!("data: {}\n\ndata: [DONE]\n\n", event)), true, &mapping);
+        let sse = restore_tool_namespaces(
+            Bytes::from(format!("data: {}\n\ndata: [DONE]\n\n", event)),
+            true,
+            &mapping,
+        );
         let sse = String::from_utf8(sse.to_vec()).unwrap();
         assert!(sse.contains("\"namespace\":\"mcp_a\""));
         assert!(sse.ends_with("data: [DONE]\n\n"));
@@ -2430,7 +2600,8 @@ mod tests {
     #[test]
     fn namespace_tools_reject_ambiguity_and_unsupported_members() {
         let member = json!({"type":"function","name":"read"});
-        let mut duplicate = json!({"tools":[{"type":"namespace","name":"mcp","tools":[member, member]}]});
+        let mut duplicate =
+            json!({"tools":[{"type":"namespace","name":"mcp","tools":[member, member]}]});
         assert!(flatten_tool_namespaces(&mut duplicate).is_err());
         let mut custom = json!({"tools":[{"type":"namespace","name":"mcp","tools":[{"type":"custom","name":"read"}]}]});
         assert!(flatten_tool_namespaces(&mut custom).is_err());
@@ -2501,8 +2672,20 @@ mod tests {
 
     #[test]
     fn local_task_routing_separates_routine_coding_and_reasoning() {
-        for (text, expected) in [("Hello", "routine"), ("Implement a Python function", "code"), ("Investigate this race condition", "reasoning"), ("Improve this function", "code"), ("Prove this theorem", "reasoning"), ("Explain root-cause analysis", "reasoning"), ("I trust you", "routine"), ("Write a postcard", "routine")] {
-            let request = ChatCompletionsConverter::parse_request(&json!({"model": "axiovex-agni", "messages": [{"role": "user", "content": text}]})).unwrap();
+        for (text, expected) in [
+            ("Hello", "routine"),
+            ("Implement a Python function", "code"),
+            ("Investigate this race condition", "reasoning"),
+            ("Improve this function", "code"),
+            ("Prove this theorem", "reasoning"),
+            ("Explain root-cause analysis", "reasoning"),
+            ("I trust you", "routine"),
+            ("Write a postcard", "routine"),
+        ] {
+            let request = ChatCompletionsConverter::parse_request(
+                &json!({"model": "axiovex-agni", "messages": [{"role": "user", "content": text}]}),
+            )
+            .unwrap();
             assert_eq!(local_task_class(&request), expected);
         }
     }
@@ -2510,13 +2693,35 @@ mod tests {
     #[tokio::test]
     async fn cors_preflight_succeeds_but_mcp_still_requires_authentication() {
         let router = app(state("http://127.0.0.1:1".into()));
-        let preflight = router.clone().oneshot(Request::builder().method("OPTIONS").uri("/mcp")
-            .header("origin", "https://frontend.example").header("access-control-request-headers", "authorization,content-type")
-            .body(Body::empty()).unwrap()).await.unwrap();
+        let preflight = router
+            .clone()
+            .oneshot(
+                Request::builder()
+                    .method("OPTIONS")
+                    .uri("/mcp")
+                    .header("origin", "https://frontend.example")
+                    .header(
+                        "access-control-request-headers",
+                        "authorization,content-type",
+                    )
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
         assert_eq!(preflight.status(), StatusCode::NO_CONTENT);
         assert_eq!(preflight.headers()["access-control-allow-origin"], "*");
-        let denied = router.oneshot(Request::builder().method("POST").uri("/mcp")
-            .header("content-type", "application/json").body(Body::from("{}" )).unwrap()).await.unwrap();
+        let denied = router
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/mcp")
+                    .header("content-type", "application/json")
+                    .body(Body::from("{}"))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
         assert_eq!(denied.status(), StatusCode::UNAUTHORIZED);
     }
 

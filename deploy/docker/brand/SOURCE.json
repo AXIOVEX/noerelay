@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/AXIOVEX/solution-delivery-framework",
+  "revision": "3f6c77b18dd2514354a0faa388b27a891c06b3e7",
+  "files": {
+    "axiovex-full-logo.svg": {
+      "source_path": "assets/brand/svg/axiovex-full-logo.svg",
+      "sha256": "1b67cca6490384d344b14a6885c2d106aa74b98915d0f0e6de7c8b3db4d8854d"
+    },
+    "axiovex-logo-mark.svg": {
+      "source_path": "assets/brand/svg/axiovex-logo-mark.svg",
+      "sha256": "836b6d90d6baf3c978fff17c9bc13c33dc21b07e732bb7056b8db1bdc71d53d1"
+    },
+    "axiovex-readme-banner-1200x675.png": {
+      "source_path": "assets/brand/png/axiovex-readme-banner-1200x675.png",
+      "sha256": "e85f7e2aba204d0d21980427cd6fc72fc8c3260be67c6114bb08640b3dbbc5ab"
+    }
+  }
+}

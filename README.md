@@ -1,4 +1,10 @@
+<p align="center">
+  <img src="deploy/docker/brand/axiovex-readme-banner-1200x675.png" alt="Axiovex Systems, LLC" width="720">
+</p>
+
 # NoeRelay
+
+A product of **Axiovex Systems, LLC** · [AXIOVEX/noerelay](https://github.com/AXIOVEX/noerelay) · [Branding and provenance](docs/branding.md)
 
 Local AI routing and agent execution with a Rust governance gateway, native RTK context compression, Docker MCP tools, and agent-managed spec-kit/AEE development.
 

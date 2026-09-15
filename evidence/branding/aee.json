@@ -1,0 +1,26 @@
+[
+  {
+    "phase": "after_specify",
+    "exit_code": 0,
+    "output": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_specify-20260915T213923402603Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_specify-20260915T213923402603Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "after_plan",
+    "exit_code": 0,
+    "output": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_plan-20260915T213923918132Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_plan-20260915T213923918132Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "after_tasks",
+    "exit_code": 0,
+    "output": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_tasks-20260915T213924486345Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_tasks-20260915T213924486345Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "after_implement",
+    "exit_code": 0,
+    "output": "{\n  \"assessment\": \".specify/extensions/aee/assessments/aee-after_implement-20260915T213925025476Z.json\",\n  \"evaluator_result\": \".specify/extensions/evaluator/results/aee-after_implement-20260915T213925025476Z.json\",\n  \"ledger\": \".specify/extensions/aee/ledger/epistemic-ledger.jsonl\",\n  \"aee_exit_code\": 0\n}\n",
+    "stderr": ""
+  }
+]

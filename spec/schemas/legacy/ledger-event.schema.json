@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://electrohire.example/epr/schemas/ledger-event.schema.json",
+  "$id": "https://axiovex.example/epr/schemas/ledger-event.schema.json",
   "title": "EPR Hash-Linked Ledger Event",
   "type": "object",
   "required": [
