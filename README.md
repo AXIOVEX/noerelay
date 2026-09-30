@@ -4,7 +4,7 @@
 
 # NoeRelay
 
-A product of **Axiovex Systems, LLC** · [AXIOVEX/noerelay](https://github.com/AXIOVEX/noerelay) · [Branding and provenance](docs/branding.md)
+A product of **[Axiovex Systems, LLC](https://axiovexsystems.com)** · [AXIOVEX/noerelay](https://github.com/AXIOVEX/noerelay) · [Branding and provenance](docs/branding.md)
 
 Local AI routing and agent execution with a Rust governance gateway, native RTK context compression, Docker MCP tools, and agent-managed spec-kit/AEE development.
 
